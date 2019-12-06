@@ -11,7 +11,7 @@ namespace PackingListApp.Services
     public class TestServices : ITestServices
     {
         private readonly TestContext _context;
-        public TestServices(TestContext context) 
+        public TestServices(TestContext context)
         {
             _context = context;
         }
@@ -37,6 +37,16 @@ namespace PackingListApp.Services
         public List<TestModel> GetAll()
         {
             return _context.TestModels.ToList();
+        }
+
+        public int Put(int id, TestModel item)
+        {
+            var itemput = _context.TestModels.FirstOrDefault(t => t.Id == id);
+            itemput.Description = item.Description;
+            itemput.Title = item.Title;
+            _context.SaveChanges();
+            return id;
+
         }
     }
 }

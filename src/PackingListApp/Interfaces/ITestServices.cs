@@ -13,5 +13,6 @@ namespace PackingListApp.Interfaces
         int Add(NewTestModel testmodel);
 
         TestModel Get(int id);
+        int Put(int id, TestModel item);
     }
 }

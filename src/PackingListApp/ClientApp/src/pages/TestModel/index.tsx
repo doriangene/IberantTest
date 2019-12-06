@@ -71,7 +71,19 @@ TestItemListState
         this.setState({ newShow: true })
     }
 
-   
+
+    @autobind
+    private async onSaveItem(item: TestItem, state: ItemState) {
+        var result = await this.TestItemsStore.saveAsync(
+            `${item.id}`,
+            item,
+            state
+        );
+        await this.load(this.state.query);
+        return result;
+    }
+
+
 
 
 
@@ -80,7 +92,7 @@ TestItemListState
         this.setState({ newShow: false });
         this.load(this.state.query);
     }
-  
+
 
     @autobind
     private async onDeleteRow(
@@ -90,32 +102,30 @@ TestItemListState
         return await this.TestItemsStore.deleteAsync(`${item.id}`);
     }
 
-  
+
 
     render() {
         const tableModel = {
             query: this.state.query,
             columns: [
                 {
-                    field: "tile",
+                    field: "title",
                     title: "Title",
                     renderer: data =>
-                        <Link
-                            to={{
-                                pathname: `test/${data.id}`,
-                                state: this.props.location.state
-                            }}
-                        >
-                            <span>{data.title}</span>
-                        </Link>
+
+                    <span>{data.title}</span>,
+
+                    editor: data => <Input />
+
 
                 },
                 {
                     field: "description",
                     title: "Description",
                     renderer: data => <span>{data.description}</span>,
+                    editor: data => <Input />
                 },
-               
+
 
             ],
             data: this.TestItemsStore.state,
@@ -150,9 +160,11 @@ TestItemListState
                             onRefresh={() => this.load(this.state.query)}
                             canDelete={true}
                             canCreateNew={true}
+                            onSaveRow={this.onSaveItem}
                             hidepagination={true}
+                            canEdit={true}
                         />
-                        {this.state.newShow && <NewTestItemView  onClose={this.onNewItemClosed}/>}
+                        {this.state.newShow && <NewTestItemView onClose={this.onNewItemClosed} />}
                     </div>
                 </Content>
             </Layout>

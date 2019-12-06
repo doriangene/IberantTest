@@ -25,7 +25,7 @@ namespace PackingListApp.Controllers
         public IActionResult Get(ODataQueryOptions<TestModel> options)
         {
             var list = _testService.GetAll();
-           return Ok( new QueryResult<TestModel>(list, list.Count));
+            return Ok(new QueryResult<TestModel>(list, list.Count));
         }
 
         // GET: api/Test/5
@@ -39,21 +39,17 @@ namespace PackingListApp.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] NewTestModel value)
         {
-             var id = _testService.Add(value);
+            var id = _testService.Add(value);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
-           
+
         }
 
-        // PUT: api/Test/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        public  IActionResult Put(int id, [FromBody] TestModel item)
         {
+            _testService.Put(id, item);
+            return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
         }
     }
 }
