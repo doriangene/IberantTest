@@ -1,0 +1,225 @@
+$background-mdi-color: #D5D5D5;
+$background-color: #F0F0F0;
+$header-background-color: #0173C7;
+$header-color: white;
+
+htlm, body, .ant-layout, #root {
+    height: calc(100vh - 29px) !important;
+    background-color: $background-mdi-color;
+}
+
+.ant-menu-dark {
+    //margin-left: -4px;
+}
+
+.ant-modal-content {
+    background-color: $background-color !important;
+}
+
+.ant-layout-header {
+    background-color: #66ABDD !important;
+    color: $header-color !important;
+    height: 40px !important;
+}
+.ant-layout-header .title {
+
+}
+.ant-modal-header {
+    background-color: $header-background-color !important;
+    color: $header-color !important;
+}
+
+.ant-modal-title {
+    color: $header-color !important;
+}
+
+.ant-form textarea.ant-input, .ant-form .ant-input, .ant-form .ant-input-number-input, .ant-form .ant-select-selection {
+    box-shadow: inset 0 0 1px 1px #eee;
+    background: #fff;
+    color: black;
+    border: solid 1px #bfbfbf;
+}
+.ant-tabs-tab-active {
+    background-color: $background-color !important;
+    border-bottom: 0 !important;
+}
+.ant-tabs-nav-wrap {
+    background-color: $background-mdi-color !important;
+}
+
+.ant-tabs-content {
+    background-color: $background-color;
+    padding: 10px;
+}
+
+.ant-tabs-bar {
+    margin-bottom: -1px !important;
+}
+
+.table-header {
+    margin: 10px !important;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    background: #cdcdcd;
+    border: 1px solid #cdcdcd;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+    color: #000;
+}
+
+.ant-layout-sider-collapsed {
+    flex: 0 0 60px !important;
+    max-width: 60px !important;
+    min-width: 60px !important;
+    width: 60px !important;
+}
+
+.logo {
+    color: #fff;
+    position: relative;
+    height: 40px;
+    text-align: center;
+    overflow: hidden;
+    line-height: 40px;
+    background: #002140;
+    transition: all .3s;
+    font-size: 20px;
+}
+.logo > h1 {
+    display: inline-block;
+    margin: 0 0 0 12px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+    vertical-align: middle;
+}
+.toolbar {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.ant-layout-header .toolbar {
+    padding-left: 40px;
+}
+
+.toolbar > li {
+    float: left;
+}
+
+Header .title {
+    font-size: 20px;
+}
+
+.login-page {
+    background-size: cover;
+    height: 100%;
+    padding-top: 100px;
+}
+
+.login-box {
+    max-width: 300px;
+    width: 300px;
+    margin: 0 auto;
+    padding: 25px;
+    background: #F0F0F0;
+    -webkit-box-shadow: 0px 0px 12px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 12px -4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 12px -4px rgba(0,0,0,0.75);
+}
+
+.page-content {
+    margin: 16px 16px;
+    background: #F0F0F0;
+    min-height: 280px;
+    overflow-y : auto;
+}
+
+.toolbar .ant-btn {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+    padding: 8px 8px;
+}
+
+.ant-table-cell-editing {
+    padding: 0 !important;
+}
+
+.ant-table-cell-editing input {
+    width: 100%;
+    height: 41px;
+    padding-left: 10px;
+}
+
+.title {
+    line-height: 0em;
+    margin-left: -25px;
+}
+
+.header-type {
+    display: block;
+    line-height: 2.3em;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.ant-table-body {
+    background-color: white;
+}
+.inputnumber-table input {
+    margin-top : -5px;
+}
+
+.state-Aceptada {
+    background-color: green;
+    padding: 5px ;
+    color : white;
+}
+.state-Rechazada {
+    background-color: red;
+    padding: 5px;
+    color: white;
+}
+.state-Pendiente {
+    background-color:burlywood ;
+    padding: 5px;
+    color: white;
+}
+
+.stateof-Borrador {
+    background-color: blue;
+    padding: 5px;
+    color: white;
+}
+.stateof-Abierta {
+    background-color: burlywood;
+    padding: 5px;
+    color: white;
+}
+.stateof-Cerrada {
+    background-color: green;
+    padding: 5px;
+    color: white;
+}
+.stateof-Facturada {
+    background-color: red;
+    padding: 5px;
+    color: white;
+}
+.ant-input[disabled] {
+    background : gainsboro;
+}
+.ant-input-number-input[disabled] {
+    background: gainsboro;
+}
+
+.ant-menu-dark.ant-menu-inline .ant-menu-item, .ant-menu-dark.ant-menu-vertical .ant-menu-item, .ant-menu-dark.ant-menu-vertical-left .ant-menu-item, .ant-menu-dark.ant-menu-vertical-right .ant-menu-item {
+    margin: 0 !important;    
+}
