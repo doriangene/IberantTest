@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PackingListApp": {
+    "TestApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:1234;http://localhost:1235",
