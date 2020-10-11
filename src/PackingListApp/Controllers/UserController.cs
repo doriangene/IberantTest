@@ -25,7 +25,7 @@ namespace PackingListApp.Controllers
 
         // GET: api/user
         [HttpGet]
-        public IActionResult Get(ODataQueryOptions<UserModel> options)
+        public IActionResult GetAll(ODataQueryOptions<UserModel> options)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace PackingListApp.Controllers
         }
 
         // GET: api/user/5
-        [HttpGet("{id}", Name ="Get")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             try
