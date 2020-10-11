@@ -81,6 +81,10 @@ export interface DataModel<T> extends CommandModel<T> {
     discard: (item: T) => void;
 }
 
+export interface LooseObject {
+    [key: string]: any
+}
+
 export abstract class DataStore<T extends any> extends ReduxRepository<
     DataModel<T>
     > {
@@ -201,6 +205,8 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
             },
             "AsyncAction"
         );
+
+
         this.addReducer(
             this.ENTITY_UPDATED as string,
             (): any => {
@@ -211,7 +217,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
                             ...this.state,
                             items: this.state.items.map(o => {
                                 if (
-                                    o.item[this.rowKey] ==
+                                    (o.item as any)[this.rowKey] ==
                                     (item[this.rowKey] ||
                                         result.data.identifier ||
                                         (this.useTitleKey
@@ -221,8 +227,8 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
                                 ) {
                                     o.state = "Unchanged";
                                     o.item = Object.assign(o.item, item);
-                                    o.item[this.rowKey] =
-                                        result.data.identifier || o.item[this.rowKey];
+                                    (o.item as any)[this.rowKey] =
+                                        result.data.identifier || (o.item as any)[this.rowKey];
                                 }
                                 return o;
                             }),
@@ -262,7 +268,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
                             result: undefined,
                             items: this.state.items.filter(
                                 o =>
-                                    o.item[this.rowKey] !=
+                                    (o.item as any)[this.rowKey] !=
                                     (value.data.identifier ||
                                         (this.useTitleKey
                                             ? value.data.title
@@ -373,7 +379,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
         id: string,
         params?: any
     ): Promise<CommandResult<T>> {
-        var item = this.state.items.firstOrDefault(o => o.item[this.rowKey] == id);
+        var item = this.state.items.firstOrDefault(o => (o.item as any)[this.rowKey] == id);
         if (item && item.state == "New") {
             var data = {
                 aggregateRootId: id,
@@ -463,7 +469,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
             onStart: (args: any) => ({ ...this.state, isBusy: true }),
             onSuccess: (result: any, partial: Partial<T>) => {
                 var items = (this.state || ({} as any)).items.map(o => {
-                    if (o.item[key as string] == partial[key as string]) {
+                    if ((o.item as any)[key as string] == (partial as any)[key as string]) {
                         o.item = Object.assign(o.item, partial);
                         return o;
                     }

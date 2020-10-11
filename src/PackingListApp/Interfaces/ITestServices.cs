@@ -14,5 +14,6 @@ namespace PackingListApp.Interfaces
 
         TestModel Get(int id);
         int Put(int id, TestModel item);
+        int Delete(int id);
     }
 }
