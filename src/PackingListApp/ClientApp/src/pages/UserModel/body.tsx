@@ -28,28 +28,24 @@ interface ClassFormBodyProps {
 
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
     state = {
-        admin_type_list: [{ value: '', display: 'Select an admin type' },
-            { value: 'Normal', display: 'Normal' },
+        admin_type_list: [{ value: 'Normal', display: 'Normal' },
             { value: 'VIP', display: 'VIP' },
             { value: 'KING', display: 'KING' }]
     }
 
     render() {
-
-
-
         const { getFieldDecorator } = this.props;
 
         var item = this.props.item || {} as NewUserItem;
         return <Form id="modaForm" onSubmit={() => { if (this.props.onSave) { this.props.onSave(); } }}>
             <Row gutter={24}>
-
                 <Col span={8}>
                     <FormItem label={"Name"}>
                         {getFieldDecorator(nameof<NewUserItem>('name'), {
                             initialValue: item.name,
+                            rules: [{ required: true, message: 'Name required.' }]
                         })(
-                            <Input />
+                            <Input placeholder="Name" type="text"/>
                         )}
                     </FormItem>
                 </Col>
@@ -79,6 +75,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                     <FormItem label={'Description'}>
                         {getFieldDecorator(nameof<NewUserItem>('description'), {
                             initialValue: item.description,
+                            rules: [{ max: 10, message: 'Description cant have more than 10 characters.' }]
                         })(
                             <Input />
                         )}
@@ -91,17 +88,17 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
                             initialValue: item.isAdmin,
                         })(
-                            <Checkbox />
+                            <Checkbox  />
                         )}
                     </FormItem>
                 </Col>
-
+                
                 <Col span={20}>
                     <FormItem label={'Admin Type'}>
                         {getFieldDecorator(nameof<NewUserItem>('adminType'), {
                             initialValue: item.adminType,
                         })(
-                            <Select value={item.adminType}>
+                            <Select value={item.adminType} disabled={!this.props.getFieldValue('isAdmin')} placeholder={('Select an admin type')}>
                                 {this.state.admin_type_list.map((team) =>
                                     <option key={team.value} value={team.value}>{team.display}</option>)}
                             </Select>

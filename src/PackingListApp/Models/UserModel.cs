@@ -17,6 +17,7 @@ namespace PackingListApp.Models
         public string LastNames { get; set; }
         [Column(TypeName = "nvarchar(100)")]
         public string Address { get; set; }
+        [MaxLength(10)]
         public string Description { get; set; }
         public bool IsAdmin { get; set; }
         public string AdminType { get; set; }

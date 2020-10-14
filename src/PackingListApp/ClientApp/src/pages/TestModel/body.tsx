@@ -44,6 +44,7 @@ export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
                     <FormItem label={"Title"}>
                         {getFieldDecorator(nameof<NewTestItem>('title'), {
                             initialValue: item.title,
+                            rules: [{ required: true, message: 'Title required.' }]
                         })(
                             <Input />
                         )}
