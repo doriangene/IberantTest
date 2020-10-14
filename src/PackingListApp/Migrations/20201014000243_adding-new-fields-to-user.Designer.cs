@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PackingListApp.EntityFramework;
 
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(TestContext))]
-    partial class TestContextModelSnapshot : ModelSnapshot
+    [Migration("20201014000243_adding-new-fields-to-user")]
+    partial class addingnewfieldstouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,8 +46,7 @@ namespace PackingListApp.Migrations
 
                     b.Property<string>("AdminType");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(10);
+                    b.Property<string>("Description");
 
                     b.Property<bool>("IsAdmin");
 

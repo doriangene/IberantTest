@@ -83,23 +83,20 @@ TestItemListState
         return result;
     }
 
-
-
-
-
     @autobind
     private onNewItemClosed() {
         this.setState({ newShow: false });
         this.load(this.state.query);
     }
 
-
     @autobind
     private async onDeleteRow(
         item: TestItem,
         state: ItemState
     ): Promise<CommandResult<any>> {
-        return await this.TestItemsStore.deleteAsync(`${item.id}`);
+        var result = await this.TestItemsStore.deleteAsync(`${item.id}`);
+        await this.load(this.state.query);
+        return result;
     }
 
 
@@ -113,7 +110,7 @@ TestItemListState
                     title: "Title",
                     renderer: data =>
 
-                    <span>{data.title}</span>,
+                        <span>{data.title}</span>,
 
                     editor: data => <Input />
 
@@ -158,7 +155,8 @@ TestItemListState
                             onQueryChanged={(q: Query) => this.onQueryChanged(q)}
                             onNewItem={this.onNewItem}
                             onRefresh={() => this.load(this.state.query)}
-                            canDelete={true}
+                            onDeleteRow={this.onDeleteRow}
+                            canDelete={true}                       
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
