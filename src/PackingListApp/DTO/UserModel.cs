@@ -10,5 +10,8 @@ namespace PackingListApp.DTO
         public string Name { get; set; }
         public string LastNames { get; set; }
         public string Address { get; set; }
+        public string Description { get; set; }
+        public bool IsAdmin { get; set; }
+        public string AdminType { get; set; }
     }
 }

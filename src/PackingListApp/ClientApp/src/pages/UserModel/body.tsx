@@ -27,8 +27,12 @@ interface ClassFormBodyProps {
 }
 
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
-
-
+    state = {
+        admin_type_list: [{ value: '', display: 'Select an admin type' },
+            { value: 'Normal', display: 'Normal' },
+            { value: 'VIP', display: 'VIP' },
+            { value: 'KING', display: 'KING' }]
+    }
 
     render() {
 
@@ -49,7 +53,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
-                <Col span={8}>
+                <Col span={16}>
                     <FormItem label={'LastName'}>
                         {getFieldDecorator(nameof<NewUserItem>('lastNames'), {
                             initialValue: item.lastNames,
@@ -58,7 +62,9 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
-                <Col span={8}>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
                     <FormItem label={'Address'}>
                         {getFieldDecorator(nameof<NewUserItem>('address'), {
                             initialValue: item.address,
@@ -67,8 +73,41 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={24}>
+                    <FormItem label={'Description'}>
+                        {getFieldDecorator(nameof<NewUserItem>('description'), {
+                            initialValue: item.description,
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                </Col>
+            </Row>
+            <Row gutter={24}>
+                <Col span={4}>
+                    <FormItem label={'Is Admin'}>
+                        {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
+                            initialValue: item.isAdmin,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                </Col>
 
-
+                <Col span={20}>
+                    <FormItem label={'Admin Type'}>
+                        {getFieldDecorator(nameof<NewUserItem>('adminType'), {
+                            initialValue: item.adminType,
+                        })(
+                            <Select value={item.adminType}>
+                                {this.state.admin_type_list.map((team) =>
+                                    <option key={team.value} value={team.value}>{team.display}</option>)}
+                            </Select>
+                        )}
+                    </FormItem>
+                </Col>
             </Row>
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -113,10 +113,7 @@ UserItemListState
                 {
                     field: "name",
                     title: "Name",
-                    renderer: data =>
-
-                        <span>{data.name}</span>,
-
+                    renderer: data => <span>{data.name}</span>,
                     editor: data => <Input />
                 },
                 {
@@ -131,8 +128,24 @@ UserItemListState
                     renderer: data => <span>{data.address}</span>,
                     editor: data => <Input />
                 },
-
-
+                {
+                    field: "description",
+                    title: "Description",
+                    renderer: data => <span>{data.description}</span>,
+                    editor: data => <Input />
+                },
+                {
+                    field: "isAdmin",
+                    title: "IsAdmin",
+                    renderer: data => <span>{data.isAdmin?"Yes":"No"}</span>,
+                    editor: data => <Checkbox />
+                },
+                {
+                    field: "adminType",
+                    title: "Admin Type",
+                    renderer: data => <span>{data.isAdmin ?data.adminType:""}</span>,
+                    editor: data => < Input />                   
+                },
             ],
             data: this.UserItemsStore.state,
             sortFields: [

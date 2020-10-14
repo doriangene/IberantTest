@@ -11,6 +11,9 @@ export interface UserItem {
     name: string; 
     lastNames: string;
     address: string;
+    description: string;
+    isAdmin: boolean;
+    adminType: string;
 }
 
 @repository("@@UserItem", "UserItem.summary")
@@ -32,6 +35,9 @@ export interface NewUserItem {
     name: string,
     lastNames: string,
     address: string,
+    description: string,
+    isAdmin: boolean,
+    adminType: string,
 }
 
 export class NewUserValidator extends Validator<NewUserItem> {
