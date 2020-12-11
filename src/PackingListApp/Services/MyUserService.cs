@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using PackingListApp.EntityFramework;
 using PackingListApp.Interfaces;
 using PackingListApp.Models;
-using PackingListApp.DTO;
 
 namespace PackingListApp.Services {
     public class MyUserService : IMyUserService {
@@ -16,13 +13,15 @@ namespace PackingListApp.Services {
             _context = context;
         }
 
-        public int Add(NewMyUserModel usermodel) {
+        public int Add(NewMyUser usermodel) {
             (string name, string lastName, string address) = usermodel;
-            
+
             // Saving instance...
             var newUser = new MyUser() {
-                Name = name, LastName = lastName, Address = address
-            };            
+                Name = name,
+                LastName = lastName,
+                Address = address
+            };
             _context.MyUsers.Add(newUser);
             _context.SaveChanges();
 
@@ -35,7 +34,7 @@ namespace PackingListApp.Services {
 
         public int Put(int id, MyUser item) {
             var savedInstance = _context.MyUsers.Find(id);
-            
+
             // Updating instance...
             savedInstance.Name = item.Name;
             savedInstance.LastName = item.LastName;

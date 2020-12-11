@@ -1,5 +1,4 @@
-﻿using PackingListApp.DTO;
-using PackingListApp.Models;
+﻿using PackingListApp.Models;
 using System.Collections.Generic;
 
 namespace PackingListApp.Interfaces {
@@ -8,7 +7,7 @@ namespace PackingListApp.Interfaces {
         IEnumerable<MyUser> GetAll();
 
         // Creates a new MyUser using the fields of a NewMyUserModel object
-        int Add(NewMyUserModel usermodel);
+        int Add(NewMyUser usermodel);
 
         // Retrieves the MyUser instance with Id=id from the table
         MyUser Get(int id);

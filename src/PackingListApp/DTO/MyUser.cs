@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PackingListApp.DTO {
-    public class NewMyUserModel {
+﻿namespace PackingListApp.Models {
+    public class NewMyUser {
         public string Name { get; set; }
 
         public string LastName { get; set; }
