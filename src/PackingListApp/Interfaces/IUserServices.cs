@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace PackingListApp.Interfaces
 {
-    public interface ITestServices
+    public interface IUserServices
     {
-        List<TestModel> GetAll();
+        List<UserModel> GetAll();
 
-        int Add(NewTestModel testmodel);
+        int Add(NewUserModel testmodel);
 
-        TestModel Get(int id);
-        int Put(int id, TestModel item);
+        UserModel Get(int id);
+        int Put(int id, UserModel item);
         int Delete(int id);
     }
 }
