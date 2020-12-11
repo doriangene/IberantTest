@@ -17,19 +17,32 @@ namespace PackingListApp.Services {
         }
 
         public int Add(NewMyUserModel usermodel) {
-            throw new NotImplementedException();
+            (string name, string lastName, string address) = usermodel;
+            
+            // Saving instance...
+            var newUser = new MyUser() {
+                Name = name, LastName = lastName, Address = address
+            };            
+            _context.MyUsers.Add(newUser);
+            _context.SaveChanges();
+
+            return newUser.Id;
         }
 
-        public MyUser Get(int id) {
-            throw new NotImplementedException();
-        }
+        public MyUser Get(int id) => _context.MyUsers.Find(id);
 
-        public IEnumerable<MyUser> GetAll() {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<MyUser> GetAll() => _context.MyUsers.AsEnumerable();
 
         public int Put(int id, MyUser item) {
-            throw new NotImplementedException();
+            var savedInstance = _context.MyUsers.Find(id);
+            
+            // Updating instance...
+            savedInstance.Name = item.Name;
+            savedInstance.LastName = item.LastName;
+            savedInstance.Address = item.Address;
+            _context.SaveChanges();
+
+            return id;
         }
     }
 }
