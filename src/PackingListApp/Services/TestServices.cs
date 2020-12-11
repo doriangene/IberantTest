@@ -10,8 +10,8 @@ namespace PackingListApp.Services
 {
     public class TestServices : ITestServices
     {
-        private readonly TestContext _context;
-        public TestServices(TestContext context)
+        private readonly PackingListAppContext _context;
+        public TestServices(PackingListAppContext context)
         {
             _context = context;
         }

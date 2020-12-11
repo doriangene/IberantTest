@@ -10,9 +10,9 @@ using PackingListApp.DTO;
 namespace PackingListApp.Services {
     public class MyUserService : IMyUserService {
 
-        private readonly TestContext _context;
+        private readonly PackingListAppContext _context;
 
-        public MyUserService(TestContext context) {
+        public MyUserService(PackingListAppContext context) {
             _context = context;
         }
 
@@ -33,4 +33,3 @@ namespace PackingListApp.Services {
         }
     }
 }
-
