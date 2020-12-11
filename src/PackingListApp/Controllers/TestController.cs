@@ -29,7 +29,7 @@ namespace PackingListApp.Controllers
         }
 
         // GET: api/Test/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetUserById")]
         public IActionResult Get(int id)
         {
             return Ok(_testService.Get(id));

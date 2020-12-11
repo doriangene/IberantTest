@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PackingListApp.EntityFramework
 {
-    public class TestContext : DbContext
+    public class AppDbContext : DbContext
     {
         private bool _initialized;
 
-        public TestContext(DbContextOptions<TestContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             if (!_initialized)
             {
@@ -24,5 +24,6 @@ namespace PackingListApp.EntityFramework
             }
         }
         public DbSet<TestModel> TestModels { get; set; }
+        public DbSet<UserModel> UserModels { get; set; }
     }
 }

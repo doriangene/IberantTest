@@ -9,8 +9,8 @@ using PackingListApp.EntityFramework;
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191205230503_init")]
-    partial class init
+    [Migration("20201211002913_AddUserModel")]
+    partial class AddUserModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,23 @@ namespace PackingListApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TestModels");
+                });
+
+            modelBuilder.Entity("PackingListApp.Models.UserModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserModels");
                 });
 #pragma warning restore 612, 618
         }
