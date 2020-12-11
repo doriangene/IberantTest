@@ -2,7 +2,7 @@
 import { Form, Spin, Select, Input, Checkbox, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 let FormItem = Form.Item;
-import {  NewTestItem , NewTestItemStore } from 'src/stores/test-store';
+import { NewTestItem, NewTestItemStore } from 'src/stores/test-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';
@@ -13,6 +13,7 @@ import { formatMessage } from 'src/services/http-service';
 interface NewTestItemViewProps {
     onClose: (id: string | undefined, item?: NewTestItem) => void;
 }
+
 
 interface NewTestItemViewState {
 
@@ -28,11 +29,11 @@ interface ClassFormBodyProps {
 
 export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
 
-  
+
 
     render() {
 
-    
+
 
         const { getFieldDecorator } = this.props;
 
@@ -54,14 +55,14 @@ export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewTestItem>('description'), {
                             initialValue: item.description,
                         })(
-                            <Input  />
+                            <Input />
                         )}
                     </FormItem>
                 </Col>
-             
+
 
             </Row>
-          
+
 
         </Form>
     }
