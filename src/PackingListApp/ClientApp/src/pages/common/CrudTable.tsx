@@ -1,17 +1,26 @@
-import React, { Component } from "react";
-import { Input, Alert, Row, Col } from "antd";
-import { TableColumn, TableModel, TableView } from "../../components/collections/table";
-import { Query, ItemState, DataStore } from "../../stores/dataStore";
+import { Alert } from "antd";
 import autobind from "autobind-decorator";
+import React, { Component, FC } from "react";
+import {
+    TableColumn,
+    TableModel,
+    TableView,
+} from "../../components/collections/table";
+import { DataStore, ItemState, Query } from "../../stores/dataStore";
+import { FormStore } from "../../stores/formStore";
+import NewItemView, { FormBodyProps } from "./NewItemView";
 
-
-interface CrudModel {
-    id: number,
+export interface CrudModel {
+    id: number | string;
 }
 
-interface CrudTableProps<T> {
-    Store: DataStore<T>,
-    TableColumns: TableColumn<T>[],
+interface CrudTableProps<Item, NewItem> {
+    DataStore: DataStore<Item>;
+    CreationStore: FormStore<NewItem>;
+    CreationFormBody:
+        | Component<FormBodyProps<NewItem>>
+        | FC<FormBodyProps<NewItem>>;
+    TableColumns: Array<TableColumn<Item>>;
 }
 
 interface CrudTableState {
@@ -22,92 +31,67 @@ interface CrudTableState {
 /**
  * CrudTable is a generic component that implements Crud operations for a model using that model store.
  */
-export default class CrudTable<T extends CrudModel> extends Component<CrudTableProps<T>, CrudTableState> {
+export default class CrudTable<T extends CrudModel, NewT> extends Component<
+    CrudTableProps<T, NewT>,
+    CrudTableState
+> {
     private id: number = -1;
 
-    private get TableColumns() {
-        return this.props.TableColumns;
-    }
-
-    private get Store() {
-        return this.props.Store;
-    }
-
-    private get TableModel() {
-        return {
-            query: this.state.query,
-            columns: this.TableColumns,
-            data: this.Store.state,
-            sortFields: []
-        } as TableModel<T>;
-    }
-
-    constructor(props: CrudTableProps<T>) {
+    constructor(props: CrudTableProps<T, NewT>) {
         super(props);
 
         this.state = {
             query: {
                 searchQuery: "",
                 orderBy: [
-                    { field: "id", direction: "Ascending", useProfile: false }
+                    { field: "id", direction: "Ascending", useProfile: false },
                 ],
                 skip: 0,
-                take: 10
+                take: 10,
             },
-            newShow: false
+            newShow: false,
         };
     }
 
-    componentWillMount() {
+    private get TableColumns() {
+        return this.props.TableColumns;
+    }
+
+    private get DataStore() {
+        return this.props.DataStore;
+    }
+
+    private get CreationStore() {
+        return this.props.CreationStore;
+    }
+
+    private get CreationFormBody() {
+        return this.props.CreationFormBody;
+    }
+
+    private get TableModel() {
+        return {
+            query: this.state.query,
+            columns: this.TableColumns,
+            data: this.DataStore.state,
+            sortFields: [],
+        } as TableModel<T>;
+    }
+
+    public componentWillMount() {
         this.load(this.state.query);
     }
 
-    @autobind
-    private async load(query: Query) {
-        await this.Store.getAllAsync(query);
-    }
-
-    @autobind
-    private onQueryChanged(query: Query) {
-        this.setState({ query });
-        this.load(query);
-    }
-
-
-    @autobind
-    private async onNewItem() {
-        this.setState({ newShow: true })
-    }
-
-
-    @autobind
-    private async onSaveItem(item: T, state: ItemState) {
-        var result = await this.Store.saveAsync(
-            `${item.id}`,
-            item,
-            state
-        );
-        await this.load(this.state.query);
-        return result;
-    }
-
-    @autobind
-    private onNewItemClosed() {
-        this.setState({ newShow: false });
-        this.load(this.state.query);
-    }
-
-
-    render() {
+    public render() {
         return (
             <>
-                {this.Store.state.result &&
-                    !this.Store.state.result.isSuccess && (
+                {this.DataStore.state.result &&
+                    !this.DataStore.state.result.isSuccess && (
                         <Alert
                             type="error"
                             message={"Ha ocurrido un error"}
-                            description={this.Store.state.result.messages
-                                .map(o => o.body)
+                            description={this.DataStore.state.result.messages
+                                .map((o) => o.body)
                                 .join(", ")}
                         />
                     )}
@@ -124,10 +108,44 @@ export default class CrudTable<T extends CrudModel> extends Component<CrudTableP
                         hidepagination={true}
                         canEdit={true}
                     />
-                    {/* {this.state.newShow && <NewTestItemView onClose={this.onNewItemClosed} />} */}
+                    {this.state.newShow && (
+                        <NewItemView
+                            onClose={this.onNewItemClosed}
+                            CreationStore={this.CreationStore}
+                            CreationFormBody={this.CreationFormBody}
+                        />
+                    )}
                 </div>
             </>
         );
     }
 
+    @autobind
+    private async load(query: Query) {
+        await this.DataStore.getAllAsync(query);
+    }
+
+    @autobind
+    private onQueryChanged(query: Query) {
+        this.setState({ query });
+        this.load(query);
+    }
+
+    @autobind
+    private async onNewItem() {
+        this.setState({ newShow: true });
+    }
+
+    @autobind
+    private async onSaveItem(item: T, state: ItemState) {
+        let result = await this.DataStore.saveAsync(`${item.id}`, item, state);
+        await this.load(this.state.query);
+        return result;
+    }
+
+    @autobind
+    private onNewItemClosed() {
+        this.setState({ newShow: false });
+        this.load(this.state.query);
+    }
 }
