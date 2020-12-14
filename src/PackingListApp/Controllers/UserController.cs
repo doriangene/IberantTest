@@ -46,10 +46,17 @@ namespace PackingListApp.Controllers
         }
 
         [HttpPut("{id}")]
-        public  IActionResult Put(int id, [FromBody] UserModel item)
+        public IActionResult Put(int id, [FromBody] UserModel item)
         {
             _userService.Put(id, item);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _userService.Delete(id);
+            return Ok(new CommandHandledResult(true, id.ToString()));
         }
     }
 }

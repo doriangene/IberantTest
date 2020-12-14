@@ -1,14 +1,15 @@
-import { Alert } from "antd";
-import autobind from "autobind-decorator";
-import React, { Component, FC } from "react";
+import { Alert } from 'antd';
+import autobind from 'autobind-decorator';
+import React, { Component, FC } from 'react';
 import {
     TableColumn,
     TableModel,
-    TableView,
-} from "../../components/collections/table";
-import { DataStore, ItemState, Query } from "../../stores/dataStore";
-import { FormStore } from "../../stores/formStore";
-import NewItemView, { FormBodyProps } from "./NewItemView";
+    TableView
+} from '../../components/collections/table';
+import { DataStore, ItemState, Query } from '../../stores/dataStore';
+import { FormStore } from '../../stores/formStore';
+import { CommandResult } from '../../stores/types';
+import NewItemView, { FormBodyProps } from './NewItemView';
 
 export interface CrudModel {
     id: number | string;
@@ -42,14 +43,14 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
 
         this.state = {
             query: {
-                searchQuery: "",
+                searchQuery: '',
                 orderBy: [
-                    { field: "id", direction: "Ascending", useProfile: false },
+                    { field: 'id', direction: 'Ascending', useProfile: false }
                 ],
                 skip: 0,
-                take: 10,
+                take: 10
             },
-            newShow: false,
+            newShow: false
         };
     }
 
@@ -74,7 +75,7 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
             query: this.state.query,
             columns: this.TableColumns,
             data: this.DataStore.state,
-            sortFields: [],
+            sortFields: []
         } as TableModel<T>;
     }
 
@@ -89,20 +90,21 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
                     !this.DataStore.state.result.isSuccess && (
                         <Alert
                             type="error"
-                            message={"Ha ocurrido un error"}
+                            message={'Ha ocurrido un error'}
                             description={this.DataStore.state.result.messages
-                                .map((o) => o.body)
-                                .join(", ")}
+                                .map(o => o.body)
+                                .join(', ')}
                         />
                     )}
-                <div style={{ margin: "12px" }}>
+                <div style={{ margin: '12px' }}>
                     <TableView
-                        rowKey={"id"}
+                        rowKey={'id'}
                         model={this.TableModel}
                         onQueryChanged={(q: Query) => this.onQueryChanged(q)}
                         onNewItem={this.onNewItem}
                         onRefresh={() => this.load(this.state.query)}
                         canDelete={true}
+                        onDeleteRow={this.onDeleteItem}
                         canCreateNew={true}
                         onSaveRow={this.onSaveItem}
                         hidepagination={true}
@@ -140,6 +142,15 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
     private async onSaveItem(item: T, state: ItemState) {
         let result = await this.DataStore.saveAsync(`${item.id}`, item, state);
         await this.load(this.state.query);
+        return result;
+    }
+
+    @autobind
+    private async onDeleteItem(
+        item: T,
+        state: ItemState
+    ): Promise<CommandResult<any>> {
+        const result = this.DataStore.deleteAsync(`${item.id}`);
         return result;
     }
 

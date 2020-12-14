@@ -14,5 +14,7 @@ namespace PackingListApp.Interfaces
 
         UserModel Get(int id);
         int Put(int id, UserModel item);
+
+        void Delete(int id);
     }
 }
