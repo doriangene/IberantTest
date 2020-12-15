@@ -22,7 +22,10 @@ namespace PackingListApp.Services
             {
                 FirstName = usermodel.FirstName,
                 LastName = usermodel.LastName,
-                Address = usermodel.Address
+                Address = usermodel.Address,
+                Description = usermodel.Description,
+                IsAdmin = usermodel.IsAdmin,
+                AdminType = usermodel.AdminType
             };
 
             _context.UserModels.Add(newUser);
@@ -46,6 +49,10 @@ namespace PackingListApp.Services
             itemput.FirstName = item.FirstName;
             itemput.LastName = item.LastName;
             itemput.Address = item.Address;
+            itemput.Description = item.Description;
+            itemput.IsAdmin = item.IsAdmin;
+            itemput.AdminType = item.AdminType;
+
             _context.SaveChanges();
             return id;
 
@@ -55,7 +62,7 @@ namespace PackingListApp.Services
         {
             var user = _context.UserModels.First(n => n.Id == id);
             _context.UserModels.Remove(user);
-            _context.SaveChanges();   
+            _context.SaveChanges();
         }
     }
 }

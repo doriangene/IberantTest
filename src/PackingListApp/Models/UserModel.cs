@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace PackingListApp.Models
 {
+    public enum AdminType
+    {
+        Normal,
+        Vip,
+        King
+    }
+
     public class UserModel
     {
         [Key]
@@ -13,5 +20,9 @@ namespace PackingListApp.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }
+        public string Description { get; set; }
+        public bool IsAdmin { get; set; }
+        public AdminType AdminType { get; set; }
+
     }
 }
