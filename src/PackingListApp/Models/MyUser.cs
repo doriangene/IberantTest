@@ -15,7 +15,8 @@ namespace PackingListApp.Models
         public string LastName { get; set; }
         
         public string Address { get; set; }
-        
+
+        [MaxLength(5)]
         public string Description { get; set; }
         
         public bool IsAdmin { get; set; }

@@ -55,7 +55,7 @@ export class NewMyUserItemValidator extends Validator<NewMyUserItem> {
     super();
 
     // validation rules for name, last name and address
-    const MAX_CHARS_FOR_DESCRIPTION = 13;
+    const MAX_CHARS_FOR_DESCRIPTION = 10;
     const notNullMessage = (propName: string) =>
       `MyUser instance does not admit null values for property "${propName}".`;
 
