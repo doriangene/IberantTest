@@ -14,13 +14,22 @@ namespace PackingListApp.Services {
         }
 
         public int Add(NewMyUser usermodel) {
-            (string name, string lastName, string address) = usermodel;
+            (
+                string name,
+                string lastName,
+                string address,
+                string description,
+                bool isAdmin,
+                AdminType adminType) = usermodel;
 
             // Saving instance...
             var newUser = new MyUser() {
                 Name = name,
                 LastName = lastName,
-                Address = address
+                Address = address,
+                Description = description,
+                IsAdmin = isAdmin,
+                AdminType = adminType
             };
             _context.MyUsers.Add(newUser);
             _context.SaveChanges();
@@ -28,7 +37,11 @@ namespace PackingListApp.Services {
             return newUser.Id;
         }
 
-        public void Delete(int id)  => _context.MyUsers.Remove(_context.MyUsers.Find(id));
+        public void Delete(int id) {
+            _context.MyUsers.Remove(_context.MyUsers.Find(id));
+            _context.SaveChanges();
+            System.Console.WriteLine(_context.MyUsers.Count());
+        }
 
         public MyUser Get(int id) => _context.MyUsers.Find(id);
 
@@ -41,6 +54,10 @@ namespace PackingListApp.Services {
             savedInstance.Name = item.Name;
             savedInstance.LastName = item.LastName;
             savedInstance.Address = item.Address;
+            savedInstance.Description = item.Description;
+            savedInstance.IsAdmin = item.IsAdmin;
+            savedInstance.AdminType = item.AdminType;
+
             _context.SaveChanges();
 
             return id;

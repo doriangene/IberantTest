@@ -8,7 +8,7 @@ using PackingListApp.EntityFramework;
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(PackingListAppContext))]
-    partial class TestContextModelSnapshot : ModelSnapshot
+    partial class PackingListAppContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,12 @@ namespace PackingListApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address");
+
+                    b.Property<int>("AdminType");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("IsAdmin");
 
                     b.Property<string>("LastName");
 

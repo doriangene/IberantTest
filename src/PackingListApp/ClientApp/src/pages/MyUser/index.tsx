@@ -3,12 +3,18 @@ import autobind from "autobind-decorator";
 import React, { Component } from "react";
 import { RouteComponentProps } from "react-router";
 import { connect } from "redux-scaffolding-ts";
-import { MyUserItem, MyUserItemStore } from "src/stores/my-user-store";
+import {
+  AdminType,
+  MyUserItem,
+  MyUserItemStore
+} from "src/stores/my-user-store";
 import { TableModel, TableView } from "../../components/collections/table";
+import BooleanInput from "../../components/form/booleanInput";
 import HeaderComponent from "../../components/shell/header";
 import { ItemState, Query } from "../../stores/dataStore";
 import { CommandResult } from "../../stores/types";
 import NewMyUserItemView from "./body";
+import { AdminTypeDropdown } from "./components";
 const { Content } = Layout;
 
 interface MyUserItemListState {
@@ -109,6 +115,29 @@ export default class MyUserItemListPage extends Component<
           title: "Address",
           renderer: data => <span>{data.address}</span>,
           editor: data => <Input />
+        },
+        {
+          field: "description",
+          title: "Description",
+          renderer: data => <span>{data.description}</span>,
+          editor: data => <Input />
+        },
+        {
+          field: "isAdmin",
+          title: "Is Admin",
+          renderer: data => <span>{data.isAdmin ? "True" : "False"}</span>,
+          editor: data => <BooleanInput onChange={v => (data.isAdmin = v)} />
+        },
+        {
+          field: "adminType",
+          title: "Admin Type",
+          renderer: data => (
+            <span>
+              {console.log(data.adminType)}
+              {data.isAdmin ? AdminType[data.adminType as any] : "Not an admin"}
+            </span>
+          ),
+          editor: data => <AdminTypeDropdown disabled={!data.isAdmin} />
         }
       ],
       data: this.MyUserItemStore.state,
