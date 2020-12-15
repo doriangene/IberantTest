@@ -1,5 +1,5 @@
 ﻿import React, { FC, ReactElement, useState } from 'react';
-import { Col, Input, Row, Select } from 'antd';
+import { Col, Input, Row, Select, Switch } from 'antd';
 import Form, { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
 import FormItem from 'antd/lib/form/FormItem';
 import { AdminType, NewUser, User } from '../../stores/userStore';
@@ -58,11 +58,7 @@ const UserFormBody: FC<FormBodyProps<NewUser>> = ({
                     <FormItem label={'Is Admin'}>
                         {getFieldDecorator(nameof<NewUser>('isAdmin'), {
                             initialValue: (item as NewUser).isAdmin
-                        })(
-                            <BooleanInput
-                                onChange={value => setIsAdmin(value)}
-                            />
-                        )}
+                        })(<Switch onChange={value => setIsAdmin(value)} />)}
                     </FormItem>
                 </Col>
                 {isAdmin && (

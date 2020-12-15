@@ -67,6 +67,12 @@ export class NewUserValidator extends Validator<NewUser> {
         this.ruleFor(x => x.address)
             .notNull()
             .withMessage("User address can't be empty");
+        this.ruleFor(x => x.description)
+            .notNull()
+            .withMessage("User description can't be empty");
+        this.ruleFor(x => x.description)
+            .maxLength(10)
+            .withMessage("User description can't exceed 10 characters");
     }
 }
 

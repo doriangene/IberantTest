@@ -1,4 +1,4 @@
-import { Input, Layout, Select } from 'antd';
+import { Input, Layout, Select, Switch } from 'antd';
 import React, { Component, FC, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'redux-scaffolding-ts';

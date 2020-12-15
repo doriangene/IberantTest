@@ -2,17 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PackingListApp.EntityFramework;
 
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201211002913_AddUserModel")]
-    partial class AddUserModel
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +41,14 @@ namespace PackingListApp.Migrations
 
                     b.Property<string>("Address");
 
+                    b.Property<int>("AdminType");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(10);
+
                     b.Property<string>("FirstName");
+
+                    b.Property<bool>("IsAdmin");
 
                     b.Property<string>("LastName");
 
