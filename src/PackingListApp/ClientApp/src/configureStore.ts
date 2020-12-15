@@ -5,6 +5,7 @@ import { ApplicationState, configReducer } from "./stores/reducers";
 import { History } from "history";
 import { storeBuilder } from "redux-scaffolding-ts";
 import { TestItemStore, TestItemsStore, NewTestItemStore } from "./stores/test-store";
+import { UserItemStore, UserItemsStore, NewUserItemStore } from "./stores/user-store";
 
 export default function configureStore(history: History, initialState?: ApplicationState) {
     // Build middleware. These are functions that can process the actions before they reach the store.
@@ -35,6 +36,11 @@ export default function configureStore(history: History, initialState?: Applicat
     storeBuilder.addRepository(new TestItemStore() as any);
     storeBuilder.addRepository(new NewTestItemStore() as any);
     storeBuilder.addRepository(new TestItemsStore() as any);
+
+    storeBuilder.addRepository(new UserItemStore() as any);
+    storeBuilder.addRepository(new NewUserItemStore() as any);
+    storeBuilder.addRepository(new UserItemsStore() as any);
+
     return store;
 }
 

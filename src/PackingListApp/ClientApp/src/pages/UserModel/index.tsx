@@ -1,39 +1,39 @@
-import React, { Component } from "react";
+﻿import React, { Component } from "react";
 import { Layout, Input, Alert, Row, Col } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
 import {
-    TestItemsStore,
-    TestItem
-} from "src/stores/test-store";
+    UserItemsStore,
+    UserItem
+} from "src/stores/user-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
 import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
-import NewTestItemView from "./body"
+import NewUserItemView from "./body"
 
-interface TestItemListProps extends RouteComponentProps { }
+interface UserItemListProps extends RouteComponentProps { }
 
-interface TestItemListState {
+interface UserItemListState {
     query: Query;
     newShow: boolean;
 }
 
-@connect(["TestItems", TestItemsStore])
-export default class TestItemListPage extends Component<
-TestItemListProps,
-TestItemListState
+@connect(["UserItems", UserItemsStore])
+export default class UserItemListPage extends Component<
+UserItemListProps,
+UserItemListState
 > {
     private id: number = -1;
-    private get TestItemsStore() {
-        return (this.props as any).TestItems as TestItemsStore;
+    private get UserItemsStore() {
+        return (this.props as any).UserItems as UserItemsStore;
     }
 
-    constructor(props: TestItemListProps) {
+    constructor(props: UserItemListProps) {
         super(props);
 
         this.state = {
@@ -56,7 +56,7 @@ TestItemListState
 
     @autobind
     private async load(query: Query) {
-        await this.TestItemsStore.getAllAsync(query);
+        await this.UserItemsStore.getAllAsync(query);
     }
 
     @autobind
@@ -73,8 +73,8 @@ TestItemListState
 
 
     @autobind
-    private async onSaveItem(item: TestItem, state: ItemState) {
-        var result = await this.TestItemsStore.saveAsync(
+    private async onSaveItem(item: UserItem, state: ItemState) {
+        var result = await this.UserItemsStore.saveAsync(
             `${item.id}`,
             item,
             state
@@ -82,9 +82,6 @@ TestItemListState
         await this.load(this.state.query);
         return result;
     }
-
-
-
 
 
     @autobind
@@ -96,10 +93,10 @@ TestItemListState
 
     @autobind
     private async onDeleteRow(
-        item: TestItem,
+        item: UserItem,
         state: ItemState
     ): Promise<CommandResult<any>> {
-        var result = await this.TestItemsStore.deleteAsync(`${item.id}`);
+        var result = await this.UserItemsStore.deleteAsync(`${item.id}`);
         await this.load(this.state.query);
         return result;
     }
@@ -111,43 +108,48 @@ TestItemListState
             query: this.state.query,
             columns: [
                 {
-                    field: "title",
-                    title: "Title",
+                    field: "name",
+                    title: "Name",
                     renderer: data =>
 
-                    <span>{data.title}</span>,
+                        <span>{data.name}</span>,
 
                     editor: data => <Input />
 
 
                 },
                 {
-                    field: "description",
-                    title: "Description",
-                    renderer: data => <span>{data.description}</span>,
+                    field: "lastname",
+                    title: "Lastname",
+                    renderer: data => <span>{data.lastname}</span>,
+                    editor: data => <Input />
+                },
+                {
+                    field: "address",
+                    title: "Address",
+                    renderer: data => <span>{data.address}</span>,
                     editor: data => <Input />
                 },
 
-
             ],
-            data: this.TestItemsStore.state,
+            data: this.UserItemsStore.state,
             sortFields: [
 
 
             ]
-        } as TableModel<TestItem>;
+        } as TableModel<UserItem>;
 
         return (
             <Layout>
-                <HeaderComponent title="TestModels" canGoBack={true} />
+                <HeaderComponent title="UserModels" canGoBack={true} />
 
                 <Content className="page-content">
-                    {this.TestItemsStore.state.result &&
-                        !this.TestItemsStore.state.result.isSuccess && (
+                    {this.UserItemsStore.state.result &&
+                        !this.UserItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
                                 message={"Ha ocurrido un error"}
-                                description={this.TestItemsStore.state.result.messages
+                                description={this.UserItemsStore.state.result.messages
                                     .map(o => o.body)
                                     .join(", ")}
                             />
@@ -160,14 +162,14 @@ TestItemListState
                             onQueryChanged={(q: Query) => this.onQueryChanged(q)}
                             onNewItem={this.onNewItem}
                             onRefresh={() => this.load(this.state.query)}
-                            canDelete={true}
                             onDeleteRow={this.onDeleteRow}
+                            canDelete={true}
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
                             canEdit={true}
                         />
-                        {this.state.newShow && <NewTestItemView onClose={this.onNewItemClosed} />}
+                        {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} />}
                     </div>
                 </Content>
             </Layout>

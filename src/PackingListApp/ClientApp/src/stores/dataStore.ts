@@ -209,7 +209,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
                     onSuccess: (result: any, item: any) => {
                         return {
                             ...this.state,
-                            items: this.state.items.map(o => {
+                            items: this.state.items.map((o: any) => {
                                 if (
                                     o.item[this.rowKey] ==
                                     (item[this.rowKey] ||
@@ -261,7 +261,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
                             count: value.data.count - 1,
                             result: undefined,
                             items: this.state.items.filter(
-                                o =>
+                                (o: any) =>
                                     o.item[this.rowKey] !=
                                     (value.data.identifier ||
                                         (this.useTitleKey
@@ -373,7 +373,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
         id: string,
         params?: any
     ): Promise<CommandResult<T>> {
-        var item = this.state.items.firstOrDefault(o => o.item[this.rowKey] == id);
+        var item = this.state.items.firstOrDefault((o: any) => o.item[this.rowKey] == id);
         if (item && item.state == "New") {
             var data = {
                 aggregateRootId: id,
@@ -462,8 +462,8 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
         return {
             onStart: (args: any) => ({ ...this.state, isBusy: true }),
             onSuccess: (result: any, partial: Partial<T>) => {
-                var items = (this.state || ({} as any)).items.map(o => {
-                    if (o.item[key as string] == partial[key as string]) {
+                var items = (this.state || ({} as any)).items.map((o: any) => {
+                    if ((o.item as any)[key as string] == (partial as any)[key as string]) {
                         o.item = Object.assign(o.item, partial);
                         return o;
                     }

@@ -46,7 +46,16 @@ namespace PackingListApp.Services
             itemput.Title = item.Title;
             _context.SaveChanges();
             return id;
-
         }
+
+        public int Delete(int id)
+        {
+            var itemdelete = new TestModel { Id = id };
+            _context.TestModels.Attach(itemdelete);
+            _context.TestModels.Remove(itemdelete);
+            _context.SaveChanges();
+            return id;
+        }
+
     }
 }
