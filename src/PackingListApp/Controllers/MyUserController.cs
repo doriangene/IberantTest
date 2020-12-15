@@ -43,5 +43,11 @@ namespace PackingList.Controllers {
             myUserService.Put(id, item);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id) {
+            myUserService.Delete(id);
+            return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
     }
 }

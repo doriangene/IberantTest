@@ -28,6 +28,8 @@ namespace PackingListApp.Services {
             return newUser.Id;
         }
 
+        public void Delete(int id)  => _context.MyUsers.Remove(_context.MyUsers.Find(id));
+
         public MyUser Get(int id) => _context.MyUsers.Find(id);
 
         public IEnumerable<MyUser> GetAll() => _context.MyUsers.AsEnumerable();

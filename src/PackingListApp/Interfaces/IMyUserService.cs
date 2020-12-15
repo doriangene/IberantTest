@@ -16,5 +16,8 @@ namespace PackingListApp.Interfaces {
         // using the fields of the instance specified in item
         //TODO shouldn't item be a request instead of an instance?
         int Put(int id, MyUser item);
+
+        // Deletes an instance
+        void Delete(int id);
     }
 }
