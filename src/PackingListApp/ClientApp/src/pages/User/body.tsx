@@ -58,7 +58,11 @@ const UserFormBody: FC<FormBodyProps<NewUser>> = ({
                     <FormItem label={'Is Admin'}>
                         {getFieldDecorator(nameof<NewUser>('isAdmin'), {
                             initialValue: (item as NewUser).isAdmin
-                        })(<Switch onChange={value => setIsAdmin(value)} />)}
+                        })(
+                            <BooleanInput
+                                onChange={value => setIsAdmin(value)}
+                            />
+                        )}
                     </FormItem>
                 </Col>
                 {isAdmin && (

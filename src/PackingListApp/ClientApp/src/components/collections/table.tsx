@@ -80,6 +80,7 @@ export interface TableProps<T> {
     onSelection?: (ids: any[]) => void;
     autosave?: boolean;
     saveAllDone?: () => void;
+    onModalEdit?: (item: T, state: ItemState) => void;
 
     //onPageChange?: (skip: number, take: number) => void;
     //onSearchFilterChanged?: (q: string) => void;
@@ -635,7 +636,36 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                     </Popconfirm>
                                 </span>
                             ) : (
+                                    <div>
                                     <a onClick={() => this.onRowEdit(record.key)}><Icon type='edit' /></a>
+
+                                    
+                                    {this.props.onModalEdit !== undefined && (
+                                        <a
+                                            onClick={() => {
+                                                if (
+                                                    this.props.onModalEdit !==
+                                                    undefined
+                                                ) {
+                                                    var obj = this.state.data.filter(
+                                                        o =>
+                                                            (o.item as any)[
+                                                            this.state
+                                                                .rowKey
+                                                            ] == record.key
+                                                    )[0];
+                                                    this.props.onModalEdit(
+                                                        obj.item as T,
+                                                        obj.state as ItemState
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <Icon type="switcher" />
+                                        </a>
+                                    )}
+                                    </div>
+
                                 )}
                         </div>
                     );

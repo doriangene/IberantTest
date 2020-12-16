@@ -9,6 +9,7 @@ import {
 import { DataStore, ItemState, Query } from '../../stores/dataStore';
 import { FormStore } from '../../stores/formStore';
 import { CommandResult } from '../../stores/types';
+import EditionModal from './EditionModal';
 import NewItemView, { FormBodyProps } from './NewItemView';
 
 export interface CrudModel {
@@ -27,6 +28,7 @@ interface CrudTableProps<Item, NewItem> {
 interface CrudTableState {
     query: Query;
     newShow: boolean;
+    editShow: boolean;
 }
 
 /**
@@ -50,7 +52,8 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            editShow: false,
         };
     }
 
@@ -109,12 +112,21 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
                         onSaveRow={this.onSaveItem}
                         hidepagination={true}
                         canEdit={true}
+                        onModalEdit={this.onModalEdit}
                     />
                     {this.state.newShow && (
                         <NewItemView
                             onClose={this.onNewItemClosed}
                             CreationStore={this.CreationStore}
                             CreationFormBody={this.CreationFormBody}
+                        />
+                    )}
+                    {this.state.editShow && (
+                        <EditionModal
+                            onClose={this.onEditClose}
+                            CreationStore={this.CreationStore}
+                            CreationFormBody={this.CreationFormBody}
+                            onSave={this.onEditModalSave}
                         />
                     )}
                 </div>
@@ -158,5 +170,31 @@ export default class CrudTable<T extends CrudModel, NewT> extends Component<
     private onNewItemClosed() {
         this.setState({ newShow: false });
         this.load(this.state.query);
+    }
+
+    //
+    /* Callback for getting the selected user from click on Icon (Table<T>).
+     */
+    @autobind
+    private onModalEdit(item: T, state: ItemState) {
+        this.CreationStore.createNew({} as any);
+        this.CreationStore.change({ ...item } as any);
+        this.setState({ editShow:true })
+    }
+
+    @autobind
+    private async onEditModalSave(item: T, state: ItemState) {
+        return new Promise((resolve, reject) => {
+            this.DataStore.saveAsync(`${item.id}`, item, state).then((result) => {
+                this.load(this.state.query)
+                    .then(() => { resolve(result); this.setState({ editShow:false }); })
+                    .catch(() => resolve(result));
+            }).catch(reject)
+        });
+    }
+
+    @autobind
+    private onEditClose() {
+        this.setState({ editShow: false });
     }
 }
