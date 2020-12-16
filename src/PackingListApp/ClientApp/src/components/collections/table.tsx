@@ -80,6 +80,8 @@ export interface TableProps<T> {
     onSelection?: (ids: any[]) => void;
     autosave?: boolean;
     saveAllDone?: () => void;
+    // added this prop to get user for edition modal
+    onModalOpen?: (item: T) => void;
 
     //onPageChange?: (skip: number, take: number) => void;
     //onSearchFilterChanged?: (q: string) => void;
@@ -635,7 +637,18 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                     </Popconfirm>
                                 </span>
                             ) : (
+                                    <>
                                     <a onClick={() => this.onRowEdit(record.key)}><Icon type='edit' /></a>
+                                        <a
+                                            onClick={() => { 
+                                                var obj = this.state.data.filter(o =>
+                                                    (o.item as any)[this.state.rowKey] == record.key)[0];
+                                                if (this.props.onModalOpen !== undefined)
+                                                    this.props.onModalOpen(obj.item as T);
+                                            }}>
+                                            <Icon type='setting' />
+                                        </a>
+                                    </>
                                 )}
                         </div>
                     );

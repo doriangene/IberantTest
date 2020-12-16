@@ -6,7 +6,8 @@ import { connect } from "redux-scaffolding-ts";
 import {
   AdminType,
   MyUserItem,
-  MyUserItemStore
+  MyUserItemStore,
+  NewMyUserItemStore
 } from "src/stores/my-user-store";
 import { TableModel, TableView } from "../../components/collections/table";
 import BooleanInput from "../../components/form/booleanInput";
@@ -15,16 +16,19 @@ import { ItemState, Query } from "../../stores/dataStore";
 import { CommandResult } from "../../stores/types";
 import NewMyUserItemView from "./body";
 import { AdminTypeDropdown } from "./components";
+import EditionModal from "./EditionModal";
 const { Content } = Layout;
 
 interface MyUserItemListState {
   query: Query;
   newShow: boolean;
+  editShow: boolean;
 }
 
 interface MyUserItemListProps extends RouteComponentProps {}
 
 @connect(["MyUserItems", MyUserItemStore])
+@connect(["NewMyUserItems", NewMyUserItemStore])
 export default class MyUserItemListPage extends Component<
   MyUserItemListProps,
   MyUserItemListState
@@ -32,6 +36,9 @@ export default class MyUserItemListPage extends Component<
   private id: number = -1;
   private get MyUserItemStore() {
     return (this.props as any).MyUserItems as MyUserItemStore;
+  }
+  private get NewMyUserItemStore() {
+    return (this.props as any).NewMyUserItems as NewMyUserItemStore;
   }
 
   constructor(props: MyUserItemListProps) {
@@ -44,7 +51,8 @@ export default class MyUserItemListPage extends Component<
         skip: 0,
         take: 10
       },
-      newShow: false
+      newShow: false,
+      editShow: false
     };
   }
 
@@ -86,11 +94,30 @@ export default class MyUserItemListPage extends Component<
   }
 
   @autobind
+  private onEditItemClosed() {
+    this.setState({ editShow: false });
+    this.load(this.state.query);
+  }
+
+  @autobind
   private async onDeleteRow(
     item: MyUserItem,
     state: ItemState
   ): Promise<CommandResult<any>> {
     return await this.MyUserItemStore.deleteAsync(`${item.id}`);
+  }
+
+  @autobind
+  private async onEditionOpen(item: MyUserItem) {
+    this.setState({ editShow: true });
+    this.NewMyUserItemStore.createNew({} as any);
+    this.NewMyUserItemStore.change({ ...item } as any);
+  }
+
+  @autobind
+  private async onEditionOk() {
+    this.setState({ editShow: false });
+    return this.load(this.state.query);
   }
 
   render() {
@@ -173,9 +200,16 @@ export default class MyUserItemListPage extends Component<
               onSaveRow={this.onSaveItem}
               hidepagination={true}
               canEdit={true}
+              onModalOpen={this.onEditionOpen}
             />
             {this.state.newShow && (
               <NewMyUserItemView onClose={this.onNewItemClosed} />
+            )}
+            {this.state.editShow && (
+              <EditionModal
+                onClose={this.onEditItemClosed}
+                onSave={this.onEditionOk}
+              />
             )}
           </div>
         </Content>
