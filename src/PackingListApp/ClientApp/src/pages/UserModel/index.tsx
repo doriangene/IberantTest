@@ -1,5 +1,5 @@
 ﻿import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewUserItemView from "./body"
+import { AdminTypes } from "./body"
 
 interface UserItemListProps extends RouteComponentProps { }
 
@@ -101,7 +102,7 @@ UserItemListState
         return result;
     }
 
-
+    stringIsNumber = (val: any) => isNaN(Number(val)) === false;
 
     render() {
         const tableModel = {
@@ -115,8 +116,6 @@ UserItemListState
                         <span>{data.name}</span>,
 
                     editor: data => <Input />
-
-
                 },
                 {
                     field: "lastname",
@@ -129,6 +128,27 @@ UserItemListState
                     title: "Address",
                     renderer: data => <span>{data.address}</span>,
                     editor: data => <Input />
+                },
+                {
+                    field: "isAdmin",
+                    title: "Is Admin",
+                    renderer: data => <span>{data.isAdmin ? 'Yes' : 'No'}</span>,
+                    editor: data => <Checkbox />
+                },
+                {
+                    field: "adminType",
+                    title: "Admin Type",
+                    renderer: data => <span>{data.isAdmin ? AdminTypes[data.adminType] : ''}</span>,
+                    editor: data =>
+                        <Select value={data.adminType}>
+                        {
+                            Object.keys(AdminTypes)
+                                .filter(this.stringIsNumber)
+                                .map((key: any) =>
+                                    <option value={key}>{AdminTypes[key]}</option>
+                                )
+                        }
+                    </Select>
                 },
 
             ],

@@ -8,6 +8,7 @@ import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';
 import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
 import { formatMessage } from 'src/services/http-service';
+import { max } from 'moment';
 
 
 interface NewUserItemViewProps {
@@ -26,24 +27,34 @@ interface ClassFormBodyProps {
     getFieldDecorator<T extends Object = {}>(id: keyof T, options?: GetFieldDecoratorOptions): (node: React.ReactNode) => React.ReactNode;
 }
 
+ export enum AdminTypes {
+    'Normal', 
+    'Vip',
+    'King'
+}
+
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
 
-
+    stringIsNumber = (val: any) => isNaN(Number(val)) === false;
 
     render() {
 
-
-
-        const { getFieldDecorator } = this.props;
+       const { getFieldDecorator } = this.props;
 
         var item = this.props.item || {} as NewUserItem;
         return <Form id="modaForm" onSubmit={() => { if (this.props.onSave) { this.props.onSave(); } }}>
             <Row gutter={24}>
-
                 <Col span={8}>
                     <FormItem label={"Name"}>
                         {getFieldDecorator(nameof<NewUserItem>('name'), {
                             initialValue: item.name,
+                            rules: [
+                                {
+                                    min: 1,
+                                    required: true,
+                                    message: 'Name cannot be null or empty'
+                                }
+                            ]
                         })(
                             <Input />
                         )}
@@ -53,6 +64,12 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                     <FormItem label={'LastName'}>
                         {getFieldDecorator(nameof<NewUserItem>('lastname'), {
                             initialValue: item.lastname,
+                            rules: [
+                                {
+                                    required: true,
+                                    message: 'Lastname cannot be null or empty'
+                                }
+                            ]
                         })(
                             <Input />
                         )}
@@ -62,15 +79,54 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                     <FormItem label={'Address'}>
                         {getFieldDecorator(nameof<NewUserItem>('address'), {
                             initialValue: item.address,
+                            rules: [
+                                {
+                                    required:true,
+                                    max: 10,
+                                    message: 'Address must have at most 10 characters'
+                                }
+                            ]
                         })(
                             <Input />
                         )}
                     </FormItem>
                 </Col>
-
             </Row>
-
-
+            <Row>
+                <FormItem label={'Is Admin'}>
+                    {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
+                        initialValue: item.isAdmin,
+                    })(
+                        <Checkbox />
+                    )}
+                </FormItem>
+            </Row>
+            <Row>
+                <FormItem label={'Admin Type'}>
+                    {getFieldDecorator(nameof<NewUserItem>('adminType'), {
+                        initialValue: item.adminType,
+                        rules: [
+                            {
+                                required: true
+                            }
+                        ]
+                    })(
+                        <Select
+                            value={item.adminType}
+                            disabled={!this.props.getFieldValue('isAdmin')}
+                            placeholder={this.props.getFieldValue('isAdmin')?"Select an admin type":""}
+                            >
+                            {  
+                                Object.keys(AdminTypes)
+                                    .filter(this.stringIsNumber)
+                                    .map((key: any) =>
+                                        <option value={key}>{AdminTypes[key]}</option>
+                                )
+                            }
+                        </Select>
+                    )}
+                </FormItem>
+            </Row>
         </Form>
     }
 }

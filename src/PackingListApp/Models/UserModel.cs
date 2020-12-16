@@ -8,10 +8,26 @@ namespace PackingListApp.Models
 {
     public class UserModel
     {
-        [Key]   
+        [Key]
         public int Id { get; set; }
+        
         public string Name { get; set; }
+        
         public string Lastname { get; set; }
+        
+        [MaxLength(10)]
         public string Address { get; set; }
+        
+        public bool IsAdmin { get; set; }
+
+        [EnumDataType(typeof(_AdminType))]
+        public _AdminType AdminType { get; set; }
+
+        public enum _AdminType
+        {
+            Normal = 0,
+            Vip = 1,
+            King = 2
+        }
     }
 }

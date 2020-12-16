@@ -23,7 +23,9 @@ namespace PackingListApp.Services
             {
                 Name = usermodel.Name,
                 Lastname = usermodel.Lastname,
-                Address = usermodel.Address
+                Address = usermodel.Address,
+                IsAdmin = usermodel.IsAdmin,
+                AdminType = usermodel.AdminType
             };
             _context.UserModels.Add(newuser
             );
@@ -47,6 +49,8 @@ namespace PackingListApp.Services
             itemput.Name = item.Name;
             itemput.Lastname = item.Lastname;
             itemput.Address = item.Address;
+            itemput.IsAdmin = item.IsAdmin;
+            itemput.AdminType = item.AdminType;
             _context.SaveChanges();
             return id;
         }
