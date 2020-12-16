@@ -9,8 +9,8 @@ using PackingListApp.EntityFramework;
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(PackingListAppContext))]
-    [Migration("20201215191733_DescriptionRestriction10Chars")]
-    partial class DescriptionRestriction10Chars
+    [Migration("20201216000554_DescriptionRestriction")]
+    partial class DescriptionRestriction
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

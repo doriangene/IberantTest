@@ -2,17 +2,19 @@
 
 namespace PackingListApp.Migrations
 {
-    public partial class DescriptionRestriction5Chars : Migration
+    public partial class DescriptionRestriction : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(
+                "UPDATE dbo.MyUsers SET Description = LEFT(Description, 10) WHERE LEN(Description) > 10"
+            );
             migrationBuilder.AlterColumn<string>(
                 name: "Description",
                 table: "MyUsers",
-                maxLength: 5,
+                maxLength: 10,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldMaxLength: 10,
                 oldNullable: true);
         }
 
@@ -21,10 +23,9 @@ namespace PackingListApp.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Description",
                 table: "MyUsers",
-                maxLength: 10,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldMaxLength: 5,
+                oldMaxLength: 10,
                 oldNullable: true);
         }
     }

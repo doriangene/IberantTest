@@ -29,7 +29,7 @@ namespace PackingListApp.Migrations
                     b.Property<int>("AdminType");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(5);
+                        .HasMaxLength(10);
 
                     b.Property<bool>("IsAdmin");
 
