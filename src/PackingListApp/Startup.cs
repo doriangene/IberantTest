@@ -28,7 +28,7 @@ namespace PackingListApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration["TestContext:ConnectionString"]));
 
@@ -72,6 +72,7 @@ namespace PackingListApp
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -84,14 +85,15 @@ namespace PackingListApp
             {
                 spa.Options.SourcePath = "ClientApp";
 
+
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-          
+
         }
 
-      
+
     }
 }
