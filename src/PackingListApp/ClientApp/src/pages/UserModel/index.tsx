@@ -5,7 +5,7 @@ import {AdminType, UserItem, UserItemDtoStore, UserItemStore} from "../../stores
 import React, {Component} from "react";
 import autobind from "autobind-decorator";
 import {CommandResult} from "../../stores/types";
-import {Input, Layout, Alert} from "antd";
+import { Layout, Input, Alert, Row, Col } from "antd";
 import {TableModel, TableView} from "../../components/collections/table";
 import HeaderComponent from "../../components/shell/header";
 import UserItemDtoView from "./body";
