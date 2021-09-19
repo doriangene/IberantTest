@@ -10,6 +10,7 @@ import AppMenu from './menu';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { container } from './inversify.config';
+import UserItemListPage from "./pages/UserModel";
 
 
 interface AppProps extends RouteComponentProps {
@@ -49,6 +50,7 @@ class App extends Component<AppProps, AppState> {
                 </Sider>
                 <Route exact path='/' component={HomePage} />
                 <Route exact path='/test' component={TestIndex} />
+                <Route exact path='/user' component={UserItemListPage} />
             </Layout>);
     }
 }
