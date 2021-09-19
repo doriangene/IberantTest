@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, RouteComponentProps, withRouter } from 'react-router';
 import HomePage from './pages/home';
 import TestIndex from './pages/TestModel/index';
+import UserIndex from './pages/UserModel/index'
 import autobind from 'autobind-decorator';
 import { Layout, Menu, Icon, Divider, Modal, DatePicker, Input, InputNumber } from 'antd';
 import HttpService from './services/http-service';
@@ -10,7 +11,6 @@ import AppMenu from './menu';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { container } from './inversify.config';
-import UserItemListPage from "./pages/UserModel";
 
 
 interface AppProps extends RouteComponentProps {
@@ -50,7 +50,7 @@ class App extends Component<AppProps, AppState> {
                 </Sider>
                 <Route exact path='/' component={HomePage} />
                 <Route exact path='/test' component={TestIndex} />
-                <Route exact path='/user' component={UserItemListPage} />
+                <Route exact path='/user' component={UserIndex} />
             </Layout>);
     }
 }

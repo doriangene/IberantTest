@@ -35,7 +35,7 @@ export default function configureStore(history: History, initialState?: Applicat
     storeBuilder.addRepository(new NewTestItemStore() as any);
     storeBuilder.addRepository(new TestItemsStore() as any);
     
-    storeBuilder.addRepository(new UserItemDtoStore() as any);
+    storeBuilder.addRepository(new UserItemStore() as any);
     storeBuilder.addRepository(new UserItemDtoStore() as any);
     
     return store;
