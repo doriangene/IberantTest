@@ -10,10 +10,13 @@ import {
 import React, {Component} from "react";
 import autobind from "autobind-decorator";
 import {CommandResult} from "../../stores/types";
-import {Layout, Input, Alert, Row, Col} from "antd";
+import {Layout, Input, Alert, Row, Col, Checkbox} from "antd";
 import {TableModel, TableView} from "../../components/collections/table";
 import HeaderComponent from "../../components/shell/header";
 import UserItemDtoView from "./body";
+import BooleanInput from "../../components/form/booleanInput";
+import {AdminTypeComponent} from "./adminTypeComponent";
+import  ModalEditItemView  from './modalComponent'
 
 const {Content} = Layout;
 const HEADER_TITLE = "Users";
@@ -28,6 +31,7 @@ interface UserItemListState {
 }
 
 @connect(["UserItem", UserItemStore])
+@connect(["UserItemDto", UserItemDtoStore])
 export default class UserItemListPage extends Component<UserItemListProps,
     UserItemListState> {
     private id: number = -1;
@@ -86,7 +90,13 @@ export default class UserItemListPage extends Component<UserItemListProps,
     @autobind
     private onNewItemClosed() {
         this.setState({newShow: false});
-        this.load(this.state.query);
+        return this.load(this.state.query);
+    }
+    
+    @autobind 
+    private onEditItemClosed(){
+        this.setState({editShow: false});
+        return this.load(this.state.query);    
     }
 
     @autobind
@@ -96,6 +106,13 @@ export default class UserItemListPage extends Component<UserItemListProps,
     ): Promise<CommandResult<any>> {
         return await this.UserItemStore.deleteAsync(`${item.id}`);
     }
+    
+    @autobind
+    private async onEditItem(item: UserItem){
+        this.setState({editShow: true})
+        this.UserItemDtoStore.createNew({} as any);
+        this.UserItemDtoStore.change({...item} as any);
+    }
 
     render() {
         const tableModel = {
@@ -104,13 +121,13 @@ export default class UserItemListPage extends Component<UserItemListProps,
                 {
                     field: "firstName",
                     title: "First Name",
-                    renderer: (data) => <span>{data.firstname}</span>,
+                    renderer: (data) => <span>{data.firstName}</span>,
                     editor: (data) => <Input/>,
                 },
                 {
                     field: "lastName",
                     title: "Last Name",
-                    renderer: (data) => <span>{data.lastname}</span>,
+                    renderer: (data) => <span>{data.lastName}</span>,
                     editor: (data) => <Input/>,
                 },
                 {
@@ -128,18 +145,18 @@ export default class UserItemListPage extends Component<UserItemListProps,
                 {
                     field: "isadmin",
                     title: "Is Admin",
-                    renderer: (data) => <span>{data.isadmin ? "True" : "False"}</span>,
-                    editor: (data) => <Input/>,
+                    renderer: (data) => <span>{data.isAdmin ? "True" : "False"}</span>,
+                    editor: (data) => <BooleanInput onChange={v => data.isAdmin = v}/>,
                 },
                 {
                     field: "admintype",
                     title: "Admin Type",
                     renderer: (data) => (
                         <span>
-              {data.isadmin ? AdminType[data.admintype as any] : "Not an admin"}
+              {data.isAdmin ? AdminType[data.adminType as any] : "Not an admin"}
             </span>
                     ),
-                    editor: (data) => <Input/>,
+                    editor: (data) => <AdminTypeComponent disabled={!data.isAdmin}/>,
                 },
             ],
             data: this.UserItemStore.state,
@@ -149,7 +166,7 @@ export default class UserItemListPage extends Component<UserItemListProps,
         return (
             <Layout>
                 <HeaderComponent title={HEADER_TITLE} canGoBack={true}/>
-                
+
                 <Content className="page-content">
                     {this.UserItemStore.state.result &&
                     !this.UserItemStore.state.result.isSuccess && (
@@ -174,10 +191,16 @@ export default class UserItemListPage extends Component<UserItemListProps,
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
                             canEdit={true}
+                            onModalOpen={this.onEditItem}
                         />
 
                         {this.state.newShow && (
                             <UserItemDtoView onClose={this.onNewItemClosed}/>
+                        )}
+                        {this.state.editShow && (
+                            <ModalEditItemView
+                                onClose={this.onEditItemClosed}
+                            />
                         )}
                     </div>
                 </Content>

@@ -1,4 +1,9 @@
-import {UserItem, UserItemDto, UserItemStore, UserItemDtoStore} from "../../stores/user-store";
+import {
+    UserItem, 
+    UserItemDto, 
+    UserItemStore, 
+    UserItemDtoStore
+} from "../../stores/user-store";
 import {GetFieldDecoratorOptions} from "antd/lib/form/Form";
 import React from "react";
 import {nameof} from 'src/utils/object';
@@ -13,7 +18,7 @@ import {formatMessage} from "../../services/http-service";
 let FormItem = Form.Item;
 
 interface UserItemDtoViewProps {
-    onClose: (id: string | undefined, item?: UserItemDto) => void
+    onClose: (id: string | undefined, item?: UserItemDto) => void;
 }
 
 interface ClassFormBodyProps {
@@ -34,7 +39,7 @@ export const UserItemFormBody: React.FC<ClassFormBodyProps> = props => {
     const {getFieldDecorator} = props;
 
     let item = props.item || {} as UserItemDto;
-    const [isAdmin, setIsAdmin] = React.useState(item.isadmin);
+    const [isAdmin, setIsAdmin] = React.useState(item.isAdmin);
 
     return (
         <Form
@@ -47,8 +52,8 @@ export const UserItemFormBody: React.FC<ClassFormBodyProps> = props => {
             <Row gutter={24}>
                 <Col span={12}>
                     <FormItem label={"First Name"}>
-                        {getFieldDecorator(nameof<UserItemDto>('firstname'), {
-                            initialValue: item.firstname,
+                        {getFieldDecorator(nameof<UserItemDto>('firstName'), {
+                            initialValue: item.firstName,
                         })(<Input/>)}
                     </FormItem>
                 </Col>
@@ -56,8 +61,8 @@ export const UserItemFormBody: React.FC<ClassFormBodyProps> = props => {
             <Row gutter={24}>
                 <Col span={12}>
                     <FormItem label={"Last Name"}>
-                        {getFieldDecorator(nameof<UserItemDto>('lastname'), {
-                            initialValue: item.lastname,
+                        {getFieldDecorator(nameof<UserItemDto>('lastName'), {
+                            initialValue: item.lastName,
                         })(<Input/>)}
                     </FormItem>
                 </Col>
@@ -83,8 +88,8 @@ export const UserItemFormBody: React.FC<ClassFormBodyProps> = props => {
             <Row gutter={24}>
                 <Col span={12}>
                     <FormItem label={"Is Admin"}>
-                        {getFieldDecorator(nameof<UserItemDto>('isadmin'), {
-                            initialValue: item.isadmin,
+                        {getFieldDecorator(nameof<UserItemDto>('isAdmin'), {
+                            initialValue: item.isAdmin,
                         })(<BooleanInput onChange={v => setIsAdmin(v)}/>)}
                     </FormItem>
                 </Col>
@@ -92,8 +97,8 @@ export const UserItemFormBody: React.FC<ClassFormBodyProps> = props => {
             <Row gutter={24}>
                 <Col span={12}>
                     <FormItem label={"Admin Type"}>
-                        {getFieldDecorator(nameof<UserItemDto>('admintype'), {
-                            initialValue: item.admintype,
+                        {getFieldDecorator(nameof<UserItemDto>('adminType'), {
+                            initialValue: item.adminType,
                         })(<AdminTypeComponent disabled={!isAdmin}/>)}
                     </FormItem>
                 </Col>
@@ -114,7 +119,7 @@ class UserItemDtoView extends React.Component<UserItemDtoViewProps & FormCompone
         this.UserItemStore.createNew({} as any);
     }
 
-    componentWillReceiveProps(nextProps: Readonly<UserItemDtoViewProps & FormComponentProps>, nextContext: any) {
+    componentWillReceiveProps(nextProps: UserItemDtoViewProps) {
         if (this.UserItemStore.state.result && this.UserItemStore.state.result.isSuccess) {
             nextProps.onClose((this.UserItemStore.state.result as any).aggregateRootId,
                 this.UserItemStore.state.item)

@@ -1,16 +1,35 @@
-﻿import React, { cloneElement } from 'react';
+﻿import React, {cloneElement} from 'react';
 import autobind from 'autobind-decorator';
-import { DataModel, ItemModel, ItemState, SortDirection, Query } from '../../stores/dataStore';
-import { Table as AntTable, Alert, Input, InputNumber, Row, Col, Button, Icon, Dropdown, Menu, Popconfirm, Modal, Select, Form, Card, Tooltip, Upload } from 'antd';
+import {DataModel, ItemModel, ItemState, SortDirection, Query} from '../../stores/dataStore';
+import {
+    Table as AntTable,
+    Alert,
+    Input,
+    InputNumber,
+    Row,
+    Col,
+    Button,
+    Icon,
+    Dropdown,
+    Menu,
+    Popconfirm,
+    Modal,
+    Select,
+    Form,
+    Card,
+    Tooltip,
+    Upload
+} from 'antd';
+
 let Option = Select.Option;
 let Search = Input.Search;
-import { clone, getProperties } from '../../utils/object';
+import {clone, getProperties} from '../../utils/object';
 import '../../utils/linq';
 import HttpService from "../../services/http-service";
 import FileSaver from 'file-saver';
-import { withSize } from 'react-sizeme'
-import { CommandResult } from '../../stores/types';
-import { resolve } from '../../inversify.config';
+import {withSize} from 'react-sizeme'
+import {CommandResult} from '../../stores/types';
+import {resolve} from '../../inversify.config';
 
 export interface TableSortFieldDefinition {
     field: string;
@@ -80,6 +99,7 @@ export interface TableProps<T> {
     onSelection?: (ids: any[]) => void;
     autosave?: boolean;
     saveAllDone?: () => void;
+    onModalOpen?: (item: T) => void;
 
     //onPageChange?: (skip: number, take: number) => void;
     //onSearchFilterChanged?: (q: string) => void;
@@ -153,11 +173,13 @@ class EditableCell extends React.Component<any> {
         return (
             <EditableContext.Consumer>
                 {(form: any) => {
-                    const { getFieldDecorator } = form;
+                    const {getFieldDecorator} = form;
                     return (
-                        <td {...restProps} className={editing ? `ant-table-cell-editing ${restProps.className}` : restProps.className} style={{ textAlign: centered ? 'center' : '', ...restProps.style }}>
+                        <td {...restProps}
+                            className={editing ? `ant-table-cell-editing ${restProps.className}` : restProps.className}
+                            style={{textAlign: centered ? 'center' : '', ...restProps.style}}>
                             {editing && editor ? (
-                                <FormItem style={{ margin: 0 }}>
+                                <FormItem style={{margin: 0}}>
                                     {getFieldDecorator(dataIndex, {
                                         valuePropName: editorValuePropName || 'value',
                                         initialValue: record[dataIndex],
@@ -201,7 +223,11 @@ class FilterComponent extends React.Component<FilterComponentProps> {
         if (!this.props.children)
             return <Card>filter not configured</Card>
 
-        return <Card style={{ minWidth: 320 }}>{React.cloneElement(this.props.children as any, { value: this.props.value, onChange: this.onValueChanged })}{this.props.value && <a style={{ float: 'right', marginTop: 10 }} onClick={this.onClearFilter}>Clear filter</a>}</Card>
+        return <Card style={{minWidth: 320}}>{React.cloneElement(this.props.children as any, {
+            value: this.props.value,
+            onChange: this.onValueChanged
+        })}{this.props.value &&
+        <a style={{float: 'right', marginTop: 10}} onClick={this.onClearFilter}>Clear filter</a>}</Card>
     }
 }
 
@@ -234,6 +260,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
 
 
     editingDictionary: any[];
+
     componentWillReceiveProps(nextProps: TableProps<T>) {
         this.setState({
             data: this.BuildRows(nextProps.model.data),
@@ -242,6 +269,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
             totalPages: Math.ceil((nextProps.model.data == null ? 1 : nextProps.model.data.count) / this.state.pageSize),
         });
     }
+
     componentDidUpdate(prevProps: TableProps<T>) {
         if (prevProps.autosave != undefined && prevProps.autosave != this.props.autosave) {
             this.SaveAll();
@@ -252,9 +280,9 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
 
     public async SaveAll() {
         var self = this
-        var keys = { ...self.state.editingKeys };
+        var keys = {...self.state.editingKeys};
         for (var i = 0; i < this.state.editingKeys.length; i++) {
-            
+
             var key = keys[i];
             var model = self.editingDictionary.firstOrDefault(o => (o as any)["Key"] == key);
             var form = model["Form"];
@@ -272,9 +300,8 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                         obj.state = 'Unchanged';
                         obj.mode = 'normal';
                     }
-                   await self.setState({ editingKeys: self.state.editingKeys.filter(o => o != values[self.state.rowKey]) });
-                }
-                else {
+                    await self.setState({editingKeys: self.state.editingKeys.filter(o => o != values[self.state.rowKey])});
+                } else {
                     return;
                 }
 
@@ -286,7 +313,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
             return;
         }
         if (this.props.saveAllDone) {
-           
+
             this.props.saveAllDone();
         }
     }
@@ -316,7 +343,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
             const result = await this.props.onDeleteRow(row.item, row.state);
             if (result && result.isSuccess) {
                 this.props.model.data.discard(row.item);
-                this.setState({ data: this.state.data.filter((o) => o.item !== row.item) });
+                this.setState({data: this.state.data.filter((o) => o.item !== row.item)});
             }
         }
     }
@@ -344,7 +371,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
 
     @autobind
     private hideConfirmModal() {
-        this.setState({ showDeleteConfirm: false, toDelete: undefined });
+        this.setState({showDeleteConfirm: false, toDelete: undefined});
     }
 
     //@autobind
@@ -466,7 +493,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
 
     @autobind
     private onSelectChange(selectedRowKeys: any[]) {
-        this.setState({ selectedRowKeys });
+        this.setState({selectedRowKeys});
         if (this.props.onSelection)
             this.props.onSelection(selectedRowKeys);
     }
@@ -483,7 +510,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
             }
         }) as any) as any;
 
-        self.setState({ selectedRowKeys: [], showConfirmDeletion: false })
+        self.setState({selectedRowKeys: [], showConfirmDeletion: false})
     }
 
     private isEditing(record: any) {
@@ -497,7 +524,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
         const result = await this.httpService.get(this.props.bulkTemplateUrl as string, {
             responseType: 'arraybuffer'
         });
-        const blob = new Blob([result.data as any], { type: result.headers['content-type'] });
+        const blob = new Blob([result.data as any], {type: result.headers['content-type']});
         (FileSaver as any).saveAs(blob, this.props.bulkTemplateName || "template.xlsx");
     }
 
@@ -529,7 +556,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                 obj.state = 'Unchanged';
                                 obj.mode = 'normal';
                             }
-                            self.setState({ editingKeys: self.state.editingKeys.filter(o => o != values[self.state.rowKey]) });
+                            self.setState({editingKeys: self.state.editingKeys.filter(o => o != values[self.state.rowKey])});
                         }
 
 
@@ -541,7 +568,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
 
     @autobind
     private onRowEdit(key: string) {
-        this.setState({ editingKeys: [...this.state.editingKeys, key] });
+        this.setState({editingKeys: [...this.state.editingKeys, key]});
     }
 
     @autobind
@@ -550,7 +577,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
         if (model && model.state == 'New' && this.props.onDeleteRow) {
             this.props.onDeleteRow(model.item, model.state);
         }
-        this.setState({ editingKeys: this.state.editingKeys.filter(o => o != key) });
+        this.setState({editingKeys: this.state.editingKeys.filter(o => o != key)});
     }
 
     @autobind
@@ -598,7 +625,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
 
     public Addform(key: any, form: any) {
         if (!this.editingDictionary.firstOrDefault(t => t.Key == key))
-            this.editingDictionary.push({ Key: key, Form: form });
+            this.editingDictionary.push({Key: key, Form: form});
         return true;
     }
 
@@ -613,7 +640,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                 render: (text: any, record: any) => {
                     const editable = this.isEditing(record);
                     return (
-                        <div style={{ width: editable ? 50 : 'auto' }}>
+                        <div style={{width: editable ? 50 : 'auto'}}>
                             {editable ? (
                                 <span>
                                     <EditableContext.Consumer>
@@ -621,9 +648,9 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                             <a
                                                 href="javascript:;"
                                                 onClick={() => this.onSaveRow(form, record.key)}
-                                                style={{ marginRight: 8 }}
+                                                style={{marginRight: 8}}
                                             >
-                                                <Icon type='save' />
+                                                <Icon type='save'/>
                                             </a>
                                         )}
                                     </EditableContext.Consumer>
@@ -631,12 +658,25 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                         title="¿Está seguro que desea descartar los cambios?"
                                         onConfirm={() => this.onRowEditCancelled(record.key)}
                                     >
-                                        <a><Icon type='undo' /></a>
+                                        <a><Icon type='undo'/></a>
                                     </Popconfirm>
                                 </span>
                             ) : (
-                                    <a onClick={() => this.onRowEdit(record.key)}><Icon type='edit' /></a>
-                                )}
+                                <>
+                                    <a onClick={() => this.onRowEdit(record.key)}><Icon type='edit'/></a>
+
+                                    <a onClick={() => {
+                                        let obj = this.state.data.filter(o =>
+                                            (o.item as any)[this.state.rowKey] == record.key
+                                        )[0];
+                                        if (this.props.onModalOpen !== undefined) {
+                                            this.props.onModalOpen(obj.item as T);
+                                        }
+                                    }}>
+                                        <Icon type={"edit"}/>
+                                    </a>
+                                </>
+                            )}
                         </div>
                     );
                 },
@@ -668,13 +708,16 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                 filterDropdown: !c.filter ? undefined : (props: any) => (<FilterComponent onChange={value => {
                     var change = {} as any;
                     change[c.fiterField || c.field] = value;
-                    var filterObject = c.filterByQueryString ? { ...self.state.parameters, ...change } : { ...self.state.filter, ...change };
-                    self.setState({ filter: filterObject });
+                    var filterObject = c.filterByQueryString ? {...self.state.parameters, ...change} : {...self.state.filter, ...change};
+                    self.setState({filter: filterObject});
                     self.onFilterChanged(c.filterByQueryString ? true : false, filterObject);
                     confirm();
                 }} value={self.state.filter[c.field]}>{c.filter}</FilterComponent>),
-                filterIcon: (filtered: boolean) => <Icon type="filter" style={{ color: filtered ? '#1890ff' : undefined }} />,
-                render: (text: any, record: any, index: number) => c.renderer === undefined ? <span style={{ textAlign: c.align || 'left' }}>{text}</span> : <div style={{ textAlign: c.align || 'left' }}>{c.renderer(record)}</div>
+                filterIcon: (filtered: boolean) => <Icon type="filter"
+                                                         style={{color: filtered ? '#1890ff' : undefined}}/>,
+                render: (text: any, record: any, index: number) => c.renderer === undefined ?
+                    <span style={{textAlign: c.align || 'left'}}>{text}</span> :
+                    <div style={{textAlign: c.align || 'left'}}>{c.renderer(record)}</div>
             };
         }));
 
@@ -705,7 +748,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
             return item;
         });
 
-        const { selectedRowKeys } = this.state;
+        const {selectedRowKeys} = this.state;
         const rowSelection = (this.props.canEdit || this.props.canDelete) ? {
             selectedRowKeys,
             onChange: this.onSelectChange,
@@ -732,7 +775,8 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
         let canEmbedd = this.props.embedded && (!this.state.result || this.state.result.isSuccess);
         const menu = (
             <Menu onClick={this.handleMenuClick}>
-                {this.props.bulkTemplateUrl && <Menu.Item key="download"><Icon type="download" />Descargar plantilla</Menu.Item>}
+                {this.props.bulkTemplateUrl &&
+                <Menu.Item key="download"><Icon type="download"/>Descargar plantilla</Menu.Item>}
             </Menu>
         );
         return <div>
@@ -740,18 +784,30 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                 visible={this.state.showConfirmDeletion}
                 closable={false}
                 onOk={this.onDeleteItems}
-                onCancel={() => this.setState({ showConfirmDeletion: false })}
+                onCancel={() => this.setState({showConfirmDeletion: false})}
                 title="Advertencia">
                 <p>¿Está seguro que desea eliminar los elementos seleccionados?</p>
             </Modal>
-            <div className="table-header" style={{ marginTop: canEmbedd ? -64 : 0, marginBottom: canEmbedd ? 16 : 0, marginRight: this.props.headerMarginRight ? this.props.headerMarginRight : 0, marginLeft: this.props.headerMarginLeft ? this.props.headerMarginLeft : 0 }}>
+            <div className="table-header" style={{
+                marginTop: canEmbedd ? -64 : 0,
+                marginBottom: canEmbedd ? 16 : 0,
+                marginRight: this.props.headerMarginRight ? this.props.headerMarginRight : 0,
+                marginLeft: this.props.headerMarginLeft ? this.props.headerMarginLeft : 0
+            }}>
                 <Row>
                     <Col span={6}>
-                        {this.props.title && ((typeof this.props.title === 'string' || this.props.title instanceof String) ? <h3>{this.props.title}</h3> : this.props.title)}
-                        <ul className="toolbar" style={{ float: 'left' }}>
+                        {this.props.title && ((typeof this.props.title === 'string' || this.props.title instanceof String) ?
+                            <h3>{this.props.title}</h3> : this.props.title)}
+                        <ul className="toolbar" style={{float: 'left'}}>
 
-                            {this.props.canCreateNew && this.props.onNewItem && <li><Tooltip placement="topLeft" title="Añadir nuevo"><Button icon='plus' onClick={this.props.onNewItem}></Button></Tooltip></li>}
-                            {hasSelected && this.props.canDelete && <li><Tooltip placement="topLeft" title="Eliminar elementos seleccionados"><Button onClick={() => this.setState({ showConfirmDeletion: true })} type='danger'><Icon type='delete' /></Button></Tooltip></li>}
+                            {this.props.canCreateNew && this.props.onNewItem &&
+                            <li><Tooltip placement="topLeft" title="Añadir nuevo"><Button icon='plus'
+                                                                                          onClick={this.props.onNewItem}></Button></Tooltip>
+                            </li>}
+                            {hasSelected && this.props.canDelete &&
+                            <li><Tooltip placement="topLeft" title="Eliminar elementos seleccionados"><Button
+                                onClick={() => this.setState({showConfirmDeletion: true})} type='danger'><Icon
+                                type='delete'/></Button></Tooltip></li>}
 
                             {this.props.bulkInsertUrl && <li><Upload
                                 name="file"
@@ -762,15 +818,15 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                 action={this.props.bulkInsertUrl}
                                 onChange={info => {
                                     if (info.file.status == 'uploading')
-                                        this.setState({ uploading: true });
+                                        this.setState({uploading: true});
                                     else {
-                                        this.setState({ uploading: false });
+                                        this.setState({uploading: false});
                                     }
                                     if (info.file.status == 'error' || (info.file.response.messages && info.file.response.messages.length > 0)) {
 
-                                        this.setState({ uploadingError: info.file.response.messages.map((i: any) => i.body).join(",") })
+                                        this.setState({uploadingError: info.file.response.messages.map((i: any) => i.body).join(",")})
                                     } else {
-                                        this.setState({ uploadingError: undefined })
+                                        this.setState({uploadingError: undefined})
                                     }
                                     if (info.file.status == 'done')
                                         if (this.props.onRefresh)
@@ -778,7 +834,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                                 }}>
                                 <Tooltip title="Carga masiva">
                                     <Dropdown.Button overlay={menu}>
-                                        <Icon type="upload" />
+                                        <Icon type="upload"/>
                                     </Dropdown.Button>
                                 </Tooltip>
                             </Upload></li>}
@@ -786,30 +842,38 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                         </ul>
                     </Col>
                     <Col span={18}>
-                        <ul className="toolbar" style={{ float: 'right' }}>
-                            {!isMobile && this.props.model.sortFields && this.props.model.sortFields.length > 0 && (this.props.canSort == undefined || this.props.canSort) && <li>
-                                <Select placeholder={"Ordernar por"} value={this.props.model.query.orderBy && this.props.model.query.orderBy.length > 0 ? this.props.model.query.orderBy[0].field : undefined} onChange={(value: any) => this.onOrderByChanged(value as string, direction, useProfile)}>
-                                    {(this.props.model.sortFields || []).map(o => <Option key={o.field} value={o.field}>{o.text}</Option>)}
+                        <ul className="toolbar" style={{float: 'right'}}>
+                            {!isMobile && this.props.model.sortFields && this.props.model.sortFields.length > 0 && (this.props.canSort == undefined || this.props.canSort) &&
+                            <li>
+                                <Select placeholder={"Ordernar por"}
+                                        value={this.props.model.query.orderBy && this.props.model.query.orderBy.length > 0 ? this.props.model.query.orderBy[0].field : undefined}
+                                        onChange={(value: any) => this.onOrderByChanged(value as string, direction, useProfile)}>
+                                    {(this.props.model.sortFields || []).map(o => <Option key={o.field}
+                                                                                          value={o.field}>{o.text}</Option>)}
                                 </Select>
                             </li>}
                             {!isMobile && orderBy && (this.props.canSort == undefined || this.props.canSort) && <li>
-                                <Tooltip placement="topLeft" title='Ordenar'><Button onClick={e => this.onSortDirection()}>
-                                    <Icon type={(direction || 'Ascending') == 'Ascending' ? 'sort-ascending' : 'sort-descending'} />
+                                <Tooltip placement="topLeft" title='Ordenar'><Button
+                                    onClick={e => this.onSortDirection()}>
+                                    <Icon
+                                        type={(direction || 'Ascending') == 'Ascending' ? 'sort-ascending' : 'sort-descending'}/>
                                 </Button></Tooltip>
                             </li>}
                             {!isMobile && orderBy && (this.props.exportable) && <li>
-                                <Tooltip placement="topLeft" title='Exportar a Excel'> <Button onClick={e => this.onExportToExcel()}>
-                                    <Icon type={'download'} />
+                                <Tooltip placement="topLeft" title='Exportar a Excel'> <Button
+                                    onClick={e => this.onExportToExcel()}>
+                                    <Icon type={'download'}/>
                                 </Button> </Tooltip>
                             </li>}
                             {(this.props.hideRefresh == undefined || !this.props.hideRefresh) &&
-                                <li>  <Tooltip placement="topLeft" title='Recargar'><Button onClick={this.props.onRefresh}><Icon type='reload' /></Button></Tooltip></li>
+                            <li><Tooltip placement="topLeft" title='Recargar'><Button
+                                onClick={this.props.onRefresh}><Icon type='reload'/></Button></Tooltip></li>
                             }
                             {(this.props.hideSearch == undefined || !this.props.hideSearch) && !isMobile && <li>
                                 <Tooltip placement="topLeft" title='Buscar'> <Search
                                     placeholder={this.props.searchText || "Texto de búsqueda"}
                                     onSearch={value => this.onSearchFilterChanged(value)}
-                                    style={{ width: this.props.searchWidth || 200 }}
+                                    style={{width: this.props.searchWidth || 200}}
                                 />
                                 </Tooltip>
                             </li>}
@@ -817,24 +881,24 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                     </Col>
                 </Row>
             </div>
-            <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <div style={{marginTop: '10px', marginBottom: '10px'}}>
                 {this.state.uploadingError &&
-                    <Alert
-                        type='error'
-                        message="Ha ocurrido un error"
-                        description={this.state.uploadingError} />
+                <Alert
+                    type='error'
+                    message="Ha ocurrido un error"
+                    description={this.state.uploadingError}/>
                 }
                 {this.state.result && !this.state.result.isSuccess &&
-                    <Alert type='error' style={{ marginBottom: 16 }}
-                        message="Ha ocurrido un error"
-                        description={this.state.result.messages.map((o) => o.body)}
-                    />
+                <Alert type='error' style={{marginBottom: 16}}
+                       message="Ha ocurrido un error"
+                       description={this.state.result.messages.map((o) => o.body)}
+                />
                 }
                 {this.props.error &&
-                    <Alert type='error' style={{ marginBottom: 16 }}
-                        message="Ha ocurrido un error"
-                        description={this.props.error}
-                    />
+                <Alert type='error' style={{marginBottom: 16}}
+                       message="Ha ocurrido un error"
+                       description={this.props.error}
+                />
                 }
             </div>
             <AntTable
@@ -853,7 +917,7 @@ class Table<T> extends React.Component<TableProps<T>, TableState<T>> {
                     sortTitle: "Ordenar"
                 }}
                 pagination={!this.props.hidepagination ? pagination : false}
-                dataSource={tableData} />
+                dataSource={tableData}/>
         </div>
     }
 }

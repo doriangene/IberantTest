@@ -15,21 +15,21 @@ export enum AdminType {
 
 export interface UserItem {
     id: number,
-    firstname: string,
-    lastname: string,
+    firstName: string,
+    lastName: string,
     address: string,
     description: string,
-    isadmin: boolean,
-    admintype: string
+    isAdmin: boolean,
+    adminType: string
 }
 
 export interface UserItemDto {
-    firstname: string,
-    lastname: string,
+    firstName: string,
+    lastName: string,
     address: string,
     description: string,
-    isadmin: boolean,
-    admintype: string
+    isAdmin: boolean,
+    adminType: string
 }
 
 @repository("@@UserItem", "UserItem.summary")
@@ -55,10 +55,10 @@ export class UserItemDtoValidator extends Validator<UserItemDto> {
         const notNullMsg = (prop: string) =>
             `User does not permit null values for "${prop}"`;
 
-        this.ruleFor(item => item.firstname)
+        this.ruleFor(item => item.firstName)
             .notNull()
             .withMessage(notNullMsg("FirstName"))
-        this.ruleFor(item => item.lastname)
+        this.ruleFor(item => item.lastName)
             .notNull()
             .withMessage(notNullMsg("LastName"))
         this.ruleFor(item => item.address)

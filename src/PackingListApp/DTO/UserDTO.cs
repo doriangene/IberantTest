@@ -10,7 +10,7 @@ namespace PackingListApp.DTO
         public string LastName { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
-        public bool isAdmin { get; set; }
+        public bool IsAdmin { get; set; }
         public AdminType AdminType { get; set; }
 
         #endregion
