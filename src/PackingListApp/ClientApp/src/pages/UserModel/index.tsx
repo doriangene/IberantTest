@@ -187,6 +187,7 @@ export default class UserItemListPage extends Component<UserItemListProps,
                             onNewItem={this.onNewItem}
                             onRefresh={() => this.load(this.state.query)}
                             canDelete={true}
+                            onDeleteRow={this.onDeleteRow}
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}

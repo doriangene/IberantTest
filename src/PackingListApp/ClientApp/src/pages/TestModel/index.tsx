@@ -159,6 +159,7 @@ TestItemListState
                             onNewItem={this.onNewItem}
                             onRefresh={() => this.load(this.state.query)}
                             canDelete={true}
+                            onDeleteRow={this.onDeleteRow}
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
