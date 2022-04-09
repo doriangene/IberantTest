@@ -15,7 +15,7 @@
     "inversify-inject-decorators": "^3.1.0",
     "jsonwebtoken": "^8.5.1",
     "lakmus": "^0.3.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "odata-query": "^5.7.0",
     "print-js": "^1.0.61",
     "query-string": "^6.8.1",
