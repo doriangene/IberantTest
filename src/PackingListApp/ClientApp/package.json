@@ -36,7 +36,7 @@
     "redux-scaffolding-ts": "^0.0.1",
     "redux-thunk": "^2.3.0",
     "reflect-metadata": "^0.1.13",
-    "rfc6902": "^3.0.4"
+    "rfc6902": "^5.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "4.3.1",
