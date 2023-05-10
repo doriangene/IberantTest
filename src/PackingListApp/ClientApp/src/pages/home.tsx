@@ -50,7 +50,7 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                             <Card title="Models">
                                 <ul>
                                     <li><Link to='/test'>TestModel</Link></li>
-                                    <li><Link to='/TODO'>TODO</Link></li>
+                                    <li><Link to='/usuario'>UsuarioModel</Link></li>
                                    
                                 </ul>
                             </Card>

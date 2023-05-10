@@ -21,7 +21,7 @@ namespace PackingListApp.Controllers
             _testService = testService;
         }
         // GET: api/Test
-        [HttpGet]
+        [HttpGet]        
         public IActionResult Get(ODataQueryOptions<TestModel> options)
         {
             var list = _testService.GetAll();

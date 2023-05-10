@@ -32,6 +32,22 @@ namespace PackingListApp
 
             services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration["TestContext:ConnectionString"]));
 
+            //Register the Swagger generator, defining 1 or more Swagger documents
+            //services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info
+            //{
+            //    Version = "v1",
+            //    Title = "Test Title",
+            //    Description = "Test Description",
+            //    TermsOfService = "None",
+            //    Contact = new Contact
+            //    {
+            //        Name = "Abel",
+            //        Email = "abel406@gmail.com",
+            //        Url = ""
+            //    }
+
+            //}));
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -52,6 +68,7 @@ namespace PackingListApp
                 }
             });
             services.AddTransient<ITestServices, TestServices>();
+            services.AddTransient<IUsuarioServices, UsuarioServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +84,16 @@ namespace PackingListApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 //app.UseHsts();
             }
+
+            //Enable middleware to serve generated Swagger as a JSON endpoint.
+            //app.UseSwagger();
+
+            //Enable middleware to server swagger-ui (HTML, JS, CSS, etc.),
+            //specifying the Swagger JSON endpoint
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Test Version 1");
+            //});
 
             //app.UseHttpsRedirection();
             app.UseStaticFiles();

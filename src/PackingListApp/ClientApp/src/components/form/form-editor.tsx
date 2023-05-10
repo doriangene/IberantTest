@@ -82,6 +82,7 @@ class FormEditorView extends React.Component<FormEditorViewProps, FormEditorView
                 />
             }
             <div style={this.props.style}>
+            <p>form-editor.tsx</p>
                 {childrenWithProps}
                 <div style={{ paddingTop: 5, paddingBottom: 5, textAlign: "center", marginTop : "10px" }}>
                     {isFieldsTouched() && <div/>

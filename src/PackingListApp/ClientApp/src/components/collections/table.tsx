@@ -158,6 +158,9 @@ class EditableCell extends React.Component<any> {
                         <td {...restProps} className={editing ? `ant-table-cell-editing ${restProps.className}` : restProps.className} style={{ textAlign: centered ? 'center' : '', ...restProps.style }}>
                             {editing && editor ? (
                                 <FormItem style={{ margin: 0 }}>
+                                    <div>
+                                        <p>Table.tsx</p>
+                                    </div>
                                     {getFieldDecorator(dataIndex, {
                                         valuePropName: editorValuePropName || 'value',
                                         initialValue: record[dataIndex],
