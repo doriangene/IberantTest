@@ -6,7 +6,8 @@ import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
 import {
     UserItemsStore,
-    UserItem
+    UserItem,
+    AdminType
 } from "src/stores/user-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
@@ -129,6 +130,18 @@ export default class UserItemListPage extends Component<
                     field: "address",
                     title: "Address",
                     renderer: data => <span>{data.address}</span>,
+                    editor: data => <Input />
+                },
+                {
+                    field: "isAdmin",
+                    title: "Admin",
+                    renderer: data => <span>{data.isAdmin ? 'Yes': 'No'}</span>,
+                    editor: data => <Input />
+                },
+                {
+                    field: "adminType",
+                    title: "Admin Type",
+                    renderer: data => <span>{data.isAdmin ? AdminType[data.adminType] : '-'}</span>,
                     editor: data => <Input />
                 },
 

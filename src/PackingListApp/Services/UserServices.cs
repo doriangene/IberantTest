@@ -1,6 +1,7 @@
 ﻿using PackingListApp.EntityFramework;
 using PackingListApp.Interfaces;
 using PackingListApp.Models;
+using PackingListApp.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace PackingListApp.Services
                 Name = model.Name,
                 Lastname = model.Lastname,
                 Address = model.Address,
+                IsAdmin = model.IsAdmin,
+                AdminType = model.AdminType
             };
             _context.Users.Add(newUser
             );
@@ -46,6 +49,8 @@ namespace PackingListApp.Services
             itemput.Name = item.Name;
             itemput.Lastname = item.Lastname;
             itemput.Address = item.Address;
+            itemput.IsAdmin = item.IsAdmin;
+            itemput.AdminType = item.AdminType;
             _context.SaveChanges();
             return id;
 

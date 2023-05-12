@@ -1,8 +1,8 @@
 ﻿import * as React from 'react'
-import { Form, Spin, Select, Input, Checkbox, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
+import { Form, Spin, Select, Input, Switch, Modal, Row, Col, Alert, Dropdown, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 let FormItem = Form.Item;
-import { NewUserItem, NewUserItemStore } from 'src/stores/user-store';
+import { AdminType, NewUserItem, NewUserItemStore } from 'src/stores/user-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';
@@ -27,9 +27,22 @@ interface ClassFormBodyProps {
 }
 
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
-  
-    render() {
 
+    state = {
+        isAdminTypeVisible: false
+    }
+
+    
+    handleAdminTypeSelect = () => {
+        this.setState({ isAdminTypeVisible: !this.state.isAdminTypeVisible });
+        this.props.setFieldsValue({ isAdmin: !this.state.isAdminTypeVisible });
+    }
+
+    handleAdminType = (value : number) => {
+        this.props.setFieldsValue({adminType: value });
+    }
+
+    render() {
         const { getFieldDecorator } = this.props;
 
         var item = this.props.item || {} as NewUserItem;
@@ -63,6 +76,32 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
+                <Col span={8}>
+                    <FormItem label={'Admin'}>
+                        {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
+                            initialValue: item.isAdmin,
+                        })(
+                            <Switch onChange={this.handleAdminTypeSelect} />
+                        )}
+                    </FormItem>
+                </Col>
+                {
+                    this.state.isAdminTypeVisible &&                  <Col span={8}>
+                        <FormItem label={'Admin Type'}>
+                            {getFieldDecorator(nameof<NewUserItem>('adminType'), {
+                                initialValue: item.adminType,
+                            })(
+                                <Select clearIcon onChange={this.handleAdminType}>
+                                    {
+                                        Object.keys(AdminType).filter(x => !(parseInt(x) >= 0)).map((item, index) =>
+                                            <Select.Option key={`admintype-${index}`} value={index}>{item}</Select.Option>
+                                        )
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
+                }
             </Row>
         </Form>
     }

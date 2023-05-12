@@ -10,7 +10,7 @@ namespace PackingListApp.Interfaces
     {
         List<UserModel> GetAll();
 
-        int Add(NewUserModel testmodel);
+        int Add(NewUserModel model);
 
         UserModel Get(int id);
         int Put(int id, UserModel item);
