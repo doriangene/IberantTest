@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Tooltip, Button } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -9,6 +9,9 @@ import {
     UserItem,
     AdminType
 } from "src/stores/user-store";
+import {
+    TestItemsStore
+} from "src/stores/test-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
@@ -22,6 +25,8 @@ interface UserItemListProps extends RouteComponentProps { }
 interface UserItemListState {
     query: Query;
     newShow: boolean;
+    editShow: boolean;
+    selected: UserItem | null;
 }
 
 @connect(["UserItems", UserItemsStore])
@@ -46,17 +51,24 @@ export default class UserItemListPage extends Component<
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            editShow: false,
+            selected: null
         };
     }
 
     componentWillMount() {
-
         this.load(this.state.query);
+        this.getOccupations(this.state.query);
     }
 
     @autobind
     private async load(query: Query) {
+        await this.UserItemsStore.getAllAsync(query);
+    }
+
+ 
+    private async getOccupations(query: Query) {
         await this.UserItemsStore.getAllAsync(query);
     }
 
@@ -72,6 +84,10 @@ export default class UserItemListPage extends Component<
         this.setState({ newShow: true })
     }
 
+    @autobind
+    private async onEditItem(data: UserItem) {
+        this.setState({ editShow: true, selected: data })
+    }
 
     @autobind
     private async onSaveItem(item: UserItem, state: ItemState) {
@@ -84,8 +100,13 @@ export default class UserItemListPage extends Component<
         return result;
     }
 
-
-
+    
+    @autobind
+    private async onRemoveItem(id: number) {
+        var result = await this.UserItemsStore.deleteAsync(id);
+        await this.load(this.state.query);
+        return result;
+    }
 
 
     @autobind
@@ -93,6 +114,12 @@ export default class UserItemListPage extends Component<
         this.setState({ newShow: false });
         this.load(this.state.query);
     }
+
+    @autobind
+    private onEditItemClosed() {
+        this.setState({ editShow: false });
+        this.load(this.state.query);
+    } 
 
 
     @autobind
@@ -109,6 +136,19 @@ export default class UserItemListPage extends Component<
         const tableModel = {
             query: this.state.query,
             columns: [
+                {
+                    field: "id",
+                    title: "Actions",
+                    renderer: data =>
+                        <>
+                            <Tooltip title="edit">
+                                <Button shape="circle" type="primary" icon={'edit'} onClick={() => this.onEditItem(data)} />
+                            </Tooltip>,
+                            <Tooltip title="delete">
+                                <Button shape="circle" type="danger" icon={'delete'} onClick={() => this.onRemoveItem(data.id)} />
+                            </Tooltip>,
+                        </>
+                },
                 {
                     field: "name",
                     title: "Name",
@@ -176,13 +216,14 @@ export default class UserItemListPage extends Component<
                             onQueryChanged={(q: Query) => this.onQueryChanged(q)}
                             onNewItem={this.onNewItem}
                             onRefresh={() => this.load(this.state.query)}
-                            canDelete={true}
+                            canDelete={false}
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
-                            canEdit={true}
+                            canEdit={false}
                         />
-                        {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} />}
+                        {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} occupations={[]} />}
+                        {this.state.editShow && <NewUserItemView item={this.state.selected} onClose={this.onEditItemClosed} />}
                     </div>
                 </Content>
             </Layout>

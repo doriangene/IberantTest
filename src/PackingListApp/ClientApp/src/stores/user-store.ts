@@ -18,6 +18,7 @@ export interface UserItem {
     address: string;
     isAdmin: boolean;
     adminType: AdminType;
+    occupation: number;
 }
 
 @repository("@@UserItem", "UserItem.summary")
@@ -41,6 +42,7 @@ export interface NewUserItem {
     address: string;
     isAdmin: boolean;
     adminType: AdminType;
+    occupation: number;
 }
 
 export class NewUserValidator extends Validator<NewUserItem> {

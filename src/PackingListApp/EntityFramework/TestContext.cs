@@ -23,7 +23,7 @@ namespace PackingListApp.EntityFramework
                 _initialized = true;
             }
         }
-        public DbSet<TestModel> TestModels { get; set; }
+        public DbSet<Occupation> TestModels { get; set; }
         public DbSet<UserModel> Users { get; set; }
     }
 }

@@ -8,11 +8,13 @@ namespace PackingListApp.Interfaces
 {
     public interface ITestServices
     {
-        List<TestModel> GetAll();
+        List<Occupation> GetAll();
 
         int Add(NewTestModel testmodel);
 
-        TestModel Get(int id);
-        int Put(int id, TestModel item);
+        Occupation Get(int id);
+        int Put(int id, Occupation item);
+
+        int Delete(int id);
     }
 }

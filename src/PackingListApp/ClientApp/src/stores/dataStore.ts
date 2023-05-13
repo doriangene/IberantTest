@@ -370,7 +370,7 @@ export abstract class DataStore<T extends any> extends ReduxRepository<
     }
 
     public async deleteAsync(
-        id: string,
+        id: number,
         params?: any
     ): Promise<CommandResult<T>> {
         var item = this.state.items.firstOrDefault(o => (o.item as any)[this.rowKey] == id);

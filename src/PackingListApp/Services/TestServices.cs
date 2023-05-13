@@ -18,7 +18,7 @@ namespace PackingListApp.Services
 
         public int Add(NewTestModel testmodel)
         {
-            var newtest = new TestModel()
+            var newtest = new Occupation()
             {
                 Title = testmodel.Title,
                 Description = testmodel.Description
@@ -29,17 +29,17 @@ namespace PackingListApp.Services
             return newtest.Id;
         }
 
-        public TestModel Get(int id)
+        public Occupation Get(int id)
         {
             return _context.TestModels.FirstOrDefault(t => t.Id == id);
         }
 
-        public List<TestModel> GetAll()
+        public List<Occupation> GetAll()
         {
             return _context.TestModels.ToList();
         }
 
-        public int Put(int id, TestModel item)
+        public int Put(int id, Occupation item)
         {
             var itemput = _context.TestModels.FirstOrDefault(t => t.Id == id);
             itemput.Description = item.Description;
@@ -47,6 +47,14 @@ namespace PackingListApp.Services
             _context.SaveChanges();
             return id;
 
+        }
+
+        public int Delete(int id)
+        {
+            var occup = _context.TestModels.FirstOrDefault(t => t.Id == id);
+            _context.TestModels.Remove(occup);
+            _context.SaveChanges();
+            return id;
         }
     }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Button, Tooltip } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -21,6 +21,8 @@ interface TestItemListProps extends RouteComponentProps { }
 interface TestItemListState {
     query: Query;
     newShow: boolean;
+    editShow: boolean;
+    selected: UserItem | null;
 }
 
 @connect(["TestItems", TestItemsStore])
@@ -45,7 +47,9 @@ TestItemListState
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            editShow: false,
+            selected: null
         };
     }
 
@@ -83,8 +87,17 @@ TestItemListState
         return result;
     }
 
+    @autobind
+    private async onEditItem(data: TestItem) {
+        this.setState({ editShow: true, selected: data })
+    }
 
-
+    @autobind
+    private async onRemoveItem(id: number) {
+        var result = await this.TestItemsStore.deleteAsync(id);
+        await this.load(this.state.query);
+        return result;
+    }
 
 
     @autobind
@@ -92,6 +105,12 @@ TestItemListState
         this.setState({ newShow: false });
         this.load(this.state.query);
     }
+
+    @autobind
+    private onEditItemClosed() {
+        this.setState({ editShow: false });
+        this.load(this.state.query);
+    } 
 
 
     @autobind
@@ -108,6 +127,19 @@ TestItemListState
         const tableModel = {
             query: this.state.query,
             columns: [
+                {
+                    field: "id",
+                    title: "Actions",
+                    renderer: data =>
+                        <>
+                            <Tooltip title="edit">
+                                <Button shape="circle" type="primary" icon={'edit'} onClick={() => this.onEditItem(data)} />
+                            </Tooltip>,
+                            <Tooltip title="delete">
+                                <Button shape="circle" type="danger" icon={'delete'} onClick={() => this.onRemoveItem(data.id)} />
+                            </Tooltip>,
+                        </>
+                },
                 {
                     field: "title",
                     title: "Title",
@@ -158,13 +190,14 @@ TestItemListState
                             onQueryChanged={(q: Query) => this.onQueryChanged(q)}
                             onNewItem={this.onNewItem}
                             onRefresh={() => this.load(this.state.query)}
-                            canDelete={true}
+                            canDelete={false}
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
-                            canEdit={true}
+                            canEdit={false}
                         />
                         {this.state.newShow && <NewTestItemView onClose={this.onNewItemClosed} />}
+                        {this.state.editShow && <NewTestItemView item={this.state.selected} onClose={this.onEditItemClosed} />}
                     </div>
                 </Content>
             </Layout>

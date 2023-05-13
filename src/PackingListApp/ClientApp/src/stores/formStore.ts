@@ -165,7 +165,7 @@ export abstract class FormStore<T> extends ReduxRepository<FormModel<T>> {
         return value;
     }
 
-    protected patch(actionName: string, path: string, partial: Partial<T>) {
+    public patch(actionName: string, path: string, partial: Partial<T>) {
         var httpService = this.container.get<HttpService>(HttpService);
         return this.dispatchAsync(actionName, httpService.patch(`${this.baseUrl}/${path}`, createPatch(this.state.item, partial)), partial);
     }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using PackingList.Core.Queries;
 using PackingListApp.Interfaces;
 using PackingListApp.Models;
+using PackingListApp.Services;
 
 namespace PackingListApp.Controllers
 {
@@ -22,10 +23,10 @@ namespace PackingListApp.Controllers
         }
         // GET: api/Test
         [HttpGet]
-        public IActionResult Get(ODataQueryOptions<TestModel> options)
+        public IActionResult Get(ODataQueryOptions<Occupation> options)
         {
             var list = _testService.GetAll();
-            return Ok(new QueryResult<TestModel>(list, list.Count));
+            return Ok(new QueryResult<Occupation>(list, list.Count));
         }
 
         // GET: api/Test/5
@@ -46,9 +47,17 @@ namespace PackingListApp.Controllers
 
         [HttpPut("{id}")]
 
-        public  IActionResult Put(int id, [FromBody] TestModel item)
+        public  IActionResult Put(int id, [FromBody] Occupation item)
         {
             _testService.Put(id, item);
+            return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
+
+        [HttpDelete("{id}")]
+
+        public IActionResult Delete(int id)
+        {
+            _testService.Delete(id);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
         }
     }
