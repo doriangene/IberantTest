@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PackingListApp.Models
 {
@@ -8,7 +10,7 @@ namespace PackingListApp.Models
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Apellidos { get; set; }
-        [MaxLength(33)]
+        [Column(TypeName = "nvarchar(10)")]
         public string Direccion { get; set; }
     }
 }
