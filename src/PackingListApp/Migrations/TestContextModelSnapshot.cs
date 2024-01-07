@@ -47,8 +47,7 @@ namespace PackingListApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
-                        .HasMaxLength(33)
-                        .HasColumnType("nvarchar(33)");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
