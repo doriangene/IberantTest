@@ -41,6 +41,9 @@ export class NewUserValidator extends Validator<NewUserItem> {
         this.ruleFor(x => x.nombre)
             .notNull()
             .withMessage("Nombre cant be empty");
+        this.ruleFor(x => x.direccion)
+            .maxLength(10)
+            .withMessage("Direccion debe ser de 10 caracteres");
     }
 }
 
@@ -67,11 +70,13 @@ export class NewUserItemStore extends FormStore<NewUserItem> {
 export class UserValidator extends Validator<UserItem> {
     constructor() {
         super();
-
+       
         this.ruleFor(x => x.nombre)
             .notNull()
             .withMessage("nombre can not be null");
-
+        this.ruleFor(x => x.direccion)
+            .maxLength(10)
+            .withMessage("Direccion debe ser de 10 caracteres");
     }
 }
 
