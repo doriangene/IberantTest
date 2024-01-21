@@ -77,7 +77,7 @@ export class TestValidator extends Validator<TestItem> {
     }
 }
 
-const TestItem_UPDATE_ITEM = "TestItem_UPDATE_ITEM";
+//const TestItem_UPDATE_ITEM = "TestItem_UPDATE_ITEM";
 @repository("@@TestItem", "TestItem.detail")
 export class TestItemStore extends FormStore<TestItem> {
     baseUrl: string = "api/test";
@@ -95,13 +95,13 @@ export class TestItemStore extends FormStore<TestItem> {
         }, container);
     }
 
-    public async Update(item: TestItem) {
-        var result = await super.patch(TestItem_UPDATE_ITEM, `${item.id}`, item) as any;
-        return result.data as CommandResult<TestItem>;
-    }
+    //public async Update(item: TestItem) {
+    //    var result = await super.patch(TestItem_UPDATE_ITEM, `${item.id}`, item) as any;
+    //    return result.data as CommandResult<TestItem>;
+    //}
 
-    @reduce(TestItem_UPDATE_ITEM)
-    protected onUpdateBillingOrder(): AsyncAction<AxiosResponse<CommandResult<TestItem>>, DataModel<TestItem>> {
-        return super.onPatch();
-    }
+    //@reduce(TestItem_UPDATE_ITEM)
+    //protected onUpdateBillingOrder(): AsyncAction<AxiosResponse<CommandResult<TestItem>>, DataModel<TestItem>> {
+    //    return super.onPatch();
+    //}
 }

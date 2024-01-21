@@ -24,5 +24,7 @@ namespace PackingListApp.EntityFramework
             }
         }
         public DbSet<TestModel> TestModels { get; set; }
+
+        public DbSet<UserModel> UserModels { get; set; }
     }
 }
