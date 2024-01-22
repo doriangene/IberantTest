@@ -15,12 +15,15 @@ import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewUserItemView from "./body"
+import EditUserItemView from "./body"
+import { adminType } from "../../enums/adminType";
 
 interface UserItemListProps extends RouteComponentProps { }
 
 interface UserItemListState {
     query: Query;
     newShow: boolean;
+    editShow: boolean;
 }
 
 @connect(["UserItems", UserItemsStore])
@@ -45,7 +48,8 @@ UserItemListState
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            editShow: false
         };
     }
 
@@ -71,6 +75,10 @@ UserItemListState
         this.setState({ newShow: true })
     }
 
+    @autobind
+    private async onEditItem() {
+        this.setState({ editShow: true })
+    }
 
     @autobind
     private async onSaveItem(item: UserItem, state: ItemState) {
@@ -93,6 +101,12 @@ UserItemListState
         this.load(this.state.query);
     }
 
+    @autobind
+    private onEditItemClosed() {
+        this.setState({ editShow: false });
+        this.load(this.state.query);
+    }
+
 
     @autobind
     private async onDeleteRow(
@@ -111,6 +125,7 @@ UserItemListState
                 {
                     field: "name",
                     title: "Name",
+                    required: true,
                     renderer: data => <span>{data.name}</span>,
                     editor: data => <Input />
 
@@ -119,6 +134,7 @@ UserItemListState
                 {
                     field: "lastName",
                     title: "Last Name",
+                    required: true,
                     renderer: data => <span>{data.lastName}</span>,
                     editor: data => <Input />
                 },
@@ -136,7 +152,7 @@ UserItemListState
                 {
                     field: "adminType",
                     title: "Admin Type",
-                    renderer: data => data.isAdmin ? <span>data.adminType</span> : <span>-</span>
+                    renderer: data => data.isAdmin ? <span>{adminType[data.adminType]}</span> : <span>-</span>
                 }
 
             ],
@@ -178,6 +194,7 @@ UserItemListState
                             canEdit={true}
                         />
                         {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} />}
+                        {this.state.editShow && <EditUserItemView onClose={this.onEditItemClosed} />}
                     </div>
                 </Content>
             </Layout>
