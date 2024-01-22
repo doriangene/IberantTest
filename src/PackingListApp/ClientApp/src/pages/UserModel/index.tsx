@@ -4,10 +4,7 @@ import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
-import {
-    UserItemsStore,
-    UserItem
-} from "src/stores/user-store";
+import {UserItemsStore,UserItem} from "src/stores/user-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
@@ -27,11 +24,9 @@ interface UserItemListState {
 }
 
 @connect(["UserItems", UserItemsStore])
-export default class UserItemListPage extends Component<
-UserItemListProps,
-UserItemListState
-> {
+export default class UserItemListPage extends Component<UserItemListProps,UserItemListState> {
     private id: number = -1;
+
     private get UserItemsStore() {
         return (this.props as any).UserItems as UserItemsStore;
     }
@@ -116,7 +111,6 @@ UserItemListState
         return await this.UserItemsStore.deleteAsync(`${item.id}`);
     }
 
-    /*Arreglar cuando este la base de datos*/
 
     render() {
         const tableModel = {

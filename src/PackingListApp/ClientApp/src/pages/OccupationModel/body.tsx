@@ -2,7 +2,7 @@
 import { Form, Spin, Select, Input, Checkbox, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 let FormItem = Form.Item;
-import {  NewOccupationItem , NewOccupationItemStore } from 'src/stores/test-store';
+import {  NewOccupationItem , NewOccupationItemStore } from 'src/stores/occupation-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';

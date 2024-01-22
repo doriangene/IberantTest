@@ -4,7 +4,7 @@ import { routerReducer, routerMiddleware } from "react-router-redux";
 import { ApplicationState, configReducer } from "./stores/reducers";
 import { History } from "history";
 import { storeBuilder } from "redux-scaffolding-ts";
-import { OccupationItemStore, OccupationItemsStore, NewOccupationItemStore } from "./stores/test-store";
+import { OccupationItemStore, OccupationItemsStore, NewOccupationItemStore } from "./stores/occupation-store";
 import { NewUserItemStore, UserItemsStore, UserItemStore } from "./stores/user-store";
 
 export default function configureStore(history: History, initialState?: ApplicationState) {

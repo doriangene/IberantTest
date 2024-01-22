@@ -1,7 +1,6 @@
 ﻿import * as React from 'react'
-import { Form, Spin, Select, Input, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
+import { Form, Spin, Input, Select, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-let FormItem = Form.Item;
 import { NewUserItem, NewUserItemStore } from 'src/stores/user-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
@@ -10,6 +9,7 @@ import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
 import { formatMessage } from 'src/services/http-service';
 import { adminType } from '../../enums/adminType';
 
+let FormItem = Form.Item;
 
 interface NewUserItemViewProps {
     onClose: (id: string | undefined, item?: NewUserItem) => void;
@@ -35,8 +35,10 @@ interface ClassFormBodyProps {
     getFieldDecorator<T extends Object = {}>(id: keyof T, options?: GetFieldDecoratorOptions): (node: React.ReactNode) => React.ReactNode;
 }
 
+
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
     state = { isAdmin: false }
+
 
     render() {
         const handleChange = () => {
@@ -45,6 +47,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
 
         const { getFieldDecorator } = this.props;
         var item = this.props.item || {} as NewUserItem;
+        const opciones = ["Opción 1", "Opción 2", "Opción 3"];
         
         return <Form id="modaForm" onSubmit={() => { if (this.props.onSave) { this.props.onSave(); } }}>
             <Row gutter={24}>
@@ -77,6 +80,22 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
+
+                <Col span={12}>
+                    <FormItem label={'Occupation'} >
+                        {getFieldDecorator(nameof<NewUserItem>('occupation'), {
+                            initialValue: item.occupation,
+                        })(
+                            <Select>
+                                {opciones.map((opcion) => (
+                                <option value={opcion}>{opcion}</option>
+                                ))}
+                            </Select>
+
+                        )}
+                    </FormItem>
+                </Col>
+
                 <Col span={12}>
                     <FormItem label={'Is Admin'}>
                         {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {

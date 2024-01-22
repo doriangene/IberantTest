@@ -4,10 +4,7 @@ import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
-import {
-    OccupationItemsStore,
-    OccupationItem
-} from "src/stores/test-store";
+import {OccupationItemsStore,OccupationItem} from "src/stores/occupation-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
@@ -24,10 +21,7 @@ interface OccupationItemListState {
 }
 
 @connect(["OccupationItems", OccupationItemsStore])
-export default class OccupationItemListPage extends Component<
-OccupationItemListProps,
-OccupationItemListState
-> {
+export default class OccupationItemListPage extends Component<OccupationItemListProps,OccupationItemListState> {
     private id: number = -1;
     private get OccupationItemsStore() {
         return (this.props as any).OccupationItems as OccupationItemsStore;
@@ -83,10 +77,6 @@ OccupationItemListState
         return result;
     }
 
-
-
-
-
     @autobind
     private onNewItemClosed() {
         this.setState({ newShow: false });
@@ -111,13 +101,8 @@ OccupationItemListState
                 {
                     field: "title",
                     title: "Title",
-                    renderer: data =>
-
-                    <span>{data.title}</span>,
-
+                    renderer: data =><span>{data.title}</span>,
                     editor: data => <Input />
-
-
                 },
                 {
                     field: "description",
@@ -125,7 +110,6 @@ OccupationItemListState
                     renderer: data => <span>{data.description}</span>,
                     editor: data => <Input />
                 },
-
 
             ],
             data: this.OccupationItemsStore.state,
@@ -147,8 +131,8 @@ OccupationItemListState
                                 message={"Ha ocurrido un error"}
                                 description={this.OccupationItemsStore.state.result.messages
                                     .map(o => o.body)
-                                    .join(", ")}
-                            />
+                                .join(", ")}
+                        />
                         )}
 
                     <div style={{ margin: "12px" }}>
