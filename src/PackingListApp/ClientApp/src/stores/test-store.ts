@@ -6,18 +6,18 @@ import { AxiosResponse } from 'axios';
 import { container } from '../inversify.config';
 import { CommandResult } from './types';
 
-export interface TestItem {
+export interface OccupationItem {
     id: number;
     title: string; 
     description: string;
 }
 
-@repository("@@TestItem", "TestItem.summary")
-export class TestItemsStore extends DataStore<TestItem> {
-    baseUrl: string = "api/test";
+@repository("@@OccupationItem", "OccupationItem.summary")
+export class OccupationItemsStore extends DataStore<OccupationItem> {
+    baseUrl: string = "api/occupation";
 
     constructor() {
-        super('TestItem', {
+        super('OccupationItem', {
             count: 0,
             isBusy: false,
             items: [],
@@ -31,12 +31,12 @@ export class TestItemsStore extends DataStore<TestItem> {
    
 }
 
-export interface NewTestItem {
+export interface NewOccupationItem {
     title: string,
     description: string,
 }
 
-export class NewTestValidator extends Validator<NewTestItem> {
+export class NewOccupationValidator extends Validator<NewOccupationItem> {
     constructor() {
         super();
 
@@ -46,16 +46,16 @@ export class NewTestValidator extends Validator<NewTestItem> {
     }
 }
 
-@repository("@@TestItem", "TestItem.new")
-export class NewTestItemStore extends FormStore<NewTestItem> {
-    baseUrl: string = "api/test";
+@repository("@@OccupationItem", "OccupationItem.new")
+export class NewOccupationItemStore extends FormStore<NewOccupationItem> {
+    baseUrl: string = "api/occupation";
 
-    protected validate(item: NewTestItem) {
-        return (new NewTestValidator()).validate(item);
+    protected validate(item: NewOccupationItem) {
+        return (new NewOccupationValidator()).validate(item);
     }
 
     constructor() {
-        super('NEW_TestItem', {
+        super('NEW_OccupationItem', {
             isBusy: false,
             status: 'New',
             item: undefined,
@@ -66,7 +66,7 @@ export class NewTestItemStore extends FormStore<NewTestItem> {
 
 
 
-export class TestValidator extends Validator<TestItem> {
+export class OccupationValidator extends Validator<OccupationItem> {
     constructor() {
         super();
 
@@ -77,17 +77,17 @@ export class TestValidator extends Validator<TestItem> {
     }
 }
 
-//const TestItem_UPDATE_ITEM = "TestItem_UPDATE_ITEM";
-@repository("@@TestItem", "TestItem.detail")
-export class TestItemStore extends FormStore<TestItem> {
-    baseUrl: string = "api/test";
+//const OccupationItem_UPDATE_ITEM = "OccupationItem_UPDATE_ITEM";
+@repository("@@OccupationItem", "OccupationItem.detail")
+export class OccupationItemStore extends FormStore<OccupationItem> {
+    baseUrl: string = "api/occupation";
 
-    protected validate(item: TestItem) {
-        return new TestValidator().validate(item);
+    protected validate(item: OccupationItem) {
+        return new OccupationValidator().validate(item);
     }
 
     constructor() {
-        super('TestItem', {
+        super('OccupationItem', {
             isBusy: false,
             status: 'New',
             item: undefined,
@@ -95,13 +95,13 @@ export class TestItemStore extends FormStore<TestItem> {
         }, container);
     }
 
-    //public async Update(item: TestItem) {
-    //    var result = await super.patch(TestItem_UPDATE_ITEM, `${item.id}`, item) as any;
-    //    return result.data as CommandResult<TestItem>;
+    //public async Update(item: OccupationItem) {
+    //    var result = await super.patch(OccupationItem_UPDATE_ITEM, `${item.id}`, item) as any;
+    //    return result.data as CommandResult<OccupationItem>;
     //}
 
-    //@reduce(TestItem_UPDATE_ITEM)
-    //protected onUpdateBillingOrder(): AsyncAction<AxiosResponse<CommandResult<TestItem>>, DataModel<TestItem>> {
+    //@reduce(OccupationItem_UPDATE_ITEM)
+    //protected onUpdateBillingOrder(): AsyncAction<AxiosResponse<CommandResult<OccupationItem>>, DataModel<OccupationItem>> {
     //    return super.onPatch();
     //}
 }

@@ -17,5 +17,6 @@ namespace PackingListApp.Models
         public string Direction { get; set; }
         public bool IsAdmin { get; set; }
         public adminType AdminType { get; set; }
+        public OccupationModel Occupation { get; set; }
     }
 }

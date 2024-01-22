@@ -2,7 +2,7 @@
 import { Form, Spin, Select, Input, Checkbox, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 let FormItem = Form.Item;
-import {  NewTestItem , NewTestItemStore } from 'src/stores/test-store';
+import {  NewOccupationItem , NewOccupationItemStore } from 'src/stores/test-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';
@@ -10,23 +10,23 @@ import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
 import { formatMessage } from 'src/services/http-service';
 
 
-interface NewTestItemViewProps {
-    onClose: (id: string | undefined, item?: NewTestItem) => void;
+interface NewOccupationItemViewProps {
+    onClose: (id: string | undefined, item?: NewOccupationItem) => void;
 }
 
-interface NewTestItemViewState {
+interface NewOccupationItemViewState {
 
 }
 
 interface ClassFormBodyProps {
-    item: NewTestItem | undefined,
+    item: NewOccupationItem | undefined,
     onSave?: () => Promise<any>;
     setFieldsValue(obj: Object): void;
     getFieldValue(fieldName: string): any;
     getFieldDecorator<T extends Object = {}>(id: keyof T, options?: GetFieldDecoratorOptions): (node: React.ReactNode) => React.ReactNode;
 }
 
-export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
+export class OccupationItemFormBody extends React.Component<ClassFormBodyProps> {
 
   
 
@@ -36,13 +36,13 @@ export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
 
         const { getFieldDecorator } = this.props;
 
-        var item = this.props.item || {} as NewTestItem;
+        var item = this.props.item || {} as NewOccupationItem;
         return <Form id="modaForm" onSubmit={() => { if (this.props.onSave) { this.props.onSave(); } }}>
             <Row gutter={24}>
 
                 <Col span={12}>
                     <FormItem label={"Title"}>
-                        {getFieldDecorator(nameof<NewTestItem>('title'), {
+                        {getFieldDecorator(nameof<NewOccupationItem>('title'), {
                             initialValue: item.title,
                         })(
                             <Input />
@@ -51,7 +51,7 @@ export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
                 </Col>
                 <Col span={12}>
                     <FormItem label={'Description'}>
-                        {getFieldDecorator(nameof<NewTestItem>('description'), {
+                        {getFieldDecorator(nameof<NewOccupationItem>('description'), {
                             initialValue: item.description,
                         })(
                             <Input  />
@@ -67,20 +67,20 @@ export class TestItemFormBody extends React.Component<ClassFormBodyProps> {
     }
 }
 
-@connect(["newTestItem", NewTestItemStore])
-class NewTestItemView extends React.Component<NewTestItemViewProps & FormComponentProps, NewTestItemViewState> {
-    private get TestItemsStore() {
-        return (this.props as any).newTestItem as NewTestItemStore;
+@connect(["newOccupationItem", NewOccupationItemStore])
+class NewOccupationItemView extends React.Component<NewOccupationItemViewProps & FormComponentProps, NewOccupationItemViewState> {
+    private get OccupationItemsStore() {
+        return (this.props as any).newOccupationItem as NewOccupationItemStore;
     }
 
-    constructor(props: NewTestItemViewProps & FormComponentProps) {
+    constructor(props: NewOccupationItemViewProps & FormComponentProps) {
         super(props);
-        this.TestItemsStore.createNew({} as any);
+        this.OccupationItemsStore.createNew({} as any);
     }
 
-    componentWillReceiveProps(nextProps: NewTestItemViewProps) {
-        if (this.TestItemsStore.state.result && this.TestItemsStore.state.result.isSuccess)
-            nextProps.onClose((this.TestItemsStore.state.result as any).aggregateRootId, this.TestItemsStore.state.item)
+    componentWillReceiveProps(nextProps: NewOccupationItemViewProps) {
+        if (this.OccupationItemsStore.state.result && this.OccupationItemsStore.state.result.isSuccess)
+            nextProps.onClose((this.OccupationItemsStore.state.result as any).aggregateRootId, this.OccupationItemsStore.state.item)
     }
 
     @autobind
@@ -91,8 +91,8 @@ class NewTestItemView extends React.Component<NewTestItemViewProps & FormCompone
                 var values = self.props.form.getFieldsValue();
                 if (!event) {
                     values = { ...values, };
-                    self.TestItemsStore.change(values);
-                    self.TestItemsStore.submit().then(result => {
+                    self.OccupationItemsStore.change(values);
+                    self.OccupationItemsStore.submit().then(result => {
                         if (result.isSuccess) {
                             resolve();
                         } else {
@@ -106,7 +106,7 @@ class NewTestItemView extends React.Component<NewTestItemViewProps & FormCompone
 
     @autobind
     private onCancelNewItem() {
-        this.TestItemsStore.clear();
+        this.OccupationItemsStore.clear();
         this.props.onClose(undefined);
     }
 
@@ -120,15 +120,15 @@ class NewTestItemView extends React.Component<NewTestItemViewProps & FormCompone
                 onOk={this.onCreateNewItem}
                 closable={false}
                 width='800px'
-                title={"New TestItem"}>
-                {this.TestItemsStore.state.result && !this.TestItemsStore.state.result.isSuccess &&
+                title={"New Occupation"}>
+                {this.OccupationItemsStore.state.result && !this.OccupationItemsStore.state.result.isSuccess &&
                     <Alert type='error'
                         message="Ha ocurrido un error"
-                        description={formatMessage(this.TestItemsStore.state.result)}
+                        description={formatMessage(this.OccupationItemsStore.state.result)}
                     />
                 }
-                <Spin spinning={this.TestItemsStore.state.isBusy}>
-                    <TestItemFormBody item={this.TestItemsStore.state.item} getFieldDecorator={getFieldDecorator} getFieldValue={this.props.form.getFieldValue} setFieldsValue={this.props.form.setFieldsValue} onSave={this.onCreateNewItem} />
+                <Spin spinning={this.OccupationItemsStore.state.isBusy}>
+                    <OccupationItemFormBody item={this.OccupationItemsStore.state.item} getFieldDecorator={getFieldDecorator} getFieldValue={this.props.form.getFieldValue} setFieldsValue={this.props.form.setFieldsValue} onSave={this.onCreateNewItem} />
                 </Spin>
             </Modal>
         );
@@ -136,4 +136,4 @@ class NewTestItemView extends React.Component<NewTestItemViewProps & FormCompone
 }
 
 // Wire up the React component to the Redux store
-export default Form.create({})(NewTestItemView as any) as any as React.ComponentClass<NewTestItemViewProps>;
+export default Form.create({})(NewOccupationItemView as any) as any as React.ComponentClass<NewOccupationItemViewProps>;

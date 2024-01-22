@@ -4,7 +4,7 @@ import { routerReducer, routerMiddleware } from "react-router-redux";
 import { ApplicationState, configReducer } from "./stores/reducers";
 import { History } from "history";
 import { storeBuilder } from "redux-scaffolding-ts";
-import { TestItemStore, TestItemsStore, NewTestItemStore } from "./stores/test-store";
+import { OccupationItemStore, OccupationItemsStore, NewOccupationItemStore } from "./stores/test-store";
 import { NewUserItemStore, UserItemsStore, UserItemStore } from "./stores/user-store";
 
 export default function configureStore(history: History, initialState?: ApplicationState) {
@@ -33,9 +33,9 @@ export default function configureStore(history: History, initialState?: Applicat
         ApplicationState
     >;
 
-    storeBuilder.addRepository(new TestItemStore() as any);
-    storeBuilder.addRepository(new NewTestItemStore() as any);
-    storeBuilder.addRepository(new TestItemsStore() as any);
+    storeBuilder.addRepository(new OccupationItemStore() as any);
+    storeBuilder.addRepository(new NewOccupationItemStore() as any);
+    storeBuilder.addRepository(new OccupationItemsStore() as any);
 
     storeBuilder.addRepository(new UserItemStore() as any);
     storeBuilder.addRepository(new NewUserItemStore() as any);

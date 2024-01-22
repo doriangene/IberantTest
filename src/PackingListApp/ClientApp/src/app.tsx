@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, RouteComponentProps, withRouter } from 'react-router';
 import HomePage from './pages/home';
-import TestIndex from './pages/TestModel/index';
+import OccupationIndex from './pages/OccupationModel/index';
+//import OccupationIndex from './pages/OccupationModel/index';
 import UserIndex from './pages/UserModel/index';
 import autobind from 'autobind-decorator';
 import { Layout, Menu, Icon, Divider, Modal, DatePicker, Input, InputNumber } from 'antd';
@@ -49,7 +50,7 @@ class App extends Component<AppProps, AppState> {
                     <AppMenu  /> 
                 </Sider>
                 <Route exact path='/' component={HomePage} />
-                <Route exact path='/test' component={TestIndex} />
+                <Route exact path='/test' component={OccupationIndex} />
                 <Route exact path='/user' component={UserIndex}/>
             </Layout>);
     }

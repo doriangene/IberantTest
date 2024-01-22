@@ -8,40 +8,40 @@ using System.Threading.Tasks;
 
 namespace PackingListApp.Services
 {
-    public class TestServices : ITestServices
+    public class OccupationServices : IOccupationServices
     {
         private readonly TestContext _context;
-        public TestServices(TestContext context)
+        public OccupationServices(TestContext context)
         {
             _context = context;
         }
 
-        public int Add(NewTestModel testmodel)
+        public int Add(NewOccupationModel testmodel)
         {
-            var newtest = new TestModel()
+            var newtest = new OccupationModel()
             {
                 Title = testmodel.Title,
                 Description = testmodel.Description
             };
-            _context.TestModels.Add(newtest
+            _context.OccupationModels.Add(newtest
             );
             _context.SaveChanges();
             return newtest.Id;
         }
 
-        public TestModel Get(int id)
+        public OccupationModel Get(int id)
         {
-            return _context.TestModels.FirstOrDefault(t => t.Id == id);
+            return _context.OccupationModels.FirstOrDefault(t => t.Id == id);
         }
 
-        public List<TestModel> GetAll()
+        public List<OccupationModel> GetAll()
         {
-            return _context.TestModels.ToList();
+            return _context.OccupationModels.ToList();
         }
 
-        public int Put(int id, TestModel item)
+        public int Put(int id, OccupationModel item)
         {
-            var itemput = _context.TestModels.FirstOrDefault(t => t.Id == id);
+            var itemput = _context.OccupationModels.FirstOrDefault(t => t.Id == id);
             itemput.Description = item.Description;
             itemput.Title = item.Title;
             _context.SaveChanges();
@@ -51,7 +51,7 @@ namespace PackingListApp.Services
 
         public int Delete(int id)
         {
-            var itemDelete = _context.TestModels.FirstOrDefault(x => x.Id == id);
+            var itemDelete = _context.OccupationModels.FirstOrDefault(x => x.Id == id);
             _context.Remove(itemDelete);
             _context.SaveChanges();
             return id;

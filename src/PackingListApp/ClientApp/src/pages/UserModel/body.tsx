@@ -59,7 +59,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem label={'LastName'}>
+                    <FormItem label={'Last Name'}>
                         {getFieldDecorator(nameof<NewUserItem>('lastName'), {
                             initialValue: item.lastName,
                         })(
@@ -78,7 +78,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem label={'IsAdmin'}>
+                    <FormItem label={'Is Admin'}>
                         {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
                             initialValue: item.isAdmin
                         })(
@@ -87,7 +87,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                     </FormItem>
                 </Col>
                 {this.state.isAdmin && <Col span={12}>
-                        <FormItem label={'AdminType'} >
+                        <FormItem label={'Admin Type'} >
                             {getFieldDecorator(nameof<NewUserItem>('adminType'), {
                                 initialValue: item.adminType,
                             })(
