@@ -58,6 +58,10 @@ export class NewUserValidator extends Validator<NewUserItem> {
         this.ruleFor(x => x.lastName)
             .notNull()
             .withMessage("Last Name cant be empty");
+
+        this.ruleFor(x => x.direction)
+            .maxLength(10)
+            .withMessage("Direction cant be more than 10 characters");
     }
 }
 
