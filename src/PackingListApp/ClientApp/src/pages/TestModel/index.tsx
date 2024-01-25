@@ -137,7 +137,7 @@ TestItemListState
 
         return (
             <Layout>
-                <HeaderComponent title="TestModels" canGoBack={true} />
+                <HeaderComponent title="Occupations" canGoBack={true} />
 
                 <Content className="page-content">
                     {this.TestItemsStore.state.result &&
