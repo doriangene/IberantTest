@@ -64,7 +64,6 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
         this.setState({ newShow: true })
     }
 
-
     @autobind
     private async onSaveItem(item: TestItem, state: ItemState) {
         var result = await this.TestItemsStore.saveAsync(
@@ -111,7 +110,7 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
 
         return (
             <Layout>
-                <HeaderComponent title="Occupations" canGoBack={true} />
+                <HeaderComponent title="Users" canGoBack={true} />
 
                 <Content className="page-content">
                     {this.TestItemsStore.state.result &&

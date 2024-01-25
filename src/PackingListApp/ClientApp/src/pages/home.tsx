@@ -39,7 +39,6 @@ class HomePage extends Component<HomePageProps, HomePageState> {
         });
     }
 
-
     render() {
         return <Layout>
             <HeaderComponent title='Test Iberant' />
@@ -49,9 +48,8 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                         <Col span={24}>
                             <Card title="Models">
                                 <ul>
-                                    <li><Link to='/test'>Occupation</Link></li>
+                                    <li><Link to='/occupation'>Occupation</Link></li>
                                     <li><Link to='/user'>User</Link></li>
-                                   
                                 </ul>
                             </Card>
                         </Col>

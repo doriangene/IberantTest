@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, RouteComponentProps, withRouter } from 'react-router';
 import HomePage from './pages/home';
 import TestIndex from './pages/TestModel/index';
+import UserIndex from './pages/User/index';
 import autobind from 'autobind-decorator';
 import { Layout, Menu, Icon, Divider, Modal, DatePicker, Input, InputNumber } from 'antd';
 import HttpService from './services/http-service';
@@ -48,8 +49,8 @@ class App extends Component<AppProps, AppState> {
                     <AppMenu  /> 
                 </Sider>
                 <Route exact path='/' component={HomePage} />
-                <Route exact path='/test' component={TestIndex} />
-                <Route exact path='/user' component={TestIndex} />
+                <Route exact path='/occupation' component={TestIndex} />
+                <Route exact path='/user' component={UserIndex} />
             </Layout>);
     }
 }

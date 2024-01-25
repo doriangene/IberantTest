@@ -111,7 +111,7 @@ class NewTestItemView extends React.Component<NewTestItemViewProps & FormCompone
                 onOk={this.onCreateNewItem}
                 closable={false}
                 width='800px'
-                title={"New Occupation"}>
+                title={"New User"}>
                 {this.TestItemsStore.state.result && !this.TestItemsStore.state.result.isSuccess &&
                     <Alert type='error'
                         message="Ha ocurrido un error"
