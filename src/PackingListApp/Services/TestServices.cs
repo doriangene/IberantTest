@@ -10,38 +10,38 @@ namespace PackingListApp.Services
 {
     public class TestServices : ITestServices
     {
-        private readonly TestContext _context;
-        public TestServices(TestContext context)
+        private readonly DataContext _context;
+        public TestServices(DataContext context)
         {
             _context = context;
         }
 
-        public int Add(NewTestModel testmodel)
+        public int Add(NewOccupation testmodel)
         {
-            var newtest = new TestModel()
+            var newtest = new Occupation()
             {
                 Title = testmodel.Title,
                 Description = testmodel.Description
             };
-            _context.TestModels.Add(newtest
+            _context.Occupations.Add(newtest
             );
             _context.SaveChanges();
             return newtest.Id;
         }
 
-        public TestModel Get(int id)
+        public Occupation Get(int id)
         {
-            return _context.TestModels.FirstOrDefault(t => t.Id == id);
+            return _context.Occupations.FirstOrDefault(t => t.Id == id);
         }
 
-        public List<TestModel> GetAll()
+        public List<Occupation> GetAll()
         {
-            return _context.TestModels.ToList();
+            return _context.Occupations.ToList();
         }
 
-        public int Put(int id, TestModel item)
+        public int Put(int id, Occupation item)
         {
-            var itemput = _context.TestModels.FirstOrDefault(t => t.Id == id);
+            var itemput = _context.Occupations.FirstOrDefault(t => t.Id == id);
             itemput.Description = item.Description;
             itemput.Title = item.Title;
             _context.SaveChanges();

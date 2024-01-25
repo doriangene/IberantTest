@@ -30,7 +30,7 @@ namespace PackingListApp
         {
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration["TestContext:ConnectionString"]));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["DataContext:ConnectionString"]));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

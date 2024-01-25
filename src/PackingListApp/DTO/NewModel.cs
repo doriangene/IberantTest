@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PackingListApp.Models
 {
-    public class NewTestModel
+    public class NewOccupation
     {
         public string Title { get; set; }
         public string Description { get; set; }
