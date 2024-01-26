@@ -14,5 +14,6 @@ namespace PackingListApp.Interfaces
 
         Occupation Get(int id);
         int Put(int id, Occupation item);
+        void Delete(int id);
     }
 }

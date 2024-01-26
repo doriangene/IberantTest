@@ -135,6 +135,7 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
                             canDelete={true}
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
+                            onDeleteRow={this.onDeleteRow}
                             hidepagination={true}
                             canEdit={true}
                         />
