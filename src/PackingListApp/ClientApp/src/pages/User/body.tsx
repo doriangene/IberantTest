@@ -155,10 +155,9 @@ class NewUserItemView extends React.Component<NewUserItemViewProps & FormCompone
                 title={"New User"}>
                 {this.UserItemsStore.state.result && !this.UserItemsStore.state.result.isSuccess &&
                     <Alert type='error'
-                        message="Ha ocurrido un error"
-                        description={formatMessage(this.UserItemsStore.state.result)}
-                    />
-                }
+                        message="An error has occurred"
+                    description={this.UserItemsStore.state.result.messages.map(o => o.body).join(", ")}
+                    />}
                 <Spin spinning={this.UserItemsStore.state.isBusy}>
                     <UserItemFormBody item={this.UserItemsStore.state.item} getFieldDecorator={getFieldDecorator} getFieldValue={this.props.form.getFieldValue} setFieldsValue={this.props.form.setFieldsValue} onSave={this.onCreateNewItem} />
                 </Spin>

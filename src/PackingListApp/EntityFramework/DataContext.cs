@@ -33,12 +33,12 @@ namespace PackingListApp.EntityFramework
                 .WithMany()
                 .HasForeignKey(u => u.OccupationId)
                 .OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<Occupation>()
-                .HasIndex(o => new { o.Title })
-                .IsUnique();
-            modelBuilder.Entity<User>()
-                .HasIndex(u => new { u.Name, u.LastName, u.Address })
-                .IsUnique();
+            //modelBuilder.Entity<Occupation>()
+            //    .HasIndex(o => new { o.Title })
+            //    .IsUnique();
+            //modelBuilder.Entity<User>()
+            //    .HasIndex(u => new { u.Name, u.LastName, u.Address })
+            //    .IsUnique();
         }
     }
 }

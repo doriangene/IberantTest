@@ -116,13 +116,9 @@ export default class OccupationItemListPage extends Component<OccupationItemList
                         !this.OccupationItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
-                                message={"Ha ocurrido un error"}
-                                description={this.OccupationItemsStore.state.result.messages
-                                    .map(o => o.body)
-                                    .join(", ")}
-                            />
-                        )}
-
+                                message={"An error has occurred"}
+                                description={this.OccupationItemsStore.state.result.messages.map(o => o.body).join(", ")}
+                            />)}
                     <div style={{ margin: "12px" }}>
                         <TableView
                             rowKey={"id"}

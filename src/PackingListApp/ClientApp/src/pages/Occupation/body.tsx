@@ -112,12 +112,11 @@ class NewOccupationItemView extends React.Component<NewOccupationItemViewProps &
                 closable={false}
                 width='800px'
                 title={"New Occupation"}>
-                {this.OccupationItemsStore.state.result && !this.OccupationItemsStore.state.result.isSuccess &&
+                {this.OccupationItemsStore.state.result && !this.OccupationItemsStore.state.result.isSuccess && (
                     <Alert type='error'
-                        message="Ha ocurrido un error"
-                        description={formatMessage(this.OccupationItemsStore.state.result)}
-                    />
-                }
+                    message="An error has occurred"
+                    description={this.OccupationItemsStore.state.result.messages.map(o => o.body).join(", ")}
+                    />)}
                 <Spin spinning={this.OccupationItemsStore.state.isBusy}>
                     <OccupationItemFormBody item={this.OccupationItemsStore.state.item} getFieldDecorator={getFieldDecorator} getFieldValue={this.props.form.getFieldValue} setFieldsValue={this.props.form.setFieldsValue} onSave={this.onCreateNewItem} />
                 </Spin>

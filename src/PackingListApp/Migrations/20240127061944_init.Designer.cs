@@ -10,7 +10,7 @@ using PackingListApp.EntityFramework;
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240127012417_init")]
+    [Migration("20240127061944_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,12 +33,9 @@ namespace PackingListApp.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Title")
-                        .IsUnique();
 
                     b.ToTable("Occupations");
                 });
@@ -63,11 +60,11 @@ namespace PackingListApp.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OccupationId")
                         .HasColumnType("int");
@@ -75,9 +72,6 @@ namespace PackingListApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OccupationId");
-
-                    b.HasIndex("Name", "LastName", "Address")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });

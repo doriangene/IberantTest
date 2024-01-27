@@ -116,13 +116,13 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                 {
                     field: "adminType",
                     title: "Admin Type",
-                    renderer: data => data.isAdmin ? <span>{AdminType[data.adminType]}</span> : <span>-</span>,
+                    renderer: data => data.isAdmin ? <span>{AdminType[data.adminType]}</span> : <span>X</span>,
                     editor: data => <Input />
                 },
                 {
                     field: "occupationId",
                     title: "Occupation",
-                    renderer: data => <span>{data.occupationId}</span>,
+                    renderer: data => data.occupationId == null ? <span>{"Not Assigned"}</span> : <span>{data.occupationId}</span>,
                     editor: data => <Input />
                 },
             ],
@@ -140,13 +140,9 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                         !this.UserItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
-                                message={"Ha ocurrido un error"}
-                                description={this.UserItemsStore.state.result.messages
-                                    .map(o => o.body)
-                                    .join(", ")}
-                            />
-                        )}
-
+                                message={"An error has occurred"}
+                                description={this.UserItemsStore.state.result.messages.map(o => o.body).join(", ")}
+                            />)}
                     <div style={{ margin: "12px" }}>
                         <TableView
                             rowKey={"id"}

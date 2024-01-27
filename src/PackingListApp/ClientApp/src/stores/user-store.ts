@@ -47,12 +47,17 @@ export class NewUserValidator extends Validator<NewUserItem> {
         super();
 
         this.ruleFor(x => x.name)
-            .notNull()
-            .withMessage("Name cant be empty");
+            .notEmpty()
+            .withMessage("Name cannot be empty");
+
+        this.ruleFor(x => x.lastName)
+            .notEmpty()
+            .withMessage("Last Name cannot be empty");
 
         this.ruleFor(x => x.address)
+            .notEmpty()
             .maxLength(10)
-            .withMessage("Address cant be more than 10 characters");
+            .withMessage("Address cannot be empty or have more than 10 characters");
     }
 }
 
@@ -79,12 +84,17 @@ export class UserValidator extends Validator<UserItem> {
         super();
 
         this.ruleFor(x => x.name)
-            .notNull()
-            .withMessage("Name can not be null");
+            .notEmpty()
+            .withMessage("Name cannot be empty");
+
+        this.ruleFor(x => x.lastName)
+            .notEmpty()
+            .withMessage("Last Name cannot be empty");
 
         this.ruleFor(x => x.address)
+            .notEmpty()
             .maxLength(10)
-            .withMessage("Address cant be more than 10 characters");
+            .withMessage("Address cannot be empty or have more than 10 characters");
     }
 }
 

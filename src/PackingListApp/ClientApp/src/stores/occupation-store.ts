@@ -12,6 +12,7 @@ export interface OccupationItem {
     description: string;
 }
 
+
 @repository("@@OccupationItem", "OccupationItem.summary")
 export class OccupationItemsStore extends DataStore<OccupationItem> {
     baseUrl: string = "api/occupation";
@@ -37,8 +38,8 @@ export class NewOccupationValidator extends Validator<NewOccupationItem> {
         super();
 
         this.ruleFor(x => x.title)
-            .notNull()
-            .withMessage("Title cant be empty");
+            .notEmpty()
+            .withMessage("Title cannot be empty");
     }
 }
 
@@ -65,8 +66,8 @@ export class OccupationValidator extends Validator<OccupationItem> {
         super();
 
         this.ruleFor(x => x.title)
-            .notNull()
-            .withMessage("Title can not be null");
+            .notEmpty()
+            .withMessage("Title cannot be empty");
     }
 }
 

@@ -12,7 +12,7 @@ namespace PackingListApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -26,8 +26,8 @@ namespace PackingListApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     AdminType = table.Column<int>(type: "int", nullable: false),
@@ -43,18 +43,6 @@ namespace PackingListApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Occupations_Title",
-                table: "Occupations",
-                column: "Title",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Name_LastName_Address",
-                table: "Users",
-                columns: new[] { "Name", "LastName", "Address" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_OccupationId",
