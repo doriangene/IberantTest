@@ -10,7 +10,7 @@ using PackingListApp.EntityFramework;
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240125223528_init")]
+    [Migration("20240127012417_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,13 @@ namespace PackingListApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.ToTable("Occupations");
                 });
@@ -47,20 +51,23 @@ namespace PackingListApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("AdminType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AdminType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("OccupationId")
                         .HasColumnType("int");
@@ -69,6 +76,9 @@ namespace PackingListApp.Migrations
 
                     b.HasIndex("OccupationId");
 
+                    b.HasIndex("Name", "LastName", "Address")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
@@ -76,7 +86,8 @@ namespace PackingListApp.Migrations
                 {
                     b.HasOne("PackingListApp.Models.Occupation", "Occupation")
                         .WithMany()
-                        .HasForeignKey("OccupationId");
+                        .HasForeignKey("OccupationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Occupation");
                 });

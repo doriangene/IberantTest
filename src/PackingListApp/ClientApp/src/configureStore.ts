@@ -4,7 +4,8 @@ import { routerReducer, routerMiddleware } from "react-router-redux";
 import { ApplicationState, configReducer } from "./stores/reducers";
 import { History } from "history";
 import { storeBuilder } from "redux-scaffolding-ts";
-import { TestItemStore, TestItemsStore, NewTestItemStore } from "./stores/test-store";
+import { OccupationItemStore, OccupationItemsStore, NewOccupationItemStore } from "./stores/occupation-store";
+import { UserItemStore, UserItemsStore, NewUserItemStore } from "./stores/user-store";
 
 export default function configureStore(history: History, initialState?: ApplicationState) {
     // Build middleware. These are functions that can process the actions before they reach the store.
@@ -28,13 +29,15 @@ export default function configureStore(history: History, initialState?: Applicat
     //storeBuilder.addRepository(new ServicesStore() as any);
 
     // Combine all reducers and instantiate the app-wide store instance
-    const store = storeBuilder.getStore(initialState, buildRootReducer(), createStoreWithMiddleware as any) as Store<
-        ApplicationState
-    >;
+    const store = storeBuilder.getStore(initialState, buildRootReducer(), createStoreWithMiddleware as any) as Store<ApplicationState>;
 
-    storeBuilder.addRepository(new TestItemStore() as any);
-    storeBuilder.addRepository(new NewTestItemStore() as any);
-    storeBuilder.addRepository(new TestItemsStore() as any);
+    storeBuilder.addRepository(new OccupationItemStore() as any);
+    storeBuilder.addRepository(new NewOccupationItemStore() as any);
+    storeBuilder.addRepository(new OccupationItemsStore() as any);
+
+    storeBuilder.addRepository(new UserItemStore() as any);
+    storeBuilder.addRepository(new NewUserItemStore() as any);
+    storeBuilder.addRepository(new UserItemsStore() as any);
     return store;
 }
 

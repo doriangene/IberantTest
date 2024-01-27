@@ -12,7 +12,7 @@ namespace PackingListApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -26,11 +26,11 @@ namespace PackingListApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    AdminType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdminType = table.Column<int>(type: "int", nullable: false),
                     OccupationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -41,8 +41,20 @@ namespace PackingListApp.Migrations
                         column: x => x.OccupationId,
                         principalTable: "Occupations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Occupations_Title",
+                table: "Occupations",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Name_LastName_Address",
+                table: "Users",
+                columns: new[] { "Name", "LastName", "Address" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_OccupationId",

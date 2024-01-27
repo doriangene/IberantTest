@@ -10,6 +10,8 @@ namespace PackingListApp.EntityFramework
     public class DataContext : DbContext
     {
         private bool _initialized;
+        public DbSet<Occupation> Occupations { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -23,7 +25,20 @@ namespace PackingListApp.EntityFramework
                 _initialized = true;
             }
         }
-        public DbSet<Occupation> Occupations { get; set; }
-        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Occupation)
+                .WithMany()
+                .HasForeignKey(u => u.OccupationId)
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Occupation>()
+                .HasIndex(o => new { o.Title })
+                .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => new { u.Name, u.LastName, u.Address })
+                .IsUnique();
+        }
     }
 }

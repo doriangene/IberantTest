@@ -4,30 +4,30 @@ import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
-import { TestItemsStore, TestItem } from "src/stores/test-store";
+import { OccupationItemsStore, OccupationItem } from "src/stores/occupation-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
 import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
-import NewTestItemView from "./body"
+import NewOccupationItemView from "./body"
 
-interface TestItemListProps extends RouteComponentProps { }
+interface OccupationItemListProps extends RouteComponentProps { }
 
-interface TestItemListState {
+interface OccupationItemListState {
     query: Query;
     newShow: boolean;
 }
 
-@connect(["TestItems", TestItemsStore])
-export default class TestItemListPage extends Component<TestItemListProps, TestItemListState> {
+@connect(["OccupationItems", OccupationItemsStore])
+export default class OccupationItemListPage extends Component<OccupationItemListProps, OccupationItemListState> {
     private id: number = -1;
-    private get TestItemsStore() {
-        return (this.props as any).TestItems as TestItemsStore;
+    private get OccupationItemsStore() {
+        return (this.props as any).OccupationItems as OccupationItemsStore;
     }
 
-    constructor(props: TestItemListProps) {
+    constructor(props: OccupationItemListProps) {
         super(props);
 
         this.state = {
@@ -49,7 +49,7 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
 
     @autobind
     private async load(query: Query) {
-        await this.TestItemsStore.getAllAsync(query);
+        await this.OccupationItemsStore.getAllAsync(query);
     }
 
     @autobind
@@ -58,16 +58,14 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
         this.load(query);
     }
 
-
     @autobind
     private async onNewItem() {
         this.setState({ newShow: true })
     }
 
-
     @autobind
-    private async onSaveItem(item: TestItem, state: ItemState) {
-        var result = await this.TestItemsStore.saveAsync(
+    private async onSaveItem(item: OccupationItem, state: ItemState) {
+        var result = await this.OccupationItemsStore.saveAsync(
             `${item.id}`,
             item,
             state
@@ -83,8 +81,8 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
     }
 
     @autobind
-    private async onDeleteRow(item: TestItem, state: ItemState): Promise<CommandResult<any>> {
-        return await this.TestItemsStore.deleteAsync(`${item.id}`);
+    private async onDeleteRow(item: OccupationItem, state: ItemState): Promise<CommandResult<any>> {
+        return await this.OccupationItemsStore.deleteAsync(`${item.id}`);
     }
 
     render() {
@@ -104,22 +102,22 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
                     editor: data => <Input />
                 },
             ],
-            data: this.TestItemsStore.state,
+            data: this.OccupationItemsStore.state,
             sortFields: [
             ]
-        } as TableModel<TestItem>;
+        } as TableModel<OccupationItem>;
 
         return (
             <Layout>
                 <HeaderComponent title="Occupations" canGoBack={true} />
 
                 <Content className="page-content">
-                    {this.TestItemsStore.state.result &&
-                        !this.TestItemsStore.state.result.isSuccess && (
+                    {this.OccupationItemsStore.state.result &&
+                        !this.OccupationItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
                                 message={"Ha ocurrido un error"}
-                                description={this.TestItemsStore.state.result.messages
+                                description={this.OccupationItemsStore.state.result.messages
                                     .map(o => o.body)
                                     .join(", ")}
                             />
@@ -139,7 +137,7 @@ export default class TestItemListPage extends Component<TestItemListProps, TestI
                             hidepagination={true}
                             canEdit={true}
                         />
-                        {this.state.newShow && <NewTestItemView onClose={this.onNewItemClosed} />}
+                        {this.state.newShow && <NewOccupationItemView onClose={this.onNewItemClosed} />}
                     </div>
                 </Content>
             </Layout>

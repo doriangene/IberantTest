@@ -51,7 +51,8 @@ namespace PackingListApp
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
             });
-            services.AddTransient<ITestServices, TestServices>();
+            services.AddTransient<IOccupationServices, OccupationServices>();
+            services.AddTransient<IUserServices, UserServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

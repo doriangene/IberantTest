@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace PackingListApp.Services
 {
-    public class TestServices : ITestServices
+    public class OccupationServices : IOccupationServices
     {
         private readonly DataContext _context;
-        public TestServices(DataContext context)
+        public OccupationServices(DataContext context)
         {
             _context = context;
         }
