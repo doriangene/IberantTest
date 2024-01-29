@@ -12,12 +12,16 @@ import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewUserItemView from "./body"
+//import EditUserItemView from "./editor"
+import axios from 'axios';
 
 interface UserItemListProps extends RouteComponentProps { }
 
 interface UserItemListState {
     query: Query;
     newShow: boolean;
+    editShow: boolean;
+    occupations: any[];
 }
 
 @connect(["UserItems", UserItemsStore])
@@ -39,7 +43,9 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            editShow: false,
+            occupations: [] as any[],
         };
     }
 
@@ -85,6 +91,20 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
         return await this.UserItemsStore.deleteAsync(`${item.id}`);
     }
 
+    loadOccupations = async () => {
+        try {
+            const response = await axios.get('api/occupation');
+            const occupationsArray = Array.isArray(response.data.items) ? response.data.items : [response.data.items];
+            this.setState({ occupations: occupationsArray });
+        } catch (error) {
+            console.error('Error getting occupations', error);
+        }
+    };
+
+    componentDidMount() {
+        this.loadOccupations();
+    }
+
     render() {
         const tableModel = {
             query: this.state.query,
@@ -122,7 +142,11 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                 {
                     field: "occupationId",
                     title: "Occupation",
-                    renderer: data => data.occupationId == null ? <span>{"Non-occupation"}</span> : <span>{data.occupationId}</span>,
+                    renderer: data => {
+                        const matchedOccupation = data.occupationId != null
+                            ? this.state.occupations.find(occupation => occupation.id == data.occupationId) : null;
+                        return (<span>{matchedOccupation ? matchedOccupation.title : "Non-occupation"}</span>);
+                    },
                     editor: data => <Input />
                 },
             ],
@@ -130,6 +154,10 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
             sortFields: [
             ]
         } as TableModel<UserItem>;
+
+        console.log("occupations", this.state.occupations)
+        console.log("query", this.state.query)
+        console.log("state useritem", this.UserItemsStore.state)
 
         return (
             <Layout>

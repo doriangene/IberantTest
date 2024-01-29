@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewOccupationItemView from "./body"
+//import EditOccupationItemView from "./editor"
 
 interface OccupationItemListProps extends RouteComponentProps { }
 
