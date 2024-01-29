@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewUserItemView from "./body"
-//import EditUserItemView from "./editor"
+// import EditUserItemView from "./editor"
 import axios from 'axios';
 
 interface UserItemListProps extends RouteComponentProps { }
@@ -154,10 +154,6 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
             sortFields: [
             ]
         } as TableModel<UserItem>;
-
-        console.log("occupations", this.state.occupations)
-        console.log("query", this.state.query)
-        console.log("state useritem", this.UserItemsStore.state)
 
         return (
             <Layout>
