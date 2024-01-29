@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Row, Col, Select, Checkbox } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewUserItemView from "./body"
-// import EditUserItemView from "./editor"
 import axios from 'axios';
 
 interface UserItemListProps extends RouteComponentProps { }
@@ -131,13 +130,25 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                     field: "isAdmin",
                     title: "Is Admin",
                     renderer: data => data.isAdmin ? <span>Yes</span> : <span>No</span>,
-                    editor: data => <Input />
+                    editor: data => (
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent : 'center' }}>
+                            <Checkbox checked={data.isAdmin} onChange={(e) => data.isAdmin = e.target.checked} />
+                        </div>
+                    )
                 },
                 {
                     field: "adminType",
                     title: "Admin Type",
                     renderer: data => data.isAdmin ? <span>{AdminType[data.adminType]}</span> : <span>X</span>,
-                    editor: data => <Input />
+                    editor: data => (
+                        <Select value={data.isAdmin ? data.adminType : AdminType.None}
+                            style={{ width: 100 }}
+                            onChange={(value: AdminType) => data.adminType = value} disabled={!data.isAdmin}>
+                            <option value={AdminType.Normal}>Normal</option>
+                            <option value={AdminType.Vip}>Vip</option>
+                            <option value={AdminType.King}>King</option>
+                        </Select>
+                    )
                 },
                 {
                     field: "occupationId",
@@ -147,7 +158,16 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                             ? this.state.occupations.find(occupation => occupation.id == data.occupationId) : null;
                         return (<span>{matchedOccupation ? matchedOccupation.title : "Non-occupation"}</span>);
                     },
-                    editor: data => <Input />
+                    editor: data => (
+                        <Select placeholder="Non-occupation" value={data.occupationId}
+                            style={{ width: 180 }}
+                            onChange={(value: number | null) => data.occupationId = value}>
+                            <option value={undefined}>Non-occupation</option>
+                            {this.state.occupations.map(occupation => (
+                                <option key={occupation.id} value={occupation.id}>{occupation.title}</option>
+                            ))}
+                        </Select>
+                    )
                 },
             ],
             data: this.UserItemsStore.state,
