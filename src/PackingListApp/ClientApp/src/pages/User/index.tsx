@@ -19,7 +19,6 @@ interface UserItemListProps extends RouteComponentProps { }
 interface UserItemListState {
     query: Query;
     newShow: boolean;
-    editShow: boolean;
     occupations: any[];
 }
 
@@ -43,7 +42,6 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                 take: 10
             },
             newShow: false,
-            editShow: false,
             occupations: [] as any[],
         };
     }
