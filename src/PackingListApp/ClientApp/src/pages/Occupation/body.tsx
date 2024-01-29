@@ -40,7 +40,7 @@ export class OccupationItemFormBody extends React.Component<ClassFormBodyProps> 
                         {getFieldDecorator(nameof<NewOccupationItem>('title'), {
                             initialValue: item.title,
                         })(
-                            <Input />
+                            <Input placeholder="(Required)" />
                         )}
                     </FormItem>
                 </Col>
@@ -49,7 +49,7 @@ export class OccupationItemFormBody extends React.Component<ClassFormBodyProps> 
                         {getFieldDecorator(nameof<NewOccupationItem>('description'), {
                             initialValue: item.description,
                         })(
-                            <Input  />
+                            <Input placeholder="(Optional)" />
                         )}
                     </FormItem>
                 </Col>

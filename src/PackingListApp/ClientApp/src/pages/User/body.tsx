@@ -2,13 +2,13 @@
 import { Form, Spin, Select, Input, Checkbox, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 let FormItem = Form.Item;
-import {  NewUserItem , NewUserItemStore, AdminType } from 'src/stores/user-store';
+import { NewUserItem, NewUserItemStore, AdminType } from 'src/stores/user-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';
 import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
 import { formatMessage } from 'src/services/http-service';
-
+import axios from 'axios';
 
 interface NewUserItemViewProps {
     onClose: (id: string | undefined, item?: NewUserItem) => void;
@@ -27,9 +27,27 @@ interface ClassFormBodyProps {
 }
 
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
-    state = { isAdmin : false }
+    state = {
+        isAdmin: false,
+        occupations: [] as any[],
+    };
+
+    loadOccupations = async () => {
+        try {
+            const response = await axios.get('api/occupation');
+            const occupationsArray = Array.isArray(response.data.items) ? response.data.items : [response.data.items];
+            this.setState({ occupations: occupationsArray });
+        } catch (error) {
+            console.error('Error getting occupations', error);
+        }
+    };
+
+    componentDidMount() {
+        this.loadOccupations();
+    }
+
     render() {
-        const { isAdmin } = this.state;
+        const { isAdmin, occupations } = this.state;
         const onChange = () => { this.setState(() => ({ isAdmin: !isAdmin }))};
         const { getFieldDecorator } = this.props;
 
@@ -41,7 +59,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewUserItem>('name'), {
                             initialValue: item.name,
                         })(
-                            <Input />
+                            <Input placeholder="(Required)"/>
                         )}
                     </FormItem>
                 </Col>
@@ -50,7 +68,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewUserItem>('lastName'), {
                             initialValue: item.lastName,
                         })(
-                            <Input  />
+                            <Input placeholder="(Required)"/>
                         )}
                     </FormItem>
                 </Col>
@@ -59,7 +77,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewUserItem>('address'), {
                             initialValue: item.address,
                         })(
-                            <Input />
+                            <Input placeholder="(Required)" />
                         )}
                     </FormItem>
                 </Col>
@@ -77,14 +95,19 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewUserItem>('occupationId'), {
                             initialValue: item.occupationId,
                         })(
-                            <Input />
+                            <Select placeholder="Non-occupation">
+                                <option value={undefined}>Non-occupation</option>
+                                {occupations.map(occupation => (
+                                    <option key={occupation.id} value={occupation.id}>{occupation.title}</option>
+                                ))}
+                            </Select>
                         )}
                     </FormItem>
                 </Col>
                 {this.state.isAdmin && < Col span={12}>
                     <FormItem label={'Admin Type'}>
                         {getFieldDecorator(nameof<NewUserItem>('adminType'), {
-                            initialValue: item.adminType,
+                            initialValue: item.adminType || AdminType.Normal,
                         })(
                             <Select>
                                 <option value={AdminType.Normal}>Normal</option>

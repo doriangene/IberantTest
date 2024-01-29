@@ -122,7 +122,7 @@ export default class UserItemListPage extends Component<UserItemListProps, UserI
                 {
                     field: "occupationId",
                     title: "Occupation",
-                    renderer: data => data.occupationId == null ? <span>{"Not Assigned"}</span> : <span>{data.occupationId}</span>,
+                    renderer: data => data.occupationId == null ? <span>{"Non-occupation"}</span> : <span>{data.occupationId}</span>,
                     editor: data => <Input />
                 },
             ],
