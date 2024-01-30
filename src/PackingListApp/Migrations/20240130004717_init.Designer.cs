@@ -10,7 +10,7 @@ using PackingListApp.EntityFramework;
 namespace PackingListApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240129205508_init")]
+    [Migration("20240130004717_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

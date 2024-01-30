@@ -86,7 +86,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
                             initialValue: item.isAdmin,
                         })(
-                            <Checkbox checked={isAdmin} onChange={onChange} />
+                            <Checkbox checked={isAdmin} onChange={onChange}>activate/deactivate</Checkbox>
                         )}
                     </FormItem>
                 </Col>
@@ -104,7 +104,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
-                {this.state.isAdmin && < Col span={12}>
+                < Col hidden={!this.state.isAdmin} span={12}>
                     <FormItem label={'Admin Type'}>
                         {getFieldDecorator(nameof<NewUserItem>('adminType'), {
                             initialValue: item.adminType || AdminType.Normal,
@@ -116,7 +116,7 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                             </Select>
                         )}
                     </FormItem>
-                </Col>}
+                </Col>
             </Row>
         </Form>
     }
