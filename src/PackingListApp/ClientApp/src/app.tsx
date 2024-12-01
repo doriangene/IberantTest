@@ -49,6 +49,7 @@ class App extends Component<AppProps, AppState> {
                 </Sider>
                 <Route exact path='/' component={HomePage} />
                 <Route exact path='/test' component={TestIndex} />
+                <Route exact path='/user' component={TestIndex} />
             </Layout>);
     }
 }
