@@ -3,7 +3,6 @@ using PackingListApp.Interfaces;
 using PackingListApp.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,6 +58,20 @@ namespace PackingListApp.Services
             _context.SaveChanges();
             return id;
 
+        }
+
+        public bool Delete(int id)
+        {
+            var user = _context.UserModels.Find(id);
+            if (user == null)
+            {
+                return false;
+            }
+
+            _context.UserModels.Remove(user);
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }

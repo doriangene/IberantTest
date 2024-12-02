@@ -49,7 +49,7 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                         <Col span={24}>
                             <Card title="Models">
                                 <ul>
-                                    <li><Link to='/test'>TestModel</Link></li>
+                                    <li><Link to='/occupation'>OccupationModel</Link></li>
                                     <li><Link to='/user'>UserModel</Link></li>
                                    
                                 </ul>

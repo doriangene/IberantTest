@@ -48,5 +48,18 @@ namespace PackingListApp.Services
             return id;
 
         }
+        public bool Delete(int id)
+        {
+            var occupation = _context.OccupationModels.Find(id);
+            if (occupation == null)
+            {
+                return false;
+            }
+
+            _context.OccupationModels.Remove(occupation);
+            _context.SaveChanges();
+
+            return true;
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace PackingListApp.Models
         public string Address { get; set; }
         public bool IsAdmin { get; set; }
         public AdminType? AdminType { get; set; }
-        public int OccupationId { get; set; }
+        public int? OccupationId { get; set; }
         public OccupationModel? Occupation { get; set; }
     }
 }

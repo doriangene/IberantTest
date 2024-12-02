@@ -5,35 +5,35 @@ import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
 import {
-    TestItemsStore,
-    TestItem
-} from "src/stores/test-store";
+    OccupationItemsStore,
+    OccupationItem
+} from "src/stores/occupation-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
 import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
-import NewTestItemView from "./body"
+import NewOccupationItemView from "./body"
 
-interface TestItemListProps extends RouteComponentProps { }
+interface OccupationItemListProps extends RouteComponentProps { }
 
-interface TestItemListState {
+interface OccupationItemListState {
     query: Query;
     newShow: boolean;
 }
 
-@connect(["TestItems", TestItemsStore])
-export default class TestItemListPage extends Component<
-TestItemListProps,
-TestItemListState
+@connect(["OccupationItems", OccupationItemsStore])
+export default class OccupationItemListPage extends Component<
+OccupationItemListProps,
+OccupationItemListState
 > {
     private id: number = -1;
-    private get TestItemsStore() {
-        return (this.props as any).TestItems as TestItemsStore;
+    private get OccupationItemsStore() {
+        return (this.props as any).OccupationItems as OccupationItemsStore;
     }
 
-    constructor(props: TestItemListProps) {
+    constructor(props: OccupationItemListProps) {
         super(props);
 
         this.state = {
@@ -56,7 +56,7 @@ TestItemListState
 
     @autobind
     private async load(query: Query) {
-        await this.TestItemsStore.getAllAsync(query);
+        await this.OccupationItemsStore.getAllAsync(query);
     }
 
     @autobind
@@ -73,8 +73,8 @@ TestItemListState
 
 
     @autobind
-    private async onSaveItem(item: TestItem, state: ItemState) {
-        var result = await this.TestItemsStore.saveAsync(
+    private async onSaveItem(item: OccupationItem, state: ItemState) {
+        var result = await this.OccupationItemsStore.saveAsync(
             `${item.id}`,
             item,
             state
@@ -96,10 +96,12 @@ TestItemListState
 
     @autobind
     private async onDeleteRow(
-        item: TestItem,
+        item: OccupationItem,
         state: ItemState
     ): Promise<CommandResult<any>> {
-        return await this.TestItemsStore.deleteAsync(`${item.id}`);
+        const result = await this.OccupationItemsStore.deleteAsync(`${item.id}`);
+        this.load(this.state.query);
+        return result
     }
 
 
@@ -128,24 +130,24 @@ TestItemListState
 
 
             ],
-            data: this.TestItemsStore.state,
+            data: this.OccupationItemsStore.state,
             sortFields: [
 
 
             ]
-        } as TableModel<TestItem>;
+        } as TableModel<OccupationItem>;
 
         return (
             <Layout>
-                <HeaderComponent title="TestModels" canGoBack={true} />
+                <HeaderComponent title="OccupationModels" canGoBack={true} />
 
                 <Content className="page-content">
-                    {this.TestItemsStore.state.result &&
-                        !this.TestItemsStore.state.result.isSuccess && (
+                    {this.OccupationItemsStore.state.result &&
+                        !this.OccupationItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
                                 message={"Ha ocurrido un error"}
-                                description={this.TestItemsStore.state.result.messages
+                                description={this.OccupationItemsStore.state.result.messages
                                     .map(o => o.body)
                                     .join(", ")}
                             />
@@ -163,8 +165,9 @@ TestItemListState
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
                             canEdit={true}
+                            onDeleteRow={this.onDeleteRow}
                         />
-                        {this.state.newShow && <NewTestItemView onClose={this.onNewItemClosed} />}
+                        {this.state.newShow && <NewOccupationItemView onClose={this.onNewItemClosed} />}
                     </div>
                 </Content>
             </Layout>

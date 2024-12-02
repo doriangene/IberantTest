@@ -29,7 +29,7 @@ namespace PackingListApp.Controllers
         }
 
         // GET: api/Test/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetOccupation")]
         public IActionResult Get(int id)
         {
             return Ok(_occupationService.Get(id));
@@ -50,6 +50,15 @@ namespace PackingListApp.Controllers
         {
             _occupationService.Put(id, item);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (_occupationService.Delete(id))
+                return Ok();
+
+            return NoContent();
         }
     }
 }
