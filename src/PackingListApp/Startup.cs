@@ -13,6 +13,7 @@ using PackingListApp.EntityFramework;
 using PackingListApp.Interfaces;
 using PackingListApp.Services;
 using System.Linq;
+using ApplicationContext = PackingListApp.EntityFramework.ApplicationContext;
 
 namespace PackingListApp
 {
@@ -30,8 +31,8 @@ namespace PackingListApp
         {
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration["TestContext:ConnectionString"]));
-
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration["ApplicationContext:ConnectionString"]));
+            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -51,7 +52,8 @@ namespace PackingListApp
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
             });
-            services.AddTransient<ITestServices, TestServices>();
+            services.AddTransient<IOccupationServices, OccupationServices>();
+            services.AddTransient<IUserServices, UserServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
