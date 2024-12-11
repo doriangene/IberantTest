@@ -22,13 +22,14 @@ interface UserItemListProps extends RouteComponentProps { }
 interface UserItemListState {
     query: Query;
     newShow: boolean;
+    updateShow: boolean;
 }
 
 @connect(["UserItems", UserItemsStore])
 @connect(["OccupationItems", OccupationItemsStore])
 export default class UserItemListPage extends Component<
-UserItemListProps,
-UserItemListState
+    UserItemListProps,
+    UserItemListState
 > {
     private id: number = -1;
     private get UserItemsStore() {
@@ -52,19 +53,22 @@ UserItemListState
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            updateShow: false
         };
     }
 
     componentWillMount() {
 
-        this.load(this.state.query);
         this.loadOccupations(this.state.query);
+        this.load(this.state.query);
     }
 
     @autobind
     private async load(query: Query) {
-        await this.UserItemsStore.getAllAsync(query);
+        const items = await this.UserItemsStore.getAllAsync(query);
+        console.log("Items")
+        console.log(items)
     }
 
     // OccupationItemsStore
@@ -85,9 +89,15 @@ UserItemListState
         this.setState({ newShow: true })
     }
 
+    @autobind
+    private async onUpdateItem() {
+        this.setState({ updateShow: true })
+    }
+
 
     @autobind
     private async onSaveItem(item: UserItem, state: ItemState) {
+        console.log("Saving Item...")
         var result = await this.UserItemsStore.saveAsync(
             `${item.id}`,
             item,
@@ -107,6 +117,11 @@ UserItemListState
         this.load(this.state.query);
     }
 
+    @autobind
+    private onUpdateItemClosed() {
+        this.setState({ updateShow: false });
+        this.load(this.state.query);
+    }
 
     @autobind
     private async onDeleteRow(
@@ -129,7 +144,7 @@ UserItemListState
                     title: "FirstName",
                     renderer: data =>
 
-                    <span>{data.firstName}</span>,
+                        <span>{data.firstName}</span>,
 
                     editor: data => <Input />
 
@@ -140,7 +155,7 @@ UserItemListState
                     title: "FirstName",
                     renderer: data =>
 
-                    <span>{data.lastName}</span>,
+                        <span>{data.lastName}</span>,
 
                     editor: data => <Input />
 
@@ -155,19 +170,19 @@ UserItemListState
                 {
                     field: "isAdmin",
                     title: "IsAdmin",
-                    renderer: data => <span>{data.isAdmin}</span>,
+                    renderer: data => <span>{data.isAdmin.toString()}</span>,
                     editor: data => <Input />
                 },
                 {
-                    field: "isAdmin",
-                    title: "IsAdmin",
-                    renderer: data => <span>{data.adminType}</span>,
+                    field: "AdminType",
+                    title: "AdminType",
+                    renderer: data => <span>{data.adminType == 0 ? "Normal" : data.adminType == 1 ? "Vip" : data.adminType == 2 ? "King" : "None"}</span>,
                     editor: data => <Input />
                 },
                 {
                     field: "Occupation",
-                    title: "OccupationId",
-                    renderer: data => <span>{data.occupation?.title}</span>,
+                    title: "Occupation",
+                    renderer: data => <span>{data.occupation ? data.occupation?.title : this.OccupationItemsStore.state.items.find(item => item.item.id == data.occupationId)?.item.title}</span>,
                     editor: data => <Input />
                 }
 
@@ -209,7 +224,8 @@ UserItemListState
                             canEdit={true}
                             onDeleteRow={this.onDeleteRow}
                         />
-                        {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} occupationData={this.OccupationItemsStore.state}/>}
+                        {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} occupationData={this.OccupationItemsStore.state} />}
+                        {/* {this.state.updateShow && <UpdateUserItemView onClose={this.onUpdateItemClosed} occupationData={this.OccupationItemsStore.state} />} */}
                     </div>
                 </Content>
             </Layout>

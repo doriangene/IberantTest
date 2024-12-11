@@ -105,15 +105,4 @@ export class OccupationItemStore extends FormStore<OccupationItem> {
     protected onUpdateBillingOrder(): AsyncAction<AxiosResponse<CommandResult<OccupationItem>>, DataModel<OccupationItem>> {
         return super.onPatch();
     }
-
-    // Delete
-    // public async Delete(item: OccupationItem) {
-    //     var result = await super.deleteAsync(OccupationItem_UPDATE_ITEM, `${item.id}`, item) as any;
-    //     return result.data as CommandResult<OccupationItem>;
-    // }
-
-    // @reduce(OccupationItem_UPDATE_ITEM)
-    // protected onUpdateBillingOrder(): AsyncAction<AxiosResponse<CommandResult<OccupationItem>>, DataModel<OccupationItem>> {
-    //     return super.onPatch();
-    // }
 }
