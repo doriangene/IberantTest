@@ -54,5 +54,13 @@ namespace PackingListApp.Services
             _context.SaveChanges();
             return id;
         }
+        public int Delete(int id)
+        {
+            var itemDelete = _context.UserModels.FirstOrDefault(x => x.Id == id);
+            _context.Remove(itemDelete);
+            _context.SaveChanges();
+            return id;
+        }
+
     }
 }

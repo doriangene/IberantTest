@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using PackingList.Core.Queries;
 using PackingListApp.Interfaces;
 using PackingListApp.Models;
+using PackingListApp.Services;
 
 namespace PackingListApp.Controllers
 {
@@ -49,6 +50,13 @@ namespace PackingListApp.Controllers
         public  IActionResult Put(int id, [FromBody] OccupationModel item)
         {
             _occupationService.Put(id, item);
+            return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _occupationService.Delete(id);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
         }
     }

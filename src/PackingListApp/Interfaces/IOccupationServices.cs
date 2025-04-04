@@ -14,5 +14,6 @@ namespace PackingListApp.Interfaces
 
         OccupationModel Get(int id);
         int Put(int id, OccupationModel item);
+        int Delete(int id);
     }
 }

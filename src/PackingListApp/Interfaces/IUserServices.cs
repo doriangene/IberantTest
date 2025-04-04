@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PackingListApp.Interfaces
 {
@@ -15,5 +16,6 @@ namespace PackingListApp.Interfaces
 
         UserModel Get(int id);
         int Put(int id, UserModel item);
+        int Delete(int id);
     }
 }

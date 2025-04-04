@@ -163,6 +163,7 @@ OccupationItemListState
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
                             canEdit={true}
+                            onDeleteRow={this.onDeleteRow}
                         />
                         {this.state.newShow && <NewOccupationItemView onClose={this.onNewItemClosed} />}
                     </div>

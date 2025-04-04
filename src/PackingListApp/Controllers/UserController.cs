@@ -4,6 +4,7 @@ using PackingList.Core.Queries;
 using PackingListApp.DTO;
 using PackingListApp.Interfaces;
 using PackingListApp.Models;
+using PackingListApp.Services;
 
 namespace PackingListApp.Controllers
 {
@@ -45,6 +46,13 @@ namespace PackingListApp.Controllers
         public IActionResult Put(int id, [FromBody] UserModel item)
         {
             userService.Put(id, item);
+            return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            userService.Delete(id);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
         }
     }

@@ -189,6 +189,7 @@ UserItemListState
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
                             canEdit={true}
+                            onDeleteRow={this.onDeleteRow}
                         />
                         {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} />}
                     </div>
