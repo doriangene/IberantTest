@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
 import {
     UserItemsStore,
-    UserItem
+    UserItem,
+    adminType
 } from "src/stores/user-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
@@ -21,6 +22,7 @@ interface UserItemListProps extends RouteComponentProps { }
 interface UserItemListState {
     query: Query;
     newShow: boolean;
+    isAdmin: boolean;
 }
 
 @connect(["UserItems", UserItemsStore])
@@ -45,7 +47,8 @@ UserItemListState
                 skip: 0,
                 take: 10
             },
-            newShow: false
+            newShow: false,
+            isAdmin: false
         };
     }
 
@@ -111,23 +114,43 @@ UserItemListState
                 {
                     field: "name",
                     title: "Name",
+                    align: "center",
                     renderer: data => <span>{data.name}</span>,
                     editor: data => <Input />
-
-
                 },
                 {
                     field: "lastName",
                     title: "Last Name",
+                    align: "center",
                     renderer: data => <span>{data.lastName}</span>,
                     editor: data => <Input />
                 },
                 {
                     field: "address",
                     title: "Address",
+                    align: "center",
                     renderer: data => <span>{data.address}</span>,
                     editor: data => <Input />
-                }
+                },
+                {
+                    field: "isAdmin",
+                    title: "Is Admin",
+                    align: "center",
+                    renderer: data => <span>{data.isAdmin ? "Yes" : "No"}</span>,
+                    editor: data => <Checkbox defaultChecked={data.isAdmin} onChange={()=> this.setState(() => ({isAdmin: !this.state.isAdmin}))}/>
+                },
+                {
+                    field: "adminType",
+                    title: "Admin Type",
+                    align: "center",
+                    renderer: data => <span>{data.adminType ?  adminType[data.adminType] : "-"}</span>,
+                    editor: data => {return (<Select style={{width: '90%'}}>
+                                                    <option value={adminType.None}>-</option>
+                                                    <option value={adminType.Normal}>Normal</option>
+                                                    <option value={adminType.Vip}>Vip</option>
+                                                    <option value={adminType.King}>King</option>
+                                                </Select>);}
+                },
 
 
             ],

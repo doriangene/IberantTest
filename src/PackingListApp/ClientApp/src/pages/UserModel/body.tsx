@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Form, Spin, Select, Input, Checkbox, Modal, Row, Col, Alert, InputNumber, Table } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 let FormItem = Form.Item;
-import {  NewUserItem , NewUserItemStore } from 'src/stores/user-store';
+import {  adminType, NewUserItem , NewUserItemStore } from 'src/stores/user-store';
 import { connect } from 'redux-scaffolding-ts'
 import { nameof } from 'src/utils/object';
 import autobind from 'autobind-decorator';
@@ -27,13 +27,9 @@ interface ClassFormBodyProps {
 }
 
 export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
-
-  
+    state = { isAdmin: false }
 
     render() {
-
-    
-
         const { getFieldDecorator } = this.props;
 
         var item = this.props.item || {} as NewUserItem;
@@ -67,8 +63,31 @@ export class UserItemFormBody extends React.Component<ClassFormBodyProps> {
                         )}
                     </FormItem>
                 </Col>
-             
-
+                <Col span={12}>
+                    <FormItem label={'Is Admin'}>
+                        {getFieldDecorator(nameof<NewUserItem>('isAdmin'), {
+                            initialValue: item.isAdmin,
+                        })(
+                            <Checkbox onChange={()=> this.setState(() => ({isAdmin: !this.state.isAdmin}))} />
+                        )}
+                    </FormItem>
+                </Col>
+                {
+                    this.state.isAdmin && <Col span={12}>
+                    <FormItem label={'Admin Type'}>
+                        {getFieldDecorator(nameof<NewUserItem>('adminType'), {
+                            initialValue: item.adminType,
+                        })(
+                            <Select>
+                                <option value={adminType.None}>-</option>
+                                <option value={adminType.Normal}>Normal</option>
+                                <option value={adminType.Vip}>Vip</option>
+                                <option value={adminType.King}>King</option>
+                            </Select>
+                        )}
+                    </FormItem>
+                </Col>
+                }
             </Row>
           
 
