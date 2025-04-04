@@ -13,42 +13,42 @@ namespace PackingListApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class OccupationController : ControllerBase
     {
-        public readonly ITestServices _testService;
-        public TestController(ITestServices testService)
+        public readonly IOccupationServices _occupationService;
+        public OccupationController(IOccupationServices occupationService)
         {
-            _testService = testService;
+            _occupationService = occupationService;
         }
         // GET: api/Test
         [HttpGet]
-        public IActionResult Get(ODataQueryOptions<TestModel> options)
+        public IActionResult Get(ODataQueryOptions<OccupationModel> options)
         {
-            var list = _testService.GetAll();
-            return Ok(new QueryResult<TestModel>(list, list.Count));
+            var list = _occupationService.GetAll();
+            return Ok(new QueryResult<OccupationModel>(list, list.Count));
         }
 
         // GET: api/Test/5
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            return Ok(_testService.Get(id));
+            return Ok(_occupationService.Get(id));
         }
 
         // POST: api/Test
         [HttpPost]
-        public IActionResult Post([FromBody] NewTestModel value)
+        public IActionResult Post([FromBody] NewOccupationModel value)
         {
-            var id = _testService.Add(value);
+            var id = _occupationService.Add(value);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
 
         }
 
         [HttpPut("{id}")]
 
-        public  IActionResult Put(int id, [FromBody] TestModel item)
+        public  IActionResult Put(int id, [FromBody] OccupationModel item)
         {
-            _testService.Put(id, item);
+            _occupationService.Put(id, item);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
         }
     }

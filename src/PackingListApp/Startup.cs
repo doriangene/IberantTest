@@ -51,7 +51,7 @@ namespace PackingListApp
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
             });
-            services.AddTransient<ITestServices, TestServices>();
+            services.AddTransient<IOccupationServices, OccupationServices>();
             services.AddTransient<IUserServices, UserServices>();
         }
 
