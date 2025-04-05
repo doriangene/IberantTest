@@ -144,7 +144,7 @@ OccupationItemListState
                         !this.OccupationItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
-                                message={"An error has occurred"}
+                                message={"Ha ocurrido un error"}
                                 description={this.OccupationItemsStore.state.result.messages
                                     .map(o => o.body)
                                     .join(", ")}

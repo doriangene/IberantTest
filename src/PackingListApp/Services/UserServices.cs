@@ -1,4 +1,5 @@
-﻿using PackingListApp.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using PackingListApp.DTO;
 using PackingListApp.EntityFramework;
 using PackingListApp.Interfaces;
 using PackingListApp.Models;
@@ -25,7 +26,8 @@ namespace PackingListApp.Services
                 LastName = userModel.LastName,
                 Address = userModel.Address,
                 IsAdmin = userModel.IsAdmin,
-                AdminType = userModel.IsAdmin ? userModel.AdminType : 0
+                AdminType = userModel.IsAdmin ? userModel.AdminType : 0,
+                OccupationModelId = userModel.OccupationModelId,
             };
             _context.UserModels.Add(newUser
             );
@@ -40,7 +42,7 @@ namespace PackingListApp.Services
 
         public List<UserModel> GetAll()
         {
-            return _context.UserModels.ToList();
+            return _context.UserModels.Include(x => x.Occupation).ToList();
         }
 
         public int Put(int id, UserModel item)
@@ -51,6 +53,7 @@ namespace PackingListApp.Services
             itemput.Address = item.Address;
             itemput.IsAdmin = item.IsAdmin;
             itemput.AdminType = item.IsAdmin ? item.AdminType : 0;
+            itemput.OccupationModelId = item.OccupationModelId;
             _context.SaveChanges();
             return id;
         }

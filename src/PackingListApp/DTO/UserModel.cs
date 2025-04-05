@@ -9,6 +9,6 @@ namespace PackingListApp.DTO
         public string Address { get; set; }
         public bool IsAdmin { get; set; }
         public AdminType AdminType { get; set; }
-        public int OccupationModelId { get; set; }
+        public int? OccupationModelId { get; set; }
     }
 }

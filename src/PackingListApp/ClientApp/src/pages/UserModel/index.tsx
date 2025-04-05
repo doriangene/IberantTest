@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
+import { Layout, Input, Alert, Checkbox, Select, Icon } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -12,17 +12,23 @@ import {
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import { CommandResult } from "../../stores/types";
-import { Link } from "react-router-dom";
-import { formatDate } from "src/utils/object";
 const { Content } = Layout;
 import NewUserItemView from "./body"
+
+enum MODAL_INFO{
+    EDIT_INFO,
+    CREATE_INFO,
+    NONE,
+}
+
 
 interface UserItemListProps extends RouteComponentProps { }
 
 interface UserItemListState {
     query: Query;
-    newShow: boolean;
     isAdmin: boolean;
+    openInfoModal:MODAL_INFO;
+    user?:UserItem;
 }
 
 @connect(["UserItems", UserItemsStore])
@@ -47,8 +53,9 @@ UserItemListState
                 skip: 0,
                 take: 10
             },
-            newShow: false,
-            isAdmin: false
+            openInfoModal:MODAL_INFO.NONE,
+            isAdmin: false,
+            user:undefined,
         };
     }
 
@@ -71,8 +78,15 @@ UserItemListState
 
     @autobind
     private async onNewItem() {
-        this.setState({ newShow: true })
+        this.setState({openInfoModal:MODAL_INFO.CREATE_INFO})
     }
+
+    @autobind
+    private async onEditItem(item:UserItem) {
+        this.setState({openInfoModal:MODAL_INFO.EDIT_INFO})
+        this.setState({user:item} )
+    }
+
 
 
     @autobind
@@ -86,13 +100,9 @@ UserItemListState
         return result;
     }
 
-
-
-
-
     @autobind
-    private onNewItemClosed() {
-        this.setState({ newShow: false });
+    private onClosed() {
+        this.setState({openInfoModal:MODAL_INFO.NONE})
         this.load(this.state.query);
     }
 
@@ -111,6 +121,9 @@ UserItemListState
         const tableModel = {
             query: this.state.query,
             columns: [
+                {
+                    renderer:data => <Icon type='edit' onClick={()=>this.onEditItem(data)} />
+                },
                 {
                     field: "name",
                     title: "Name",
@@ -144,12 +157,19 @@ UserItemListState
                     title: "Admin Type",
                     align: "center",
                     renderer: data => <span>{data.adminType ?  adminType[data.adminType] : "-"}</span>,
-                    editor: data => {return (<Select style={{width: '90%'}}>
-                                                    <option value={adminType.None}>-</option>
-                                                    <option value={adminType.Normal}>Normal</option>
-                                                    <option value={adminType.Vip}>Vip</option>
-                                                    <option value={adminType.King}>King</option>
-                                                </Select>);}
+                    editor: ()  => <Select style={{width: '90%'}}>
+                                        <option value={adminType.None}>-</option>
+                                        <option value={adminType.Normal}>Normal</option>
+                                        <option value={adminType.Vip}>Vip</option>
+                                        <option value={adminType.King}>King</option>
+                                    </Select>
+                },
+                {
+                    field: "occupation",
+                    title: "Occupation",
+                    align: "center",
+                    renderer: data => <span>{data.occupationModelId ? data.occupation?.title : "-"}</span>,
+                    
                 },
 
 
@@ -170,7 +190,7 @@ UserItemListState
                         !this.UserItemsStore.state.result.isSuccess && (
                             <Alert
                                 type="error"
-                                message={"An error has occurred"}
+                                message={"Ha ocurrido un error"}
                                 description={this.UserItemsStore.state.result.messages
                                     .map(o => o.body)
                                     .join(", ")}
@@ -188,10 +208,17 @@ UserItemListState
                             canCreateNew={true}
                             onSaveRow={this.onSaveItem}
                             hidepagination={true}
-                            canEdit={true}
+                            canEdit={false}
                             onDeleteRow={this.onDeleteRow}
                         />
-                        {this.state.newShow && <NewUserItemView onClose={this.onNewItemClosed} />}
+                       
+                        {this.state.openInfoModal===MODAL_INFO.CREATE_INFO && <NewUserItemView  onClose={this.onClosed} />}
+                        {this.state.openInfoModal===MODAL_INFO.EDIT_INFO && 
+                        <NewUserItemView 
+                        onClose={this.onClosed} 
+                        isEdit={true}  
+                        item={this.state.user}
+                        />}
                     </div>
                 </Content>
             </Layout>

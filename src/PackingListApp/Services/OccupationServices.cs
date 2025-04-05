@@ -50,7 +50,7 @@ namespace PackingListApp.Services
 
         public int Delete(int id)
         {
-            var itemDelete = _context.UserModels.FirstOrDefault(x => x.Id == id);
+            var itemDelete = _context.OccupationModels.FirstOrDefault(x => x.Id == id);
             _context.Remove(itemDelete);
             _context.SaveChanges();
             return id;

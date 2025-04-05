@@ -123,7 +123,7 @@ class NewOccupationItemView extends React.Component<NewOccupationItemViewProps &
                 title={"New Occupation"}>
                 {this.OccupationItemsStore.state.result && !this.OccupationItemsStore.state.result.isSuccess &&
                     <Alert type='error'
-                        message="An error has occurred"
+                        message="Ha ocurrido un error"
                         description={formatMessage(this.OccupationItemsStore.state.result)}
                     />
                 }

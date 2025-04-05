@@ -5,6 +5,7 @@ import { Validator } from "lakmus";
 import { AxiosResponse } from 'axios';
 import { container } from '../inversify.config';
 import { CommandResult } from './types';
+import { OccupationItem } from './occupation-store';
 
 export interface UserItem {
     id: number;
@@ -13,6 +14,8 @@ export interface UserItem {
     address: string;
     isAdmin: boolean;
     adminType: adminType;
+    occupationModelId?:number;
+    occupation?:OccupationItem;
 }
 
 export enum adminType {
@@ -47,6 +50,7 @@ export interface NewUserItem {
     address: string;
     isAdmin: boolean;
     adminType: adminType;
+    occupationModelId?:number;
 }
 
 export class NewUserValidator extends Validator<NewUserItem> {
@@ -59,6 +63,9 @@ export class NewUserValidator extends Validator<NewUserItem> {
         this.ruleFor(x => x.lastName)
             .notNull()
             .withMessage("Last Name cant be empty");
+        this.ruleFor(x => x.address)
+            .maxLength(10)
+            .withMessage("The address cannot be longer than 10 characters");
     }
 }
 
@@ -107,7 +114,7 @@ export class UserItemStore extends FormStore<UserItem> {
     }
 
     public async Update(item: UserItem) {
-        var result = await super.patch(UserItem_UPDATE_ITEM, `${item.id}`, item) as any;
+        var result = await super.put(UserItem_UPDATE_ITEM, `${item.id}`, item) as any;
         return result.data as CommandResult<UserItem>;
     }
 
