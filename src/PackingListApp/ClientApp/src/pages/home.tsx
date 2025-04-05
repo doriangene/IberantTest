@@ -49,8 +49,8 @@ class HomePage extends Component<HomePageProps, HomePageState> {
                         <Col span={24}>
                             <Card title="Models">
                                 <ul>
-                                    <li><Link to='/test'>TestModel</Link></li>
-                                    <li><Link to='/TODO'>TODO</Link></li>
+                                    <li><Link to='/occupation'>Occupations</Link></li>
+                                    <li><Link to='/user'>Users</Link></li>
                                    
                                 </ul>
                             </Card>

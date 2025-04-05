@@ -23,6 +23,15 @@ namespace PackingListApp.EntityFramework
                 _initialized = true;
             }
         }
-        public DbSet<TestModel> TestModels { get; set; }
+        public DbSet<OccupationModel> OccupationModels { get; set; }
+        public DbSet<UserModel> UserModels { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserModel>()
+                .HasOne(u => u.Occupation)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }
