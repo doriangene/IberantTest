@@ -25,5 +25,13 @@ namespace PackingListApp.EntityFramework
         }
         public DbSet<OccupationModel> OccupationModels { get; set; }
         public DbSet<UserModel> UserModels { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserModel>()
+                .HasOne(u => u.Occupation)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }
