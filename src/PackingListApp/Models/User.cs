@@ -19,6 +19,7 @@ namespace PackingListApp.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string LastNames { get; set; }
+        [StringLength(10)]
         public string Address { get; set; }
         public bool IsAdmin { get; set; }
         public AdminType? AdminType { get; set; }
