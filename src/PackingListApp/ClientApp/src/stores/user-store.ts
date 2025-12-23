@@ -62,7 +62,9 @@ export class NewUserValidator extends Validator<NewUser> {
 
     this.ruleFor((x) => x.address)
       .notNull()
-      .withMessage("Address cannot be empty");
+      .withMessage("Address cannot be empty")
+      .maxLength(10)
+      .withMessage("Address cannot exceed 10 characters");
 
     this.ruleFor((x) => x.adminType)
       .notNull()
@@ -107,7 +109,9 @@ export class UserValidator extends Validator<User> {
 
     this.ruleFor((x) => x.address)
       .notNull()
-      .withMessage("Address cannot be empty");
+      .withMessage("Address cannot be empty")
+      .maxLength(10)
+      .withMessage("Address cannot exceed 10 characters");
 
     this.ruleFor((x) => x.adminType)
       .notNull()

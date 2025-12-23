@@ -70,7 +70,11 @@ export class UserFormBody extends React.Component<ClassFormBodyProps> {
             <FormItem label={"Address"}>
               {getFieldDecorator(nameof<NewUser>("address"), {
                 initialValue: item.address,
-              })(<Input />)}
+                rules: [
+                  { required: true, message: "Address cannot be empty" },
+                  { max: 10, message: "Address cannot exceed 10 characters" },
+                ],
+              })(<Input maxLength={10} />)}
             </FormItem>
           </Col>
           <Col span={12}>

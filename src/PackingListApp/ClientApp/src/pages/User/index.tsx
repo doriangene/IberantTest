@@ -67,6 +67,14 @@ export default class UserListPage extends Component<
     if (!item.isAdmin) {
       item.adminType = undefined;
     }
+    if (item.address && item.address.length > 10) {
+      return {
+        isSuccess: false,
+        messages: [
+          { body: "Address cannot exceed 10 characters", level: "Error" },
+        ],
+      } as any;
+    }
     var result = await this.UsersStore.saveAsync(`${item.id}`, item, state);
     await this.load(this.state.query);
     return result;
@@ -106,7 +114,7 @@ export default class UserListPage extends Component<
           field: "address",
           title: "Address",
           renderer: (data: User) => <span>{data.address}</span>,
-          editor: (data: User) => <Input />,
+          editor: (data: User) => <Input maxLength={10} />,
         },
         {
           field: "isAdmin",
