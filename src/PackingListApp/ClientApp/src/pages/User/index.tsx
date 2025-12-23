@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Tag, Checkbox, Select } from "antd";
+import { Layout, Input, Alert, Tag, Checkbox, Select, Button } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import type { Query, ItemState } from "../../stores/dataStore";
@@ -10,13 +10,14 @@ import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
 import type { CommandResult } from "../../stores/types";
 const { Content } = Layout;
-import NewUserView from "./body";
+import { NewUserView, EditUserView } from "./body";
 
 interface UserListProps extends RouteComponentProps {}
 
 interface UserListState {
   query: Query;
   newShow: boolean;
+  editingUser?: User;
 }
 
 @connect(["Users", UsersStore])
@@ -87,6 +88,14 @@ export default class UserListPage extends Component<
   }
 
   @autobind
+  private onEditItemClosed(success: boolean) {
+    this.setState({ editingUser: undefined });
+    if (success) {
+      this.load(this.state.query);
+    }
+  }
+
+  @autobind
   private async onDeleteRow(
     item: User,
     state: ItemState
@@ -102,13 +111,11 @@ export default class UserListPage extends Component<
           field: "name",
           title: "Name",
           renderer: (data: User) => <span>{data.name}</span>,
-          editor: (data: User) => <Input />,
         },
         {
           field: "lastNames",
           title: "Last Names",
           renderer: (data: User) => <span>{data.lastNames}</span>,
-          editor: (data: User) => <Input />,
         },
         {
           field: "address",
@@ -128,18 +135,6 @@ export default class UserListPage extends Component<
               )}
             </span>
           ),
-          editorValuePropName: "checked",
-          editor: (data: User, form: any) => (
-            <Checkbox
-              onChange={(e) => {
-                if (e.target.checked) {
-                  form.setFieldsValue({ adminType: AdminType.Normal });
-                } else {
-                  form.setFieldsValue({ adminType: undefined });
-                }
-              }}
-            />
-          ),
         },
         {
           field: "adminType",
@@ -147,12 +142,15 @@ export default class UserListPage extends Component<
           renderer: (data: User) => (
             <span>{data.isAdmin ? AdminType[data.adminType!] : "-"}</span>
           ),
-          editor: (data: User, form: any) => (
-            <Select disabled={!form.getFieldValue("isAdmin")}>
-              <Select.Option value={AdminType.Normal}>Normal</Select.Option>
-              <Select.Option value={AdminType.Vip}>Vip</Select.Option>
-              <Select.Option value={AdminType.King}>King</Select.Option>
-            </Select>
+        },
+        {
+          field: "id",
+          title: "Actions",
+          renderer: (data: User) => (
+            <Button
+              icon="edit"
+              onClick={() => this.setState({ editingUser: data })}
+            />
           ),
         },
       ],
@@ -187,10 +185,16 @@ export default class UserListPage extends Component<
               canCreateNew={true}
               onSaveRow={this.onSaveItem}
               hidepagination={true}
-              canEdit={true}
+              canEdit={false}
             />
             {this.state.newShow && (
               <NewUserView onClose={this.onNewItemClosed} />
+            )}
+            {this.state.editingUser && (
+              <EditUserView
+                item={this.state.editingUser}
+                onClose={this.onEditItemClosed}
+              />
             )}
           </div>
         </Content>

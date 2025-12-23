@@ -143,7 +143,7 @@ export class UserStore extends FormStore<User> {
   }
 
   public async Update(item: User) {
-    var result = (await super.patch(
+    var result = (await super.put(
       User_UPDATE_ITEM,
       `${item.id}`,
       item

@@ -13,21 +13,27 @@ import {
 import { FormComponentProps } from "antd/lib/form";
 let FormItem = Form.Item;
 const { Option } = Select;
-import { NewUser, NewUserStore, AdminType } from "src/stores/user-store";
+import { NewUser, NewUserStore, AdminType, UserStore, User } from "src/stores/user-store";
 import { connect } from "redux-scaffolding-ts";
 import { nameof } from "src/utils/object";
 import autobind from "autobind-decorator";
 import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 import { formatMessage } from "src/services/http-service";
 
-interface NewUserViewProps {
+export interface NewUserViewProps {
   onClose: (id: string | undefined, item?: NewUser) => void;
 }
 
+export interface EditUserViewProps {
+  item: User;
+  onClose: (success: boolean) => void;
+}
+
 interface NewUserViewState {}
+interface EditUserViewState {}
 
 interface ClassFormBodyProps {
-  item: NewUser | undefined;
+  item: NewUser | User | undefined;
   onSave?: () => Promise<any>;
   setFieldsValue(obj: Object): void;
   getFieldValue(fieldName: string): any;
@@ -37,7 +43,7 @@ interface ClassFormBodyProps {
   ): (node: React.ReactNode) => React.ReactNode;
 }
 
-export class UserFormBody extends React.Component<ClassFormBodyProps> {
+class UserFormBody extends React.Component<ClassFormBodyProps> {
   render() {
     const { getFieldDecorator } = this.props;
 
@@ -209,6 +215,89 @@ class NewUserView extends React.Component<
   }
 }
 
-export default Form.create({})(
-  NewUserView as any
-) as any as React.ComponentClass<NewUserViewProps>;
+@connect(["user", UserStore])
+class EditUserView extends React.Component<
+  EditUserViewProps & FormComponentProps,
+  EditUserViewState
+> {
+  private get UserStore() {
+    return (this.props as any).user as UserStore;
+  }
+
+  constructor(props: EditUserViewProps & FormComponentProps) {
+    super(props);
+  }
+
+  @autobind
+  private onUpdateItem() {
+    var self = this;
+    return new Promise((resolve, reject) => {
+      self.props.form.validateFields((err, values) => {
+        if (!err) {
+          const updatedItem = { ...this.props.item, ...values };
+          if (!updatedItem.isAdmin) {
+            updatedItem.adminType = undefined;
+          }
+          self.UserStore.Update(updatedItem).then((result) => {
+            if (result.isSuccess) {
+              self.props.onClose(true);
+              resolve(undefined);
+            } else {
+              reject();
+            }
+          });
+        }
+      });
+    });
+  }
+
+  @autobind
+  private onCancel() {
+    this.UserStore.clear();
+    this.props.onClose(false);
+  }
+
+  public render() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Modal
+        maskClosable={false}
+        visible
+        onCancel={this.onCancel}
+        onOk={this.onUpdateItem}
+        closable={false}
+        width="800px"
+        title={"Edit User"}
+      >
+        {this.UserStore.state.result &&
+          !this.UserStore.state.result.isSuccess && (
+            <Alert
+              type="error"
+              message="Ha ocurrido un error"
+              description={formatMessage(this.UserStore.state.result)}
+            />
+          )}
+        <Spin spinning={this.UserStore.state.isBusy}>
+          <UserFormBody
+            item={this.props.item}
+            getFieldDecorator={getFieldDecorator}
+            getFieldValue={this.props.form.getFieldValue}
+            setFieldsValue={this.props.form.setFieldsValue}
+            onSave={this.onUpdateItem}
+          />
+        </Spin>
+      </Modal>
+    );
+  }
+}
+
+const NewUserViewForm = Form.create({})(NewUserView as any) as any;
+const EditUserViewForm = Form.create({})(EditUserView as any) as any;
+
+export {
+  NewUserViewForm as NewUserView,
+  EditUserViewForm as EditUserView,
+  UserFormBody,
+};
+
+export default NewUserViewForm;
