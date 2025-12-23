@@ -6,11 +6,19 @@ import { AxiosResponse } from "axios";
 import { container } from "../inversify.config";
 import { CommandResult } from "./types";
 
+export enum AdminType {
+  Normal = 0,
+  Vip = 1,
+  King = 2,
+}
+
 export interface User {
   id: number;
   name: string;
   lastNames: string;
   address: string;
+  isAdmin: boolean;
+  adminType?: AdminType;
 }
 
 @repository("@@User", "User.summary")
@@ -36,6 +44,8 @@ export interface NewUser {
   name: string;
   lastNames: string;
   address: string;
+  isAdmin: boolean;
+  adminType?: AdminType;
 }
 
 export class NewUserValidator extends Validator<NewUser> {
@@ -53,6 +63,11 @@ export class NewUserValidator extends Validator<NewUser> {
     this.ruleFor((x) => x.address)
       .notNull()
       .withMessage("Address cannot be empty");
+
+    this.ruleFor((x) => x.adminType)
+      .notNull()
+      .when((x) => x.isAdmin)
+      .withMessage("Admin type is required for admins");
   }
 }
 
@@ -93,6 +108,11 @@ export class UserValidator extends Validator<User> {
     this.ruleFor((x) => x.address)
       .notNull()
       .withMessage("Address cannot be empty");
+
+    this.ruleFor((x) => x.adminType)
+      .notNull()
+      .when((x) => x.isAdmin)
+      .withMessage("Admin type is required for admins");
   }
 }
 

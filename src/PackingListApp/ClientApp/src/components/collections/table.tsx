@@ -34,7 +34,7 @@ export interface TableColumn<T> {
     headerRenderer?: (title: string, onFilter?: (id: string, key: string, op: string, value: string, preventReload?: boolean) => void, onClearFilter?: (id: string, preventReload?: boolean) => void) => any;
     renderer?: (item: T) => any;
     editorValuePropName?: string,
-    editor?: (item: T) => any;
+    editor?: (item: T, form: any) => any;
 }
 
 export interface TableColumnFilter {
@@ -165,7 +165,7 @@ class EditableCell extends React.Component<any> {
                                             required: required || false,
                                             message: `Field '${title}' is required!`,
                                         }]
-                                    })(editor(record))}
+                                    })(editor(record, form))}
                                 </FormItem>
                             ) : restProps.children}
                         </td>
