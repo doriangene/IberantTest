@@ -1,24 +1,13 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDirs": [
-      ".",
-      "src"
-    ],
+    "rootDirs": [".", "src"],
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": [
-      "reflect-metadata"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "types": ["reflect-metadata"],
+    "typeRoots": ["node_modules/@types"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

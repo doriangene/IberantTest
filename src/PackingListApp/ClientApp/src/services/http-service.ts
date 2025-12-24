@@ -186,14 +186,17 @@ export function formatMessage(result: any): string {
     if (result && result.message) {
         return result.message;
     }
+    if (result && result.messages && result.messages.length > 0) {
+        return result.messages.map((o: any) => o.body || o.error).join(", ");
+    }
     if (result && result.response && result.response.data) {
         if (result.response.data.messages) {
             message = result.response.data.messages[0].body || result.response.data.messages[0].error;
-        }
-        if (result.response.data.error) {
+        } else if (result.response.data.error) {
             message = `${result.response.status} ${result.response.data.error}`;
+        } else {
+            message = `${result.response.status} ${result.response.message || result.response.statusText}`;
         }
-        message = `${result.response.status} ${result.response.message}`;
     }
     return message;
 }
