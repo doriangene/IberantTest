@@ -48,7 +48,7 @@ namespace PackingListApp.Services
             itemput.LastName = item.LastName;
             itemput.Address = item.Address;
             itemput.isAdmin = item.isAdmin;
-            itemput.Category = item.Category;
+            itemput.Category = item.isAdmin ? item.Category : 0;
             _context.SaveChanges();
             return id;
 

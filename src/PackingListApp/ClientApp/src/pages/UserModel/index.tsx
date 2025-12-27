@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
+import { Button, Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
 import { Query, ItemState } from "../../stores/dataStore";
-// Importamos UsersDataStore que es el que maneja la colección (DataStore)
 import { UsersDataStore, UserData } from "src/stores/user-store";
 import { connect } from "redux-scaffolding-ts";
 import autobind from "autobind-decorator";
@@ -12,13 +11,15 @@ import { CommandResult } from "../../stores/types";
 import { Link } from "react-router-dom";
 import { formatDate } from "src/utils/object";
 const { Content } = Layout;
-import NewUserDataView from "./body";
+import { NewUserDataView, EditUserDataView } from "./body";
 
 interface UserDataListProps extends RouteComponentProps {}
 
 interface UserDataListState {
   query: Query;
   newShow: boolean;
+  editShow: boolean;
+  itemToEdit: UserData | null;
 }
 
 // Conectamos a UsersDataStore para obtener la lista de usuarios
@@ -45,6 +46,8 @@ export default class UserDataListPage extends Component<
         take: 10,
       },
       newShow: false,
+      editShow: false,
+      itemToEdit: null,
     };
   }
 
@@ -91,6 +94,28 @@ export default class UserDataListPage extends Component<
     return await this.UserDataStore.deleteAsync(`${item.id}`);
   }
 
+  @autobind
+  private onEditRow(item: UserData) {
+    this.setState({
+      editShow: true,
+      itemToEdit: item, // Guardamos el usuario seleccionado
+    });
+  }
+
+  @autobind
+  private onEditClosed() {
+    this.setState({ editShow: false, itemToEdit: null });
+  }
+
+  @autobind
+  private async onSaveEditedItem(id: number, item: UserData) {
+    var result = await this.UserDataStore.saveAsync(`${id}`, item, "Changed");
+    if (result.isSuccess) {
+      await this.load(this.state.query); // Recargar tabla si tuvo éxito
+    }
+    return result;
+  }
+
   render() {
     const tableModel = {
       query: this.state.query,
@@ -99,25 +124,21 @@ export default class UserDataListPage extends Component<
           field: "name",
           title: "Nombre",
           renderer: (data) => <span>{data.name}</span>,
-          editor: (data) => <Input />,
         },
         {
           field: "lastName",
           title: "Apellidos",
           renderer: (data) => <span>{data.lastName}</span>,
-          editor: (data) => <Input />,
         },
         {
           field: "address",
           title: "Dirección",
           renderer: (data) => <span>{data.address}</span>,
-          editor: (data) => <Input maxLength={10} />,
         },
         {
           field: "isAdmin",
           title: "Admin",
           renderer: (data) => <Checkbox checked={data.isAdmin} disabled />,
-          editor: (data) => <Checkbox />, // Permite editar directamente en la fila
         },
         {
           field: "category",
@@ -126,12 +147,21 @@ export default class UserDataListPage extends Component<
             const names = { 1: "Normal", 2: "Vip", 3: "King" };
             return <span>{names[data.category] ?? "N/A"}</span>;
           },
-          editor: (data) => (
-            <Select style={{ width: 120 }}>
-              <Select.Option value={1}>Normal</Select.Option>
-              <Select.Option value={2}>Vip</Select.Option>
-              <Select.Option value={3}>King</Select.Option>
-            </Select>
+        },
+        {
+          field: "actions",
+          title: "Acciones",
+          renderer: (data) => (
+            <div>
+              <Button
+                type="primary"
+                size="small"
+                icon="edit"
+                onClick={() => this.onEditRow(data)}
+              >
+                Editar
+              </Button>
+            </div>
           ),
         },
       ],
@@ -168,8 +198,18 @@ export default class UserDataListPage extends Component<
               hidepagination={true}
               canEdit={true}
             />
+
             {this.state.newShow && (
               <NewUserDataView onClose={this.onNewItemClosed} />
+            )}
+
+            {this.state.editShow && this.state.itemToEdit && (
+              <EditUserDataView
+                visible={this.state.editShow}
+                item={this.state.itemToEdit}
+                onClose={this.onEditClosed}
+                onSave={this.onSaveEditedItem}
+              />
             )}
           </div>
         </Content>

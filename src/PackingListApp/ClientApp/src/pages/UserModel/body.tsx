@@ -26,14 +26,14 @@ import autobind from "autobind-decorator";
 import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 import { formatMessage } from "src/services/http-service";
 
-interface NewUserDataViewProps {
+interface NewUserDataViewProps extends FormComponentProps {
   onClose: (id: string | undefined, item?: NewUserData) => void;
 }
 
 interface NewUserDataViewState {}
 
 interface ClassFormBodyProps {
-  item: NewUserData | undefined;
+  item: UserData | NewUserData | undefined;
   onSave?: () => Promise<any>;
   setFieldsValue(obj: Object): void;
   getFieldValue(fieldName: string): any;
@@ -45,14 +45,14 @@ interface ClassFormBodyProps {
 
 export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
   render() {
-    const { getFieldDecorator } = this.props;
-    const isAdminChecked = this.props.getFieldValue("isAdmin");
-    var item = this.props.item || ({} as NewUserData);
+    var item = this.props.item || ({} as any);
+    const { getFieldDecorator, getFieldValue } = this.props;
 
     return (
       <Form
         id="modaForm"
-        onSubmit={() => {
+        onSubmit={(e) => {
+          e.preventDefault();
           if (this.props.onSave) {
             this.props.onSave();
           }
@@ -99,7 +99,7 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
           </Col>
         </Row>
         {/* Campo: Categoría de Administrador */}
-        {isAdminChecked && (
+        {getFieldValue("isAdmin") && (
           <Row>
             <Col span={24}>
               <FormItem label="Categoría de Admin">
@@ -122,7 +122,7 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
 }
 
 @connect(["newUserData", NewUserDataStore])
-class NewUserDataView extends React.Component<
+class NewUserDataViewInternal extends React.Component<
   NewUserDataViewProps & FormComponentProps,
   NewUserDataViewState
 > {
@@ -207,7 +207,58 @@ class NewUserDataView extends React.Component<
   }
 }
 
-// Wire up the React component to the Redux store
-export default Form.create({})(
-  NewUserDataView as any
-) as any as React.ComponentClass<NewUserDataViewProps>;
+export const NewUserDataView = Form.create<NewUserDataViewProps>()(
+  NewUserDataViewInternal
+) as any as React.ComponentClass<
+  Omit<NewUserDataViewProps, keyof FormComponentProps>
+>;
+
+interface EditUserDataViewProps extends FormComponentProps {
+  item: UserData;
+  visible: boolean;
+  onClose: () => void;
+  onSave: (id: number, data: UserData) => Promise<any>;
+}
+
+class EditUserDataViewInternal extends React.Component<
+  EditUserDataViewProps & FormComponentProps
+> {
+  @autobind
+  private onSave() {
+    this.props.form.validateFields(async (err, values) => {
+      if (!err) {
+        // Fusionamos el ID original con los nuevos valores del form
+        const updatedItem = { ...this.props.item, ...values };
+        await this.props.onSave(this.props.item.id, updatedItem);
+        this.props.onClose();
+      }
+    });
+  }
+
+  render() {
+    const { visible, onClose, item, form } = this.props;
+    return (
+      <Modal
+        title={`Editar Usuario: ${item.name}`}
+        visible={visible}
+        onOk={this.onSave}
+        onCancel={onClose}
+        width="800px"
+        destroyOnClose={true} // Importante para limpiar el form al cerrar
+      >
+        <UserDataFormBody
+          item={item}
+          getFieldDecorator={form.getFieldDecorator}
+          getFieldValue={form.getFieldValue}
+          setFieldsValue={form.setFieldsValue}
+        />
+      </Modal>
+    );
+  }
+}
+
+export const EditUserDataView = Form.create<EditUserDataViewProps>()(
+  EditUserDataViewInternal
+) as any as React.ComponentClass<
+  Omit<EditUserDataViewProps, keyof FormComponentProps>
+>;
