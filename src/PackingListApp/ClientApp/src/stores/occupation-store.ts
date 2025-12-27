@@ -25,10 +25,6 @@ export class OccupationsStore extends DataStore<Occupation> {
             discard: item => { }
         }, container);
     }
-
-  
-
-   
 }
 
 export interface NewOccupation {

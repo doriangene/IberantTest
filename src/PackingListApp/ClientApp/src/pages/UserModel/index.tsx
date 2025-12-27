@@ -149,6 +149,11 @@ export default class UserDataListPage extends Component<
           },
         },
         {
+          field: "occupation",
+          title: "Ocupación",
+          renderer: (data) => <span>{data.occupation?.title || "N/A"}</span>,
+        },
+        {
           field: "actions",
           title: "Acciones",
           renderer: (data) => (

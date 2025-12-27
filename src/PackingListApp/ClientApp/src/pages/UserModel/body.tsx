@@ -20,6 +20,7 @@ import {
   UserData,
   UserDataStore,
 } from "src/stores/user-store";
+import { OccupationsStore, Occupation } from "src/stores/occupation-store";
 import { connect } from "redux-scaffolding-ts";
 import { nameof } from "src/utils/object";
 import autobind from "autobind-decorator";
@@ -34,6 +35,7 @@ interface NewUserDataViewState {}
 
 interface ClassFormBodyProps {
   item: UserData | NewUserData | undefined;
+  occupations: Occupation[];
   onSave?: () => Promise<any>;
   setFieldsValue(obj: Object): void;
   getFieldValue(fieldName: string): any;
@@ -46,7 +48,7 @@ interface ClassFormBodyProps {
 export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
   render() {
     var item = this.props.item || ({} as any);
-    const { getFieldDecorator, getFieldValue } = this.props;
+    const { getFieldDecorator, getFieldValue, occupations } = this.props;
 
     return (
       <Form
@@ -87,6 +89,27 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
             </FormItem>
           </Col>
         </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <FormItem label="Ocupación">
+              {getFieldDecorator("occupationId", {
+                initialValue: (item as UserData).occupationId || undefined,
+              })(
+                <Select
+                  placeholder="Seleccione ocupación"
+                  loading={!occupations.length}
+                  allowClear={true}
+                >
+                  {occupations.map((occ) => (
+                    <Select.Option key={occ.id} value={occ.id}>
+                      {occ.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
         {/* Campo: Es Administrador */}
         <Row>
           <Col span={24}>
@@ -121,7 +144,7 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
   }
 }
 
-@connect(["newUserData", NewUserDataStore])
+@connect(["newUserData", NewUserDataStore], ["Occupations", OccupationsStore])
 class NewUserDataViewInternal extends React.Component<
   NewUserDataViewProps & FormComponentProps,
   NewUserDataViewState
@@ -130,9 +153,17 @@ class NewUserDataViewInternal extends React.Component<
     return (this.props as any).newUserData as NewUserDataStore;
   }
 
+  private get OccupationsStore() {
+    return (this.props as any).Occupations as OccupationsStore;
+  }
+
   constructor(props: NewUserDataViewProps & FormComponentProps) {
     super(props);
     this.UserDataStore.createNew({} as any);
+  }
+
+  componentWillMount() {
+    this.OccupationsStore.getAllAsync({ take: 100, skip: 0 } as any);
   }
 
   componentWillReceiveProps(nextProps: NewUserDataViewProps) {
@@ -196,6 +227,7 @@ class NewUserDataViewInternal extends React.Component<
         <Spin spinning={this.UserDataStore.state.isBusy}>
           <UserDataFormBody
             item={this.UserDataStore.state.item}
+            occupations={this.OccupationsStore.state.items.map((i) => i.item)}
             getFieldDecorator={getFieldDecorator}
             getFieldValue={this.props.form.getFieldValue}
             setFieldsValue={this.props.form.setFieldsValue}
@@ -220,9 +252,18 @@ interface EditUserDataViewProps extends FormComponentProps {
   onSave: (id: number, data: UserData) => Promise<any>;
 }
 
+@connect(["Occupations", OccupationsStore])
 class EditUserDataViewInternal extends React.Component<
   EditUserDataViewProps & FormComponentProps
 > {
+  private get OccupationsStore() {
+    return (this.props as any).Occupations as OccupationsStore;
+  }
+
+  componentWillMount() {
+    this.OccupationsStore.getAllAsync({ take: 100, skip: 0 } as any);
+  }
+
   @autobind
   private onSave() {
     this.props.form.validateFields(async (err, values) => {
@@ -248,6 +289,7 @@ class EditUserDataViewInternal extends React.Component<
       >
         <UserDataFormBody
           item={item}
+          occupations={this.OccupationsStore.state.items.map((i) => i.item)}
           getFieldDecorator={form.getFieldDecorator}
           getFieldValue={form.getFieldValue}
           setFieldsValue={form.setFieldsValue}

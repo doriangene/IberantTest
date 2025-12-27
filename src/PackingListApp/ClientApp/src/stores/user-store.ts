@@ -5,6 +5,7 @@ import { Validator } from "lakmus";
 import { AxiosResponse } from 'axios';
 import { container } from '../inversify.config';
 import { CommandResult } from './types';
+import { Occupation } from './occupation-store';
 
 export enum AdminCategory {
     Normal = 1,
@@ -19,6 +20,8 @@ export interface UserData {
     address: string;
     isAdmin: boolean;
     category: AdminCategory;
+    occupationId: number;
+    occupation?: Occupation;
 }
 
 @repository("@@UserData", "UserData.summary")
@@ -34,10 +37,6 @@ export class UsersDataStore extends DataStore<UserData> {
             discard: item => { }
         }, container);
     }
-
-  
-
-   
 }
 
 export interface NewUserData {
@@ -46,6 +45,7 @@ export interface NewUserData {
     address: string,
     isAdmin: boolean,
     category: AdminCategory,
+    occupationId: number,
 }
 
 export class NewUserDataValidator extends Validator<NewUserData> {
