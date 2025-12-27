@@ -80,10 +80,10 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
           </Col>
           {/* Campo: Dirección */}
           <Col span={8}>
-            <FormItem label={"Dirección"}>
+            <FormItem label={"Dirección (máx 10 caracteres)"}>
               {getFieldDecorator(nameof<NewUserData>("address"), {
                 initialValue: item.address,
-              })(<Input />)}
+              })(<Input maxLength={10} />)}
             </FormItem>
           </Col>
         </Row>

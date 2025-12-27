@@ -111,7 +111,7 @@ export default class UserDataListPage extends Component<
           field: "address",
           title: "Dirección",
           renderer: (data) => <span>{data.address}</span>,
-          editor: (data) => <Input />,
+          editor: (data) => <Input maxLength={10} />,
         },
         {
           field: "isAdmin",
