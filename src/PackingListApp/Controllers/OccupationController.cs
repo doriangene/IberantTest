@@ -15,16 +15,16 @@ namespace PackingListApp.Controllers
     [ApiController]
     public class OccupationController : ControllerBase
     {
-        public readonly IOccupationServices _testService;
-        public OccupationController(IOccupationServices testService)
+        public readonly IOccupationServices _occupationService;
+        public OccupationController(IOccupationServices occupationService)
         {
-            _testService = testService;
+            _occupationService = occupationService;
         }
         // GET: api/occupation
         [HttpGet]
         public IActionResult Get(ODataQueryOptions<OccupationModel> options)
         {
-            var list = _testService.GetAll();
+            var list = _occupationService.GetAll();
             return Ok(new QueryResult<OccupationModel>(list, list.Count));
         }
 
@@ -32,24 +32,29 @@ namespace PackingListApp.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            return Ok(_testService.Get(id));
+            return Ok(_occupationService.Get(id));
         }
 
         // POST: api/occupation
         [HttpPost]
         public IActionResult Post([FromBody] NewOccupationModel value)
         {
-            var id = _testService.Add(value);
+            var id = _occupationService.Add(value);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
-
         }
 
         [HttpPut("{id}")]
-
         public  IActionResult Put(int id, [FromBody] OccupationModel item)
         {
-            _testService.Put(id, item);
+            _occupationService.Put(id, item);
             return Ok(new CommandHandledResult(true, id.ToString(), id.ToString(), id.ToString()));
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            _occupationService.Delete(id);
+            return Ok(new { isSuccess = true });
         }
     }
 }
