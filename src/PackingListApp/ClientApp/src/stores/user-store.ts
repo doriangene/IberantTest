@@ -6,11 +6,19 @@ import { AxiosResponse } from 'axios';
 import { container } from '../inversify.config';
 import { CommandResult } from './types';
 
+export enum AdminCategory {
+    Normal = 1,
+    Vip = 2,
+    King = 3,
+}
+
 export interface UserData {
     id: number;
     name: string; 
     lastName: string;
     address: string;
+    isAdmin: boolean;
+    category: AdminCategory;
 }
 
 @repository("@@UserData", "UserData.summary")
@@ -36,6 +44,8 @@ export interface NewUserData {
     name: string,
     lastName: string,
     address: string,
+    isAdmin: boolean,
+    category: AdminCategory,
 }
 
 export class NewUserDataValidator extends Validator<NewUserData> {

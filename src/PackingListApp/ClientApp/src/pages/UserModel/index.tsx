@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Alert, Row, Col } from "antd";
+import { Layout, Input, Alert, Row, Col, Checkbox, Select } from "antd";
 import HeaderComponent from "../../components/shell/header";
 import { TableModel, TableView } from "../../components/collections/table";
 import { RouteComponentProps } from "react-router";
@@ -112,6 +112,27 @@ export default class UserDataListPage extends Component<
           title: "Dirección",
           renderer: (data) => <span>{data.address}</span>,
           editor: (data) => <Input />,
+        },
+        {
+          field: "isAdmin",
+          title: "Admin",
+          renderer: (data) => <Checkbox checked={data.isAdmin} disabled />,
+          editor: (data) => <Checkbox />, // Permite editar directamente en la fila
+        },
+        {
+          field: "category",
+          title: "Categoría",
+          renderer: (data) => {
+            const names = { 1: "Normal", 2: "Vip", 3: "King" };
+            return <span>{names[data.category] ?? "N/A"}</span>;
+          },
+          editor: (data) => (
+            <Select style={{ width: 120 }}>
+              <Select.Option value={1}>Normal</Select.Option>
+              <Select.Option value={2}>Vip</Select.Option>
+              <Select.Option value={3}>King</Select.Option>
+            </Select>
+          ),
         },
       ],
       data: this.UserDataStore.state, // Accede al estado de la lista

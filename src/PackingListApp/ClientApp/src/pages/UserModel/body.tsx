@@ -46,6 +46,7 @@ interface ClassFormBodyProps {
 export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
   render() {
     const { getFieldDecorator } = this.props;
+    const isAdminChecked = this.props.getFieldValue("isAdmin");
     var item = this.props.item || ({} as NewUserData);
 
     return (
@@ -69,7 +70,6 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
               })(<Input />)}
             </FormItem>
           </Col>
-
           {/* Campo: Apellidos */}
           <Col span={8}>
             <FormItem label={"Apellidos"}>
@@ -78,7 +78,6 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
               })(<Input />)}
             </FormItem>
           </Col>
-
           {/* Campo: Dirección */}
           <Col span={8}>
             <FormItem label={"Dirección"}>
@@ -88,6 +87,35 @@ export class UserDataFormBody extends React.Component<ClassFormBodyProps> {
             </FormItem>
           </Col>
         </Row>
+        {/* Campo: Es Administrador */}
+        <Row>
+          <Col span={24}>
+            <FormItem label="Es Administrador">
+              {getFieldDecorator("isAdmin", {
+                initialValue: item?.isAdmin || false,
+                valuePropName: "checked",
+              })(<Checkbox>Sí</Checkbox>)}
+            </FormItem>
+          </Col>
+        </Row>
+        {/* Campo: Categoría de Administrador */}
+        {isAdminChecked && (
+          <Row>
+            <Col span={24}>
+              <FormItem label="Categoría de Admin">
+                {getFieldDecorator("category", {
+                  initialValue: item?.category || 1,
+                })(
+                  <Select placeholder="Seleccione una categoría">
+                    <Select.Option value={1}>Normal</Select.Option>
+                    <Select.Option value={2}>Vip</Select.Option>
+                    <Select.Option value={3}>King</Select.Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        )}
       </Form>
     );
   }
