@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PackingListApp.Services
 {
@@ -24,7 +25,8 @@ namespace PackingListApp.Services
                 LastName = usermodel.LastName,
                 Address = usermodel.Address,
                 isAdmin = usermodel.isAdmin,
-                Category = usermodel.isAdmin ? usermodel.Category : 0
+                Category = usermodel.isAdmin ? usermodel.Category : 0,
+                OccupationId = usermodel.OccupationId,
             };
             _context.UserModels.Add(newuser);
             _context.SaveChanges();
@@ -33,12 +35,12 @@ namespace PackingListApp.Services
 
         public UserModel Get(int id)
         {
-            return _context.UserModels.FirstOrDefault(t => t.Id == id);
+            return _context.UserModels.Include(u => u.Occupation).FirstOrDefault(t => t.Id == id);
         }
 
         public List<UserModel> GetAll()
         {
-            return _context.UserModels.ToList();
+            return _context.UserModels.Include(u => u.Occupation).ToList();
         }
 
         public int Put(int id, UserModel item)
@@ -49,6 +51,7 @@ namespace PackingListApp.Services
             itemput.Address = item.Address;
             itemput.isAdmin = item.isAdmin;
             itemput.Category = item.isAdmin ? item.Category : 0;
+            itemput.OccupationId = item.OccupationId;
             _context.SaveChanges();
             return id;
 

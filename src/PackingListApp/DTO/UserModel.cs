@@ -14,5 +14,7 @@ namespace PackingListApp.Models
 
         public bool isAdmin { get; set; }
         public AdminCategory Category { get; set; }
+
+        public int? OccupationId { get; set;}
     }
 }
