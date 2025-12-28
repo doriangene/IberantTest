@@ -11,6 +11,17 @@ namespace PackingListApp.EntityFramework
     {
         private bool _initialized;
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserModel>()
+                .HasOne(u => u.Occupation)
+                .WithMany()
+                .HasForeignKey(u => u.OccupationId)
+                .OnDelete(DeleteBehavior.SetNull); // Indica a EF que ponga a NULL la referencia al borrar la ocupación
+        }
+
         public TestContext(DbContextOptions<TestContext> options) : base(options)
         {
             if (!_initialized)

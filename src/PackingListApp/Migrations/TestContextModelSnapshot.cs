@@ -74,7 +74,8 @@ namespace PackingListApp.Migrations
                 {
                     b.HasOne("PackingListApp.Models.OccupationModel", "Occupation")
                         .WithMany()
-                        .HasForeignKey("OccupationId");
+                        .HasForeignKey("OccupationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Occupation");
                 });
