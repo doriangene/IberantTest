@@ -90,8 +90,11 @@ export default class UserDataListPage extends Component<
     item: UserData,
     state: ItemState
   ): Promise<CommandResult<any>> {
-    // deleteAsync para eliminar registros
-    return await this.UserDataStore.deleteAsync(`${item.id}`);
+    const result = await this.UserDataStore.deleteAsync(`${item.id}`);
+    if (result.isSuccess) {
+      await this.load(this.state.query);
+    }
+    return result;
   }
 
   @autobind
@@ -197,6 +200,7 @@ export default class UserDataListPage extends Component<
               onQueryChanged={(q: Query) => this.onQueryChanged(q)}
               onNewItem={this.onNewItem}
               onRefresh={() => this.load(this.state.query)}
+              onDeleteRow={this.onDeleteRow}
               canDelete={true}
               canCreateNew={true}
               onSaveRow={this.onSaveItem}

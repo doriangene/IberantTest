@@ -86,7 +86,11 @@ export default class OccupationListPage extends Component<
     item: Occupation,
     state: ItemState
   ): Promise<CommandResult<any>> {
-    return await this.OccupationsStore.deleteAsync(`${item.id}`);
+    const result = await this.OccupationsStore.deleteAsync(`${item.id}`);
+    if (result.isSuccess) {
+      await this.load(this.state.query);
+    }
+    return result;
   }
 
   render() {
@@ -113,7 +117,7 @@ export default class OccupationListPage extends Component<
 
     return (
       <Layout>
-        <HeaderComponent title="TestModels" canGoBack={true} />
+        <HeaderComponent title="Ocupaciones" canGoBack={true} />
 
         <Content className="page-content">
           {this.OccupationsStore.state.result &&
@@ -134,6 +138,7 @@ export default class OccupationListPage extends Component<
               onQueryChanged={(q: Query) => this.onQueryChanged(q)}
               onNewItem={this.onNewItem}
               onRefresh={() => this.load(this.state.query)}
+              onDeleteRow={this.onDeleteRow}
               canDelete={true}
               canCreateNew={true}
               onSaveRow={this.onSaveItem}
