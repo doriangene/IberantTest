@@ -4,7 +4,8 @@ import { routerReducer, routerMiddleware } from "react-router-redux";
 import { ApplicationState, configReducer } from "./stores/reducers";
 import { History } from "history";
 import { storeBuilder } from "redux-scaffolding-ts";
-import { TestItemStore, TestItemsStore, NewTestItemStore } from "./stores/test-store";
+import { OccupationStore, OccupationsStore, NewOccupationStore } from "./stores/occupation-store";
+import { UserDataStore, UsersDataStore, NewUserDataStore } from "./stores/user-store";
 
 export default function configureStore(history: History, initialState?: ApplicationState) {
     // Build middleware. These are functions that can process the actions before they reach the store.
@@ -32,9 +33,12 @@ export default function configureStore(history: History, initialState?: Applicat
         ApplicationState
     >;
 
-    storeBuilder.addRepository(new TestItemStore() as any);
-    storeBuilder.addRepository(new NewTestItemStore() as any);
-    storeBuilder.addRepository(new TestItemsStore() as any);
+    storeBuilder.addRepository(new OccupationStore() as any);
+    storeBuilder.addRepository(new NewOccupationStore() as any);
+    storeBuilder.addRepository(new OccupationsStore() as any);
+    storeBuilder.addRepository(new UserDataStore() as any);
+    storeBuilder.addRepository(new NewUserDataStore() as any);
+    storeBuilder.addRepository(new UsersDataStore() as any);
     return store;
 }
 

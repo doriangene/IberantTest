@@ -30,7 +30,7 @@ namespace PackingListApp
         {
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration["TestContext:ConnectionString"]));
+            services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration["TestContext:ConnectionStrings:DefaultConnection"]));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -51,7 +51,8 @@ namespace PackingListApp
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
             });
-            services.AddTransient<ITestServices, TestServices>();
+            services.AddTransient<IOccupationServices, OccupationServices>();
+            services.AddTransient<IUserServices, UserServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
